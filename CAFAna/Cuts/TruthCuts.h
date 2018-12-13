@@ -12,10 +12,10 @@ namespace ana
   /// We use uniform-initializer syntax to concisely pass the list of necessary
   /// branches. In this case the selection function is simple enough that we
   /// can include it inline as a lambda function.
-  const Cut kIsNC({"dune.ccnc"},
+  const Cut kIsNC({},
                   [](const caf::StandardRecord* sr)
                   {
-                    return !sr->dune.isCC;
+                    return !sr->sbn.truth.neutrino[0].iscc;
                   });
 
   //----------------------------------------------------------------------
@@ -29,7 +29,8 @@ namespace ana
 
     bool operator()(const caf::StandardRecord* sr) const
     {
-      return sr->dune.isCC && abs(sr->dune.nuPDGunosc) == fPdgOrig && abs(sr->dune.nuPDG) == fPdg;
+      return sr->sbn.truth.neutrino[0].iscc && abs(sr->sbn.truth.neutrino[0].pdg) == fPdgOrig
+             && abs(sr->sbn.truth.neutrino[0].pdg) == fPdg;
     }
   protected:
     int fPdg, fPdgOrig;
@@ -56,35 +57,35 @@ namespace ana
   const Cut kIsAntiNu({},
                       [](const caf::StandardRecord* sr)
                       {
-                        return sr->dune.nuPDG < 0;
+                        return sr->sbn.truth.neutrino[0].pdg < 0;
                       });
 
-  const Cut kIsTrueFV({},
-                      [](const caf::StandardRecord* sr)
-                      {
-			if (sr->dune.isFD){
-			  return ( 
-				  abs(sr->dune.vtx_x) < 310 &&
-				  abs(sr->dune.vtx_y) < 550 &&
-  				  sr->dune.vtx_z >  50      &&
-  				  sr->dune.vtx_z < 1244 );
-			}
-			else{
-			  return (
-				  abs(sr->dune.vtx_x) < 300 &&
-				  abs(sr->dune.vtx_y) < 100 &&
-				  sr->dune.vtx_z > 50 &&
-				  sr->dune.vtx_z < 350
-				  );
-			}
-		      });
+  // const Cut kIsTrueFV({},
+  //                     [](const caf::StandardRecord* sr)
+  //                     {
+		// 	if (sr->dune.isFD){
+		// 	  return ( 
+		// 		  abs(sr->dune.vtx_x) < 310 &&
+		// 		  abs(sr->dune.vtx_y) < 550 &&
+  // 				  sr->dune.vtx_z >  50      &&
+  // 				  sr->dune.vtx_z < 1244 );
+		// 	}
+		// 	else{
+		// 	  return (
+		// 		  abs(sr->dune.vtx_x) < 300 &&
+		// 		  abs(sr->dune.vtx_y) < 100 &&
+		// 		  sr->dune.vtx_z > 50 &&
+		// 		  sr->dune.vtx_z < 350
+		// 		  );
+		// 	}
+		//       });
 
   //ETW 11/5/2018 Fiducial cut using MVA variable
   //Should use the previous one (kIsTrueFV) for nominal analysis
-  const Cut kPassFid_MVA({},
-			[](const caf::StandardRecord* sr)
-			{
-			  return ( sr->dune.mvanumu > -1 );
-			});
+  // const Cut kPassFid_MVA({},
+		// 	[](const caf::StandardRecord* sr)
+		// 	{
+		// 	  return ( sr->dune.mvanumu > -1 );
+		// 	});
 
 }

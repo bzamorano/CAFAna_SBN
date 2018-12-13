@@ -13,6 +13,7 @@ namespace caf
 
   SRNeutrino::SRNeutrino():
     iscc(false),
+    pdg(0),
     energy(-1),
     inelasticityY(-1)
     {  }

@@ -5,7 +5,7 @@
 #include "CAFAna/Core/Spectrum.h"
 #include "CAFAna/Core/Binning.h"
 #include "CAFAna/Core/Var.h"
-#include "CAFAna/Cuts/TruthCuts.h"
+// #include "CAFAna/Cuts/TruthCuts.h"
 #include "StandardRecord/StandardRecord.h"
 #include "TCanvas.h"
 #include "TH1.h"
@@ -15,28 +15,45 @@
 #include "CAFAna/Analysis/Calcs.h"
 #include "OscLib/func/OscCalculatorPMNSOpt.h"
 
+// Random numbers to fake an efficiency and resolution
+#include "TRandom3.h"
+TRandom3 r(0);
+
 using namespace ana;
 
 void demo1()
 {
   // See demo0.C for explanation of these repeated parts
-  const std::string fname = "/pnfs/dune/persistent/TaskForce_AnaTree/far/train/v3.2/nu.mcc10.1_def.root";
-  SpectrumLoader loader(fname);
-  auto* loaderBeam  = loader.LoaderForRunPOT(20000001);
-  auto* loaderNue   = loader.LoaderForRunPOT(20000002);
-  auto* loaderNuTau = loader.LoaderForRunPOT(20000003);
-  auto* loaderNC    = loader.LoaderForRunPOT(0);
-  const Var kRecoEnergy = SIMPLEVAR(dune.Ev_reco_numu);
-  const Var kMVANumu = SIMPLEVAR(dune.mvanumu);
-  const Binning binsEnergy = Binning::Simple(40, 0, 10);
-  const HistAxis axEnergy("Reco energy (GeV)", binsEnergy, kRecoEnergy);
-  const double pot = 3.5 * 1.47e21 * 40/1.13;
 
-  // A cut is structured like a Var, but returning bool
-  const Cut kPassesMVA({},
+  const std::string fnameBeam = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_nu_ExampleAnalysis_ExampleSelection.root";
+  const std::string fnameSwap = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_oscnue_ExampleAnalysis_ExampleSelection.root";
+
+  // Source of events
+  SpectrumLoader loaderBeam(fnameBeam);
+  SpectrumLoader loaderSwap(fnameSwap);
+
+  const Var kRecoEnergy({}, // ToDo: smear with some resolution
+                        [](const caf::StandardRecord* sr)
+                        {
+                          double fE = sr->sbn.truth.neutrino[0].energy;
+                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          return fE;
+                        });
+
+  const Binning binsEnergy = Binning::Simple(20, 0, 5);
+  const HistAxis axEnergy("Reco energy (GeV)", binsEnergy, kRecoEnergy);
+
+  // Fake POT: this means "no-scale" by construction
+  const double pot = 1.e16;
+
+  const Cut kSelectionCut({},
                        [](const caf::StandardRecord* sr)
                        {
-                         return sr->dune.mvanumu > 0;
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 90% eff for CC, 15% for NC
+                         if(isCC) return p < 0.9;
+                         else return p < 0.15;
                        });
 
   // In many cases it's easier to form them from existing Vars like this
@@ -44,17 +61,19 @@ void demo1()
 
   // A Prediction is an objects holding a variety of "OscillatableSpectrum"
   // objects, one for each original and final flavour combination.
-  PredictionNoExtrap pred(*loaderBeam, *loaderNue, *loaderNuTau, *loaderNC,
-                          axEnergy, kPassesMVA);
+  PredictionNoExtrap pred(loaderBeam, loaderSwap, kNullLoader,
+                          axEnergy, kSelectionCut);
 
   // This call will fill all of the constituent parts of the prediction
-  loader.Go();
+  loaderBeam.Go();
+  loaderSwap.Go();
 
   // We can extract a total prediction unoscillated
   const Spectrum sUnosc = pred.PredictUnoscillated();
   // Or oscillated, in this case using reasonable parameters from
   // Analysis/Calcs.h
-  osc::IOscCalculator* calc = DefaultOscCalc();
+  osc::IOscCalculatorAdjustable* calc = DefaultOscCalc();
+  calc->SetL(810); // NOvA
   const Spectrum sOsc = pred.Predict(calc);
 
   // And we can break things down by flavour
@@ -64,19 +83,21 @@ void demo1()
                                                   Sign::kBoth);
 
   // Plot what we have so far
+  TCanvas* c1 = new TCanvas("c1");
   sUnosc.ToTH1(pot)->Draw("hist");
   sUnoscNC.ToTH1(pot, kBlue)->Draw("hist same");
   sOsc.ToTH1(pot, kRed)->Draw("hist same");
+  c1->SaveAs("demo1_plot1.pdf");
 
   // "Fake" data is synonymous with the Asimov data sample
-  new TCanvas;
   sOsc.ToTH1(pot, kRed)->Draw("hist");
   sUnoscNC.ToTH1(pot, kBlue)->Draw("hist same");
   sOsc.FakeData(pot).ToTH1(pot)->Draw("ep same");
+  c1->SaveAs("demo1_plot2.pdf");
 
   // While "mock" data has statistical fluctuations in
-  new TCanvas;
   sOsc.ToTH1(pot, kRed)->Draw("hist");
   sUnoscNC.ToTH1(pot, kBlue)->Draw("hist same");
   sOsc.MockData(pot).ToTH1(pot)->Draw("ep same");
+  c1->SaveAs("demo1_plot3.pdf");
 }

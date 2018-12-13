@@ -142,6 +142,7 @@ namespace ana
     TTreeFormula form1("form1", "truth.neutrino[0].iscc", tr);
     TTreeFormula form2("form2", "truth.neutrino[0].inelasticityY", tr);
     TTreeFormula form3("form3", "truth.neutrino[0].energy", tr);
+    TTreeFormula form4("form4", "truth.neutrino[0].pdg", tr);
 
     int Nentries = tr->GetEntries();
     if (max_entries != 0 && max_entries < Nentries) Nentries = max_entries;
@@ -152,6 +153,7 @@ namespace ana
       sr.sbn.truth.neutrino[0].iscc = form1.EvalInstance(0);
       sr.sbn.truth.neutrino[0].inelasticityY = form2.EvalInstance(0);
       sr.sbn.truth.neutrino[0].energy = form3.EvalInstance(0);
+      sr.sbn.truth.neutrino[0].pdg = form4.EvalInstance(0);
 
       HandleRecord(&sr);
 

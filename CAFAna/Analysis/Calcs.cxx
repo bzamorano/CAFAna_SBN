@@ -11,8 +11,8 @@ namespace ana
   //----------------------------------------------------------------------
   void ResetOscCalcToDefault(osc::IOscCalculatorAdjustable* calc)
   {
-    // No controversy here...
-    calc->SetL(1300);
+    // Default to ICARUS
+    calc->SetL(0.6);
 
     // TODO: get good reference from Alex and Joao
     calc->SetRho(2.84); // g/cm^3

@@ -15,6 +15,7 @@ namespace caf
       ~SRNeutrino() {  };
 
       bool         iscc;          ///< Is CC interaction
+      int          pdg;           ///< PDG code
       double       energy;        ///< True energy [GeV]
       double       inelasticityY; ///< True inelasticity
     };

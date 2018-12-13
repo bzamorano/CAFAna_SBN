@@ -19,7 +19,7 @@ using namespace ana;
 void demo0()
 {
   // Environment variables and wildcards work. As do SAM datasets.
-  const std::string fname = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_ExampleAnalysis_ExampleSelection.root";
+  const std::string fname = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_nu_ExampleAnalysis_ExampleSelection.root";
 
   // Source of events
   SpectrumLoader loader(fname);
@@ -55,17 +55,17 @@ void demo0()
   loader.Go();
 
   // POT/yr * 3.5yrs * mass correction for the workspace geometry
-  const double pot = 3.5 * 1.47e21 * 40/1.13;
+  //  const double pot = 3.5 * 1.47e21 * 40/1.13;
+  const double pot = 1.e16;
 
   // For plotting purposes we can convert to TH1s
   TCanvas* c1 = new TCanvas("c1");
   sEnergy.ToTH1(pot)->Draw("hist");
   sEnergyNC.ToTH1(pot, kBlue)->Draw("hist same");
-  c1->SaveAs("plot1.pdf");
+  c1->SaveAs("demo0_plot1.pdf");
 
-  TCanvas* c2 = new TCanvas("c2");
   sY.ToTH1(pot)->Draw("hist");
   sYNC.ToTH1(pot, kBlue)->Draw("hist same");
   gPad->SetLogy();
-  c2->SaveAs("plot2.pdf");
+  c1->SaveAs("demo0_plot2.pdf");
 }
