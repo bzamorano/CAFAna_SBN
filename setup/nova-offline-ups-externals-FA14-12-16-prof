@@ -1,0 +1,22 @@
+art		 v1_12_02    -q+nu:+e6:+prof
+condb		 v2_0b
+genie_xsec	 R-2_8_0     -q+default
+genie_phyopt	 R-2_8_0     -q+dkcharmtau
+ifdh_art	 v1_5_4      -q+nu:+prof:+e6:+s5
+nutools		 v1_06_04    -q+prof:+e6
+psycopg2	 v2_5_p2_7
+totalview	 v8_9_0a
+novaddt		 v03_00_02   -q+e6:+prof
+jobsub_client	 v1_0_4
+gdb		 v7_8
+valgrind	 v3_10_1
+eid		 v01.00
+hmatrix		 v01.00
+lemlittle	 v01.02
+qepid		 v01.00
+remid		 v01.00
+rvp		 v01.00
+ucana		 v01.02
+lid		 v01.00
+calibcsvs	 v01.01
+NovaGridUtils

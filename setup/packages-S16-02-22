@@ -1,0 +1,97 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S16-02-22
+Alignment           : S16-02-22
+AnalysisSkimmer     : S16-02-22
+BreakPointFitter    : S16-02-22
+BremShowerFilter    : S16-02-22
+CAFAna              : S16-02-22
+CAFMaker            : S16-02-22
+CAFReweight         : S16-02-22
+CalHit              : S16-02-22
+Calibration         : S16-02-22
+CalibrationUtils    : S16-02-22
+CalibrationDataProducts : S16-02-22
+Calibrator          : S16-02-22
+ChannelInfo         : S16-02-22
+CMap                : S16-02-22
+Commissioning       : S16-02-22
+CosmicExposureInfo  : S16-02-22
+CosRej              : S16-02-22
+CVN                 : S16-02-22
+DAQ2RawDigit        : S16-02-22
+Database	    : S16-02-22
+DataQuality         : S16-02-22
+DDTConverters       : S16-02-22
+Demo		    : S16-02-22
+DetectorPerformance : S16-02-22
+DiscreteTracker     : S16-02-22
+DiskUsage           : S16-02-22
+DQSpillFlags        : S16-02-22
+DSOResultPlotter    : S16-02-22
+ElasticArms         : S16-02-22
+Eval	            : S16-02-22
+EventDisplay        : S16-02-22
+EventGenerator      : S16-02-22
+EventSummary        : S16-02-22
+Filter              : S16-02-22
+FuzzyKVertex        : S16-02-22
+g4nova              : S16-02-22
+Geometry            : S16-02-22
+GeometryObjects     : S16-02-22
+HMatrixE            : S16-02-22
+HoughTransform      : S16-02-22
+HoughVertex         : S16-02-22
+IFDBSpillInfo       : S16-02-22
+LEM                 : S16-02-22
+MCCheater           : S16-02-22
+MCCheckOut          : S16-02-22
+Metadata            : S16-02-22
+MEFinder            : S16-02-22
+MichelEFilter       : S16-02-22
+MockDataDAQ         : S16-02-22
+MuonRemove	    : S16-02-22
+NDRockMuon          : S16-02-22
+NovaFTS             : S16-02-22
+NovaSimMixer        : S16-02-22
+NueSandbox          : S16-02-22
+NumuEnergy          : S16-02-22
+NumuSandbox         : S16-02-22
+NusSandbox          : S16-02-22
+OnlineMonitoring    : S16-02-22
+OscLib              : S16-02-22
+PhotonTransport     : S16-02-22
+Preselection        : S16-02-22
+Production          : S16-02-22
+QEEventFinder       : S16-02-22
+RawData             : S16-02-22
+ReadoutSim          : S16-02-22
+RecoBase            : S16-02-22
+RecoBaseHit         : S16-02-22
+RecoJMShower        : S16-02-22
+RecVarPID           : S16-02-22
+ReMId               : S16-02-22
+RunHistory	    : S16-02-22
+ShowerE             : S16-02-22
+ShowerLID           : S16-02-22
+Simulation          : S16-02-22
+Slicer              : S16-02-22
+SRT_NOVA            : S16-02-22
+StandardRecord      : S16-02-22
+SummaryData         : S16-02-22
+TimingFit           : S16-02-22
+TrackFit            : S16-02-22
+Utilities           : S16-02-22
+Validation          : S16-02-22
+VertexDT            : S16-02-22
+VertexFinder        : S16-02-22
+ZukCluster          : S16-02-22
+#
+# setup package
+#
+setup               : S16-02-22

@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R16-02-11-geantpreview.b
+Alignment           : R16-02-11-geantpreview.b
+AnalysisSkimmer     : R16-02-11-geantpreview.b
+BreakPointFitter    : R16-02-11-geantpreview.b
+BremShowerFilter    : R16-02-11-geantpreview.b
+CAFAna              : R16-02-11-geantpreview.b
+CAFMaker            : R16-02-11-geantpreview.b
+CAFReweight         : R16-02-11-geantpreview.b
+CalHit              : R16-02-11-geantpreview.b
+Calibration         : R16-02-11-geantpreview.b
+CalibrationUtils    : R16-02-11-geantpreview.b
+CalibrationDataProducts : R16-02-11-geantpreview.b
+Calibrator          : R16-02-11-geantpreview.b
+ChannelInfo         : R16-02-11-geantpreview.b
+CMap                : R16-02-11-geantpreview.b
+Commissioning       : R16-02-11-geantpreview.b
+CosmicExposureInfo  : R16-02-11-geantpreview.b
+CosRej              : R16-02-11-geantpreview.b
+CVN                 : R16-02-11-geantpreview.b
+DAQ2RawDigit        : R16-02-11-geantpreview.b
+Database	    : R16-02-11-geantpreview.b
+DataQuality         : R16-02-11-geantpreview.b
+DDTConverters       : R16-02-11-geantpreview.b
+Demo		    : R16-02-11-geantpreview.b
+DetectorPerformance : R16-02-11-geantpreview.b
+DiscreteTracker     : R16-02-11-geantpreview.b
+DiskUsage           : R16-02-11-geantpreview.b
+DQSpillFlags        : R16-02-11-geantpreview.b
+DSOResultPlotter    : R16-02-11-geantpreview.b
+ElasticArms         : R16-02-11-geantpreview.b
+Eval	            : R16-02-11-geantpreview.b
+EventDisplay        : R16-02-11-geantpreview.b
+EventGenerator      : R16-02-11-geantpreview.b
+EventSummary        : R16-02-11-geantpreview.b
+Filter              : R16-02-11-geantpreview.b
+FuzzyKVertex        : R16-02-11-geantpreview.b
+g4nova              : R16-02-11-geantpreview.b
+Geometry            : R16-02-11-geantpreview.b
+GeometryObjects     : R16-02-11-geantpreview.b
+HMatrixE            : R16-02-11-geantpreview.b
+HoughTransform      : R16-02-11-geantpreview.b
+HoughVertex         : R16-02-11-geantpreview.b
+IFDBSpillInfo       : R16-02-11-geantpreview.b
+LEM                 : R16-02-11-geantpreview.b
+MCCheater           : R16-02-11-geantpreview.b
+MCCheckOut          : R16-02-11-geantpreview.b
+Metadata            : R16-02-11-geantpreview.b
+MEFinder            : R16-02-11-geantpreview.b
+MichelEFilter       : R16-02-11-geantpreview.b
+MockDataDAQ         : R16-02-11-geantpreview.b
+MuonRemove	    : R16-02-11-geantpreview.b
+NDRockMuon          : R16-02-11-geantpreview.b
+NovaFTS             : R16-02-11-geantpreview.b
+NovaSimMixer        : R16-02-11-geantpreview.b
+NueSandbox          : R16-02-11-geantpreview.b
+NumuEnergy          : R16-02-11-geantpreview.b
+NumuSandbox         : R16-02-11-geantpreview.b
+OnlineMonitoring    : R16-02-11-geantpreview.b
+OscLib              : R16-02-11-geantpreview.b
+PhotonTransport     : R16-02-11-geantpreview.b
+Preselection        : R16-02-11-geantpreview.b
+Production          : R16-02-11-geantpreview.b
+QEEventFinder       : R16-02-11-geantpreview.b
+RawData             : R16-02-11-geantpreview.b
+ReadoutSim          : R16-02-11-geantpreview.b
+RecoBase            : R16-02-11-geantpreview.b
+RecoBaseHit         : R16-02-11-geantpreview.b
+RecoJMShower        : R16-02-11-geantpreview.b
+RecVarPID           : R16-02-11-geantpreview.b
+ReMId               : R16-02-11-geantpreview.b
+RunHistory	    : R16-02-11-geantpreview.b
+ShowerE             : R16-02-11-geantpreview.b
+ShowerLID           : R16-02-11-geantpreview.b
+Simulation          : R16-02-11-geantpreview.b
+Slicer              : R16-02-11-geantpreview.b
+SRT_NOVA            : R16-02-11-geantpreview.b
+StandardRecord      : R16-02-11-geantpreview.b
+SummaryData         : R16-02-11-geantpreview.b
+TimingFit           : R16-02-11-geantpreview.b
+TrackFit            : R16-02-11-geantpreview.b
+Utilities           : R16-02-11-geantpreview.b
+Validation          : R16-02-11-geantpreview.b
+VertexDT            : R16-02-11-geantpreview.b
+VertexFinder        : R16-02-11-geantpreview.b
+ZukCluster          : R16-02-11-geantpreview.b
+#
+# setup package
+#
+setup               : R16-02-11-geantpreview.b

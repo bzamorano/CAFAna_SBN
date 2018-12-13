@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R16-02-11-geniepreview-br
+Alignment           : R16-02-11-geniepreview-br
+AnalysisSkimmer     : R16-02-11-geniepreview-br
+BreakPointFitter    : R16-02-11-geniepreview-br
+BremShowerFilter    : R16-02-11-geniepreview-br
+CAFAna              : R16-02-11-geniepreview-br
+CAFMaker            : R16-02-11-geniepreview-br
+CAFReweight         : R16-02-11-geniepreview-br
+CalHit              : R16-02-11-geniepreview-br
+Calibration         : R16-02-11-geniepreview-br
+CalibrationUtils    : R16-02-11-geniepreview-br
+CalibrationDataProducts : R16-02-11-geniepreview-br
+Calibrator          : R16-02-11-geniepreview-br
+ChannelInfo         : R16-02-11-geniepreview-br
+CMap                : R16-02-11-geniepreview-br
+Commissioning       : R16-02-11-geniepreview-br
+CosmicExposureInfo  : R16-02-11-geniepreview-br
+CosRej              : R16-02-11-geniepreview-br
+CVN                 : R16-02-11-geniepreview-br
+DAQ2RawDigit        : R16-02-11-geniepreview-br
+Database	    : R16-02-11-geniepreview-br
+DataQuality         : R16-02-11-geniepreview-br
+DDTConverters       : R16-02-11-geniepreview-br
+Demo		    : R16-02-11-geniepreview-br
+DetectorPerformance : R16-02-11-geniepreview-br
+DiscreteTracker     : R16-02-11-geniepreview-br
+DiskUsage           : R16-02-11-geniepreview-br
+DQSpillFlags        : R16-02-11-geniepreview-br
+DSOResultPlotter    : R16-02-11-geniepreview-br
+ElasticArms         : R16-02-11-geniepreview-br
+Eval	            : R16-02-11-geniepreview-br
+EventDisplay        : R16-02-11-geniepreview-br
+EventGenerator      : R16-02-11-geniepreview-br
+EventSummary        : R16-02-11-geniepreview-br
+Filter              : R16-02-11-geniepreview-br
+FuzzyKVertex        : R16-02-11-geniepreview-br
+g4nova              : R16-02-11-geniepreview-br
+Geometry            : R16-02-11-geniepreview-br
+GeometryObjects     : R16-02-11-geniepreview-br
+HMatrixE            : R16-02-11-geniepreview-br
+HoughTransform      : R16-02-11-geniepreview-br
+HoughVertex         : R16-02-11-geniepreview-br
+IFDBSpillInfo       : R16-02-11-geniepreview-br
+LEM                 : R16-02-11-geniepreview-br
+MCCheater           : R16-02-11-geniepreview-br
+MCCheckOut          : R16-02-11-geniepreview-br
+Metadata            : R16-02-11-geniepreview-br
+MEFinder            : R16-02-11-geniepreview-br
+MichelEFilter       : R16-02-11-geniepreview-br
+MockDataDAQ         : R16-02-11-geniepreview-br
+MuonRemove	    : R16-02-11-geniepreview-br
+NDRockMuon          : R16-02-11-geniepreview-br
+NovaFTS             : R16-02-11-geniepreview-br
+NovaSimMixer        : R16-02-11-geniepreview-br
+NueSandbox          : R16-02-11-geniepreview-br
+NumuEnergy          : R16-02-11-geniepreview-br
+NumuSandbox         : R16-02-11-geniepreview-br
+OnlineMonitoring    : R16-02-11-geniepreview-br
+OscLib              : R16-02-11-geniepreview-br
+PhotonTransport     : R16-02-11-geniepreview-br
+Preselection        : R16-02-11-geniepreview-br
+Production          : R16-02-11-geniepreview-br
+QEEventFinder       : R16-02-11-geniepreview-br
+RawData             : R16-02-11-geniepreview-br
+ReadoutSim          : R16-02-11-geniepreview-br
+RecoBase            : R16-02-11-geniepreview-br
+RecoBaseHit         : R16-02-11-geniepreview-br
+RecoJMShower        : R16-02-11-geniepreview-br
+RecVarPID           : R16-02-11-geniepreview-br
+ReMId               : R16-02-11-geniepreview-br
+RunHistory	    : R16-02-11-geniepreview-br
+ShowerE             : R16-02-11-geniepreview-br
+ShowerLID           : R16-02-11-geniepreview-br
+Simulation          : R16-02-11-geniepreview-br
+Slicer              : R16-02-11-geniepreview-br
+SRT_NOVA            : R16-02-11-geniepreview-br
+StandardRecord      : R16-02-11-geniepreview-br
+SummaryData         : R16-02-11-geniepreview-br
+TimingFit           : R16-02-11-geniepreview-br
+TrackFit            : R16-02-11-geniepreview-br
+Utilities           : R16-02-11-geniepreview-br
+Validation          : R16-02-11-geniepreview-br
+VertexDT            : R16-02-11-geniepreview-br
+VertexFinder        : R16-02-11-geniepreview-br
+ZukCluster          : R16-02-11-geniepreview-br
+#
+# setup package
+#
+setup               : R16-02-11-geniepreview-br

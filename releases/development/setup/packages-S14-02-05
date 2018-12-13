@@ -1,0 +1,107 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+Alignment           : S14-02-05
+BNBInfo		    : S14-02-05
+BreakPointFitter    : S14-02-05
+CAFAna              : S14-02-05
+CAFMaker            : S14-02-05
+CAFReweight         : S14-02-05
+CalHit              : S14-02-05
+Calibration         : S14-02-05
+CalibrationDataProducts : S14-02-05
+Calibrator          : S14-02-05
+CellToCell          : S14-02-05
+ChannelInfo         : S14-02-05
+ClusterMakerSS      : S14-02-05
+CMap                : S14-02-05
+Commissioning       : S14-02-05
+CosmicExposureInfo  : S14-02-05
+CosRej              : S14-02-05
+DAQ2RawDigit        : S14-02-05
+Database	    : S14-02-05
+DDTConverters       : S14-02-05
+Demo		    : S14-02-05
+DetectorPerformance : S14-02-05
+DiscreteTracker     : S14-02-05
+ElasticArms         : S14-02-05
+Eval	            : S14-02-05
+EventDisplay        : S14-02-05
+EventGenerator      : S14-02-05
+EventSummary        : S14-02-05
+FEBFlashFilter      : S14-02-05
+Filter              : S14-02-05
+FLUGGValidation     : S14-02-05
+FuzzyKVertex        : S14-02-05
+g4nova              : S14-02-05
+Geometry            : S14-02-05
+HMatrixE            : S14-02-05
+HoughTransform      : S14-02-05
+KalmanFilter3D      : S14-02-05
+LIDBuilder          : S14-02-05
+LEM                 : S14-02-05
+MCCheater           : S14-02-05
+MCCheckOut          : S14-02-05
+Metadata            : S14-02-05
+MichelEFilter       : S14-02-05
+MockDataDAQ         : S14-02-05
+MultiProngNeutrinoSearch : S14-02-05
+MuonRemove	    : S14-02-05
+NCAna               : S14-02-05
+NovaBeamMat         : S14-02-05
+NovaSimMixer        : S14-02-05
+NueSandbox          : S14-02-05
+NuMISpillInfo       : S14-02-05
+NuMuBDTSelector     : S14-02-05
+NumuEnergy          : S14-02-05
+NumuSandbox         : S14-02-05
+OnlineMonitoring    : S14-02-05
+OscLib              : S14-02-05
+PhotonTransport     : S14-02-05
+Preselection        : S14-02-05
+QEEventFinder       : S14-02-05
+RawData             : S14-02-05
+ReadoutSim          : S14-02-05
+RecoBase            : S14-02-05
+RecoJMShower        : S14-02-05
+RecVarPID           : S14-02-05
+ReMId               : S14-02-05
+RunHistory	    : S14-02-05
+ShowerAna           : S14-02-05
+ShowerLID           : S14-02-05
+Simulation          : S14-02-05
+Slicer              : S14-02-05
+SRT_NOVA            : S14-02-05
+StandardRecord      : S14-02-05
+SummaryData         : S14-02-05
+TimingFit           : S14-02-05
+TrackFit            : S14-02-05
+Utilities           : S14-02-05
+Validation          : S14-02-05
+VertexFinder        : S14-02-05
+#
+# NOvA Online packages go here
+#
+DatabaseUtils	    : off2013-12-05
+DAQChannelMap       : off2013-12-05
+DAQDataFormats      : off2013-12-05
+DAQQualityCheck     : off2013-12-05
+EventDispatcher_CommandSet : off2013-12-05
+NovaDatabase        : off2013-12-05
+NovaDAQConventions  : off2013-12-05
+NovaDAQUtilities    : off2013-12-05
+NovaTimingUtilities : off2013-12-05
+PackageVersion      : off2013-12-05
+RawFileParser       : off2013-12-05
+#
+# NOvA DDT packages go here
+#
+DDTBaseDataProducts : ddt2013-10-02
+#
+# setup package 
+#
+setup               : S14-02-05

@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# Alex Himmel ahimmel@fnal.gov
+#
+
+if echo $@ | grep "\-h" >> /dev/null; then
+    echo "merge_from_anywhere <branch> <rev>"
+    echo "This script merges a series of specific commits from the specified branch into this location and commits it, copying the original commit message."
+    exit 0
+fi
+
+if [[ $1 != "trunk" ]]; then
+    srcname=branches/$1
+fi
+shift
+
+echo "Mergeing from $srcname"
+
+
+for rev in $@; do
+    echo "Processing revision $rev"
+    svn update
+
+    # Find the full url of our current location
+    hereurl=`svn info | grep 'URL' | awk '{print $NF}'`
+
+    # Find the name of the branch
+    herename=`echo $hereurl | egrep -o '(branches)/[^/]+|trunk' | egrep -o '[^/]+$'`
+    
+    if [[ $herename != "trunk" ]]; then
+        herename=branches/$herename
+    fi
+
+    if [[ $herename == $srcname ]]; then
+        echo "Here and the source are the same: $herename. Nothing to do."
+        exit 2
+    fi
+
+    # Create the url for this location at the source
+    srcurl=`echo $hereurl | sed -e "s|$herename|$srcname|"`
+
+    # Store the commit message to put into the later merge commit
+    tmp_message_file=`mktemp -t $USER.merge_from.XXXXXXXXXX` || exit 1
+    echo "Merging revision $rev from $srcname to $herename." > $tmp_message_file
+    svn log $srcurl -r $rev | tail -n +4 | head -n -1 >> $tmp_message_file
+
+    echo "svn merge -c $rev $srcurl"
+    svn merge -c $rev $srcurl 
+    retval=$?
+
+    if [[ $retval != 0 ]]; then
+        echo "Merge failed, probably due to a conflict, stopping here. You probably missed a previous commit. Start over with:"
+        echo "svn revert --recursive . "
+        exit $retval
+    fi
+
+    cat $tmp_message_file
+
+    echo "svn commit -F $tmp_message_file"
+    svn commit -F $tmp_message_file
+    retval=$?
+
+    if [[ $retval != 0 ]]; then
+        echo "Commit failed."
+        exit $retval
+    fi
+
+    rm $tmp_message_file
+    echo
+done
+
+#
+# All steps successfully complete, clean up
+#
+echo "Success!"
+

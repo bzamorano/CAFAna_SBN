@@ -1,0 +1,221 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/subversion/novaart.pkgs.svn/!svn/ver/34258/trunk/SRT_NOVA/scripts
+END
+make_nova_build_log
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/novaart.pkgs.svn/!svn/ver/10309/trunk/SRT_NOVA/scripts/make_nova_build_log
+END
+addpkg_svn
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/subversion/novaart.pkgs.svn/!svn/ver/17178/trunk/SRT_NOVA/scripts/addpkg_svn
+END
+update-setup_slf6.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/subversion/novaart.pkgs.svn/!svn/ver/24674/trunk/SRT_NOVA/scripts/update-setup_slf6.sh
+END
+srt_parallel
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/SRT_NOVA/scripts/srt_parallel
+END
+make_library_shim_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/subversion/novaart.pkgs.svn/!svn/ver/32607/trunk/SRT_NOVA/scripts/make_library_shim_product.sh
+END
+header.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/subversion/novaart.pkgs.svn/!svn/ver/13585/trunk/SRT_NOVA/scripts/header.html
+END
+svn_branch_commit
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/subversion/novaart.pkgs.svn/!svn/ver/32340/trunk/SRT_NOVA/scripts/svn_branch_commit
+END
+ack
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/SRT_NOVA/scripts/ack
+END
+favicon.ico
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/subversion/novaart.pkgs.svn/!svn/ver/13585/trunk/SRT_NOVA/scripts/favicon.ico
+END
+make_anadata_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/subversion/novaart.pkgs.svn/!svn/ver/32966/trunk/SRT_NOVA/scripts/make_anadata_product.sh
+END
+make_nova_ups_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/subversion/novaart.pkgs.svn/!svn/ver/32607/trunk/SRT_NOVA/scripts/make_nova_ups_product.sh
+END
+build_novaart_all_varieties.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/subversion/novaart.pkgs.svn/!svn/ver/13597/trunk/SRT_NOVA/scripts/build_novaart_all_varieties.sh
+END
+nightly_merge.sh
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/subversion/novaart.pkgs.svn/!svn/ver/13445/trunk/SRT_NOVA/scripts/nightly_merge.sh
+END
+make_nova_build_maxopt_log
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/subversion/novaart.pkgs.svn/!svn/ver/10310/trunk/SRT_NOVA/scripts/make_nova_build_maxopt_log
+END
+make_ccache_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/subversion/novaart.pkgs.svn/!svn/ver/34258/trunk/SRT_NOVA/scripts/make_ccache_product.sh
+END
+novadox
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/subversion/novaart.pkgs.svn/!svn/ver/33249/trunk/SRT_NOVA/scripts/novadox
+END
+make_calib_csvs_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/subversion/novaart.pkgs.svn/!svn/ver/32607/trunk/SRT_NOVA/scripts/make_calib_csvs_product.sh
+END
+srt_environment_nova
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/subversion/novaart.pkgs.svn/!svn/ver/31193/trunk/SRT_NOVA/scripts/srt_environment_nova
+END
+merge_from_anywhere
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/novaart.pkgs.svn/!svn/ver/22845/trunk/SRT_NOVA/scripts/merge_from_anywhere
+END
+move_novabuild_all_varieties.sh
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/subversion/novaart.pkgs.svn/!svn/ver/32970/trunk/SRT_NOVA/scripts/move_novabuild_all_varieties.sh
+END
+GNUmakefile
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/SRT_NOVA/scripts/GNUmakefile
+END
+nova_srt_bootstrap
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/subversion/novaart.pkgs.svn/!svn/ver/9686/trunk/SRT_NOVA/scripts/nova_srt_bootstrap
+END
+update-setup.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/subversion/novaart.pkgs.svn/!svn/ver/23157/trunk/SRT_NOVA/scripts/update-setup.sh
+END
+make_gperftools_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/subversion/novaart.pkgs.svn/!svn/ver/34258/trunk/SRT_NOVA/scripts/make_gperftools_product.sh
+END
+make_gibuu_libs_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/subversion/novaart.pkgs.svn/!svn/ver/32607/trunk/SRT_NOVA/scripts/make_gibuu_libs_product.sh
+END
+make_nova_branch_build_log
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/subversion/novaart.pkgs.svn/!svn/ver/10704/trunk/SRT_NOVA/scripts/make_nova_branch_build_log
+END
+update-release
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/subversion/novaart.pkgs.svn/!svn/ver/30295/trunk/SRT_NOVA/scripts/update-release
+END
+update_nova_doxygen
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/novaart.pkgs.svn/!svn/ver/24671/trunk/SRT_NOVA/scripts/update_nova_doxygen
+END
+cafdox
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/subversion/novaart.pkgs.svn/!svn/ver/24658/trunk/SRT_NOVA/scripts/cafdox
+END
+merge_from_trunk
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/subversion/novaart.pkgs.svn/!svn/ver/22845/trunk/SRT_NOVA/scripts/merge_from_trunk
+END
+make_nova_build_prof_log
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/subversion/novaart.pkgs.svn/!svn/ver/4818/trunk/SRT_NOVA/scripts/make_nova_build_prof_log
+END
+make_pidlib_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/subversion/novaart.pkgs.svn/!svn/ver/11766/trunk/SRT_NOVA/scripts/make_pidlib_product.sh
+END
+check_ups_dependencies
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/subversion/novaart.pkgs.svn/!svn/ver/21937/trunk/SRT_NOVA/scripts/check_ups_dependencies
+END
+make_mcnp_libs_product.sh
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/subversion/novaart.pkgs.svn/!svn/ver/33145/trunk/SRT_NOVA/scripts/make_mcnp_libs_product.sh
+END
+run_cppcheck.sh
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/subversion/novaart.pkgs.svn/!svn/ver/23168/trunk/SRT_NOVA/scripts/run_cppcheck.sh
+END
+novasoft_build
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/subversion/novaart.pkgs.svn/!svn/ver/33556/trunk/SRT_NOVA/scripts/novasoft_build
+END

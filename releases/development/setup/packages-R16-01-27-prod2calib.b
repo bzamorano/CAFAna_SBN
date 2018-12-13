@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R16-01-27-prod2calib.b
+Alignment           : R16-01-27-prod2calib.b
+AnalysisSkimmer     : R16-01-27-prod2calib.b
+BreakPointFitter    : R16-01-27-prod2calib.b
+BremShowerFilter    : R16-01-27-prod2calib.b
+CAFAna              : R16-01-27-prod2calib.b
+CAFMaker            : R16-01-27-prod2calib.b
+CAFReweight         : R16-01-27-prod2calib.b
+CalHit              : R16-01-27-prod2calib.b
+Calibration         : R16-01-27-prod2calib.b
+CalibrationUtils    : R16-01-27-prod2calib.b
+CalibrationDataProducts : R16-01-27-prod2calib.b
+Calibrator          : R16-01-27-prod2calib.b
+ChannelInfo         : R16-01-27-prod2calib.b
+CMap                : R16-01-27-prod2calib.b
+Commissioning       : R16-01-27-prod2calib.b
+CosmicExposureInfo  : R16-01-27-prod2calib.b
+CosRej              : R16-01-27-prod2calib.b
+CVN                 : R16-01-27-prod2calib.b
+DAQ2RawDigit        : R16-01-27-prod2calib.b
+Database	    : R16-01-27-prod2calib.b
+DataQuality         : R16-01-27-prod2calib.b
+DDTConverters       : R16-01-27-prod2calib.b
+Demo		    : R16-01-27-prod2calib.b
+DetectorPerformance : R16-01-27-prod2calib.b
+DiscreteTracker     : R16-01-27-prod2calib.b
+DiskUsage           : R16-01-27-prod2calib.b
+DQSpillFlags        : R16-01-27-prod2calib.b
+DSOResultPlotter    : R16-01-27-prod2calib.b
+ElasticArms         : R16-01-27-prod2calib.b
+Eval	            : R16-01-27-prod2calib.b
+EventDisplay        : R16-01-27-prod2calib.b
+EventGenerator      : R16-01-27-prod2calib.b
+EventSummary        : R16-01-27-prod2calib.b
+Filter              : R16-01-27-prod2calib.b
+FuzzyKVertex        : R16-01-27-prod2calib.b
+g4nova              : R16-01-27-prod2calib.b
+Geometry            : R16-01-27-prod2calib.b
+GeometryObjects     : R16-01-27-prod2calib.b
+HMatrixE            : R16-01-27-prod2calib.b
+HoughTransform      : R16-01-27-prod2calib.b
+HoughVertex         : R16-01-27-prod2calib.b
+IFDBSpillInfo       : R16-01-27-prod2calib.b
+LEM                 : R16-01-27-prod2calib.b
+MCCheater           : R16-01-27-prod2calib.b
+MCCheckOut          : R16-01-27-prod2calib.b
+Metadata            : R16-01-27-prod2calib.b
+MEFinder            : R16-01-27-prod2calib.b
+MichelEFilter       : R16-01-27-prod2calib.b
+MockDataDAQ         : R16-01-27-prod2calib.b
+MuonRemove	    : R16-01-27-prod2calib.b
+NDRockMuon          : R16-01-27-prod2calib.b
+NovaFTS             : R16-01-27-prod2calib.b
+NovaSimMixer        : R16-01-27-prod2calib.b
+NueSandbox          : R16-01-27-prod2calib.b
+NumuEnergy          : R16-01-27-prod2calib.b
+NumuSandbox         : R16-01-27-prod2calib.b
+OnlineMonitoring    : R16-01-27-prod2calib.b
+OscLib              : R16-01-27-prod2calib.b
+PhotonTransport     : R16-01-27-prod2calib.b
+Preselection        : R16-01-27-prod2calib.b
+Production          : R16-01-27-prod2calib.b
+QEEventFinder       : R16-01-27-prod2calib.b
+RawData             : R16-01-27-prod2calib.b
+ReadoutSim          : R16-01-27-prod2calib.b
+RecoBase            : R16-01-27-prod2calib.b
+RecoBaseHit         : R16-01-27-prod2calib.b
+RecoJMShower        : R16-01-27-prod2calib.b
+RecVarPID           : R16-01-27-prod2calib.b
+ReMId               : R16-01-27-prod2calib.b
+RunHistory	    : R16-01-27-prod2calib.b
+ShowerE             : R16-01-27-prod2calib.b
+ShowerLID           : R16-01-27-prod2calib.b
+Simulation          : R16-01-27-prod2calib.b
+Slicer              : R16-01-27-prod2calib.b
+SRT_NOVA            : R16-01-27-prod2calib.b
+StandardRecord      : R16-01-27-prod2calib.b
+SummaryData         : R16-01-27-prod2calib.b
+TimingFit           : R16-01-27-prod2calib.b
+TrackFit            : R16-01-27-prod2calib.b
+Utilities           : R16-01-27-prod2calib.b
+Validation          : R16-01-27-prod2calib.b
+VertexDT            : R16-01-27-prod2calib.b
+VertexFinder        : R16-01-27-prod2calib.b
+ZukCluster          : R16-01-27-prod2calib.b
+#
+# setup package
+#
+setup               : R16-01-27-prod2calib.b

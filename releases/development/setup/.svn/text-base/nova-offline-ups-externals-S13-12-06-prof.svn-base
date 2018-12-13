@@ -1,0 +1,18 @@
+art v1_08_04 -q+nu:+e4:+prof
+artdaq v1_03_01 -q+nu:+e4:+eth:+prof
+cppcheck v1_59
+cry v1_7 -q+prof:+e4
+cstxsd v3_3_0_p02a -q+gcc48
+genie v2_8_0a -q+prof:+e4
+genie_xsec R-2_8_0 -q+default
+genie_phyopt R-2_8_0 -q+dkcharmtau
+ifbeam v1_2_7 -q+nu:+prof:+e4
+ifdh_art v1_2_7 -q+nu:+prof:+e4
+libwda v2_8_1
+novacon v1_2d
+NumiBeamDB v2_0_0 -q+R53409GCC48
+nutools v1_00_04 -q+prof:+e4
+psycopg2 v2_5_p2_7
+sam_web_client v1_3
+totalview v8_9_0a
+xerces_c v3_1_1 -q+prof:+e4

@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+#ANG                 : R15-11-17-miniprod-br
+AirShower           : R15-11-17-miniprod-br
+Alignment           : R15-11-17-miniprod-br
+AnalysisSkimmer     : R15-11-17-miniprod-br
+BreakPointFitter    : R15-11-17-miniprod-br
+BremShowerFilter    : R15-11-17-miniprod-br
+CAFAna              : R15-11-17-miniprod-br
+CAFMaker            : R15-11-17-miniprod-br
+CAFReweight         : R15-11-17-miniprod-br
+CalHit              : R15-11-17-miniprod-br
+Calibration         : R15-11-17-miniprod-br
+CalibrationUtils    : R15-11-17-miniprod-br
+CalibrationDataProducts : R15-11-17-miniprod-br
+Calibrator          : R15-11-17-miniprod-br
+ChannelInfo         : R15-11-17-miniprod-br
+ClusterMakerSS      : R15-11-17-miniprod-br
+CMap                : R15-11-17-miniprod-br
+Commissioning       : R15-11-17-miniprod-br
+CosmicExposureInfo  : R15-11-17-miniprod-br
+CosRej              : R15-11-17-miniprod-br
+DAQ2RawDigit        : R15-11-17-miniprod-br
+Database	    : R15-11-17-miniprod-br
+DDTConverters       : R15-11-17-miniprod-br
+Demo		    : R15-11-17-miniprod-br
+DetectorPerformance : R15-11-17-miniprod-br
+DiscreteTracker     : R15-11-17-miniprod-br
+DiskUsage           : R15-11-17-miniprod-br
+DQSpillFlags        : R15-11-17-miniprod-br
+DSOResultPlotter    : R15-11-17-miniprod-br
+ElasticArms         : R15-11-17-miniprod-br
+Eval	            : R15-11-17-miniprod-br
+EventDisplay        : R15-11-17-miniprod-br
+EventGenerator      : R15-11-17-miniprod-br
+EventSummary        : R15-11-17-miniprod-br
+Filter              : R15-11-17-miniprod-br
+FuzzyKVertex        : R15-11-17-miniprod-br
+g4nova              : R15-11-17-miniprod-br
+Geometry            : R15-11-17-miniprod-br
+GeometryObjects     : R15-11-17-miniprod-br
+HMatrixE            : R15-11-17-miniprod-br
+HoughTransform      : R15-11-17-miniprod-br
+HoughVertex         : R15-11-17-miniprod-br
+IFDBSpillInfo       : R15-11-17-miniprod-br
+LEM                 : R15-11-17-miniprod-br
+MCCheater           : R15-11-17-miniprod-br
+MCCheckOut          : R15-11-17-miniprod-br
+Metadata            : R15-11-17-miniprod-br
+MEFinder            : R15-11-17-miniprod-br
+MichelEFilter       : R15-11-17-miniprod-br
+MockDataDAQ         : R15-11-17-miniprod-br
+MuonRemove	    : R15-11-17-miniprod-br
+NDRockMuon          : R15-11-17-miniprod-br
+NovaFTS             : R15-11-17-miniprod-br
+NovaSimMixer        : R15-11-17-miniprod-br
+NueSandbox          : R15-11-17-miniprod-br
+NumuEnergy          : R15-11-17-miniprod-br
+NumuSandbox         : R15-11-17-miniprod-br
+OnlineMonitoring    : R15-11-17-miniprod-br
+OscLib              : R15-11-17-miniprod-br
+PhotonTransport     : R15-11-17-miniprod-br
+Preselection        : R15-11-17-miniprod-br
+Production          : R15-11-17-miniprod-br
+QEEventFinder       : R15-11-17-miniprod-br
+RawData             : R15-11-17-miniprod-br
+ReadoutSim          : R15-11-17-miniprod-br
+RecoBase            : R15-11-17-miniprod-br
+RecoBaseHit         : R15-11-17-miniprod-br
+RecoJMShower        : R15-11-17-miniprod-br
+RecVarPID           : R15-11-17-miniprod-br
+ReMId               : R15-11-17-miniprod-br
+RunHistory	    : R15-11-17-miniprod-br
+ShowerE             : R15-11-17-miniprod-br
+ShowerLID           : R15-11-17-miniprod-br
+Simulation          : R15-11-17-miniprod-br
+Slicer              : R15-11-17-miniprod-br
+SRT_NOVA            : R15-11-17-miniprod-br
+StandardRecord      : R15-11-17-miniprod-br
+SummaryData         : R15-11-17-miniprod-br
+TimingFit           : R15-11-17-miniprod-br
+TrackFit            : R15-11-17-miniprod-br
+Utilities           : R15-11-17-miniprod-br
+Validation          : R15-11-17-miniprod-br
+VertexDT            : R15-11-17-miniprod-br
+VertexFinder        : R15-11-17-miniprod-br
+ZukCluster          : R15-11-17-miniprod-br
+#
+# setup package
+#
+setup               : R15-11-17-miniprod-br

@@ -1,0 +1,92 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R15-05-22-nuexsecana.a
+Alignment           : R15-05-22-nuexsecana.a
+BreakPointFitter    : R15-05-22-nuexsecana.a
+BremShowerFilter    : R15-05-22-nuexsecana.a
+CAFAna              : R15-05-22-nuexsecana.a
+CAFMaker            : R15-05-22-nuexsecana.a
+CAFReweight         : R15-05-22-nuexsecana.a
+CalHit              : R15-05-22-nuexsecana.a
+Calibration         : R15-05-22-nuexsecana.a
+CalibrationUtils    : R15-05-22-nuexsecana.a
+CalibrationDataProducts : R15-05-22-nuexsecana.a
+Calibrator          : R15-05-22-nuexsecana.a
+ChannelInfo         : R15-05-22-nuexsecana.a
+ClusterMakerSS      : R15-05-22-nuexsecana.a
+CMap                : R15-05-22-nuexsecana.a
+Commissioning       : R15-05-22-nuexsecana.a
+CosmicExposureInfo  : R15-05-22-nuexsecana.a
+CosRej              : R15-05-22-nuexsecana.a
+DAQ2RawDigit        : R15-05-22-nuexsecana.a
+Database	    : R15-05-22-nuexsecana.a
+DDTConverters       : R15-05-22-nuexsecana.a
+Demo		    : R15-05-22-nuexsecana.a
+DetectorPerformance : R15-05-22-nuexsecana.a
+DiscreteTracker     : R15-05-22-nuexsecana.a
+DQSpillFlags        : R15-05-22-nuexsecana.a
+DSOResultPlotter    : R15-05-22-nuexsecana.a
+ElasticArms         : R15-05-22-nuexsecana.a
+Eval	            : R15-05-22-nuexsecana.a
+EventDisplay        : R15-05-22-nuexsecana.a
+EventGenerator      : R15-05-22-nuexsecana.a
+EventSummary        : R15-05-22-nuexsecana.a
+Filter              : R15-05-22-nuexsecana.a
+FuzzyKVertex        : R15-05-22-nuexsecana.a
+g4nova              : R15-05-22-nuexsecana.a
+Geometry            : R15-05-22-nuexsecana.a
+GeometryObjects     : R15-05-22-nuexsecana.a
+HMatrixE            : R15-05-22-nuexsecana.a
+HoughTransform      : R15-05-22-nuexsecana.a
+HoughVertex         : R15-05-22-nuexsecana.a
+IFDBSpillInfo       : R15-05-22-nuexsecana.a
+LEM                 : R15-05-22-nuexsecana.a
+MCCheater           : R15-05-22-nuexsecana.a
+MCCheckOut          : R15-05-22-nuexsecana.a
+Metadata            : R15-05-22-nuexsecana.a
+MichelEFilter       : R15-05-22-nuexsecana.a
+MockDataDAQ         : R15-05-22-nuexsecana.a
+MuonRemove	    : R15-05-22-nuexsecana.a
+NDRockMuon          : R15-05-22-nuexsecana.a
+NovaFTS             : R15-05-22-nuexsecana.a
+NovaSimMixer        : R15-05-22-nuexsecana.a
+NueSandbox          : R15-05-22-nuexsecana.a
+NumuEnergy          : R15-05-22-nuexsecana.a
+NumuSandbox         : R15-05-22-nuexsecana.a
+OnlineMonitoring    : R15-05-22-nuexsecana.a
+OscLib              : R15-05-22-nuexsecana.a
+PhotonTransport     : R15-05-22-nuexsecana.a
+Preselection        : R15-05-22-nuexsecana.a
+Production          : R15-05-22-nuexsecana.a
+QEEventFinder       : R15-05-22-nuexsecana.a
+RawData             : R15-05-22-nuexsecana.a
+ReadoutSim          : R15-05-22-nuexsecana.a
+RecoBase            : R15-05-22-nuexsecana.a
+RecoBaseHit         : R15-05-22-nuexsecana.a
+RecoJMShower        : R15-05-22-nuexsecana.a
+RecVarPID           : R15-05-22-nuexsecana.a
+ReMId               : R15-05-22-nuexsecana.a
+RunHistory	    : R15-05-22-nuexsecana.a
+ShowerLID           : R15-05-22-nuexsecana.a
+Simulation          : R15-05-22-nuexsecana.a
+Slicer              : R15-05-22-nuexsecana.a
+SRT_NOVA            : R15-05-22-nuexsecana.a
+StandardRecord      : R15-05-22-nuexsecana.a
+SummaryData         : R15-05-22-nuexsecana.a
+TimingFit           : R15-05-22-nuexsecana.a
+TrackFit            : R15-05-22-nuexsecana.a
+Utilities           : R15-05-22-nuexsecana.a
+Validation          : R15-05-22-nuexsecana.a
+VertexDT            : R15-05-22-nuexsecana.a
+VertexFinder        : R15-05-22-nuexsecana.a
+XnuePID             : R15-05-22-nuexsecana.a
+ZukCluster          : R15-05-22-nuexsecana.a
+#
+# setup package
+#
+setup               : R15-05-22-nuexsecana.a

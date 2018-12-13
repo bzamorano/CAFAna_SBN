@@ -1,0 +1,119 @@
+#!/bin/sh
+
+# Brief:  Update the doxygen documentation for novasoft and associated
+#         external products. Runs nightly.
+# Author: gsdavies@fnal.gov
+
+if [ $USER != "novasoft" ]; then
+    echo "This script must be run as novasoft"
+    exit 1
+fi
+
+# Setup novasoft to get correct $NUTOOLS_DIR, used in novadox
+source /grid/fermiapp/nova/novaart/novasvn/setup/setup_nova.sh
+
+# Specify doxygen directories
+NOVA_HOME=/nova/app/home/novasoft
+NOVA_WWW=/nusoft/app/web/htdoc/nova/novasoft/doxygen
+NOVA_WWW_CAF=/nusoft/app/web/htdoc/nova/novasoft/cafdox
+DOXY_LOG=$NOVA_HOME/nova_doxygen.log
+EMAIL_LIST="gsdavies@fnal.gov"
+VERSION="1.8.11"
+
+# Delete previous day's log
+rm -f $DOXY_LOG
+
+date | tee -a $DOXY_LOG
+
+# Check $SRT_PUBLIC_CONTEXT 
+if [ -z "$SRT_PUBLIC_CONTEXT" ]; then
+    echo "SRT_PUBLIC_CONTEXT not set. Do not run." | tee -a $DOXY_LOG
+    cat $DOXY_LOG | mail -s "Doxygen update not run" $EMAIL_LIST
+    exit 1
+fi
+
+# Clean out the old doxygen documentation
+if [ -d "$NOVA_HOME/doxygen/dox/html" ]; then
+    echo "Removing old html directory $NOVA_HOME/doxygen/html" | tee -a $DOXY_LOG
+    rm -rf $NOVA_HOME/doxygen/dox/html
+fi
+if [ -d "$NOVA_HOME/doxygen/cafdox/html" ]; then
+    echo "Removing old html directory $NOVA_HOME/doxygen/cafdox/html" | tee -a $DOXY_LOG
+    rm -rf $NOVA_HOME/doxygen/dox/html
+fi
+if [ -d "$NOVA_HOME/doxygen/cafdox/latex" ]; then
+    echo "Removing old latex directory $NOVA_HOME/doxygen/cafdox/latex" | tee -a $DOXY_LOG
+    rm -rf $NOVA_HOME/doxygen/dox/html
+fi
+
+# Run it
+echo Running Doxygen | tee -a $DOXY_LOG
+cd $NOVA_HOME
+./doxygen/doxygen-${VERSION}/bin/doxygen $SRT_PUBLIC_CONTEXT/SRT_NOVA/scripts/novadox | tee -a $DOXY_LOG
+echo
+echo "##############################################################"
+echo
+echo Running CAF Doxygen | tee -a $DOXY_LOG
+./doxygen/doxygen-${VERSION}/bin/doxygen $SRT_PUBLIC_CONTEXT/SRT_NOVA/scripts/cafdox | tee -a $DOXY_LOG
+# Replace previous build with new one
+if [ -d "$NOVA_WWW/html" ]; then
+    rm -rf $NOVA_WWW/html
+fi
+if [ -d "$NOVA_WWW_CAF/html" ]; then
+    rm -rf $NOVA_WWW_CAF/html
+fi
+
+
+echo
+echo Finished CAF Doxygen | tee -a $DOXY_LOG
+echo "#############################################################"
+echo
+echo Copying output to $NOVA_WWW/html | tee -a $DOXY_LOG
+cp -r $NOVA_HOME/doxygen/dox/html $NOVA_WWW/html &>/dev/null
+# Make sure cp was succesful
+if [ $? -eq 0 ]; then
+    echo "Copy of $NOVA_HOME/doxygen/dox/html complete" | tee -a $DOXY_LOG
+else
+    echo "Copy of $NOVA_HOME/doxygen/dox/html failed." | tee -a $DOXY_LOG
+    cat $DOXY_LOG | mail -s "Doxygen html/ copy failed!" $EMAIL_LIST
+fi
+cp -r $NOVA_HOME/doxygen/cafdox/html $NOVA_WWW_CAF/html &>/dev/null
+if [ $? -eq 0 ]; then
+    echo "Copy of $NOVA_HOME/doxygen/cafdox/html complete" | tee -a $DOXY_LOG
+else
+    echo "Copy of $NOVA_HOME/doxygen/cafdox/html failed." | tee -a $DOXY_LOG
+    cat $DOXY_LOG | mail -s "CAF Doxygen copy failed!" $EMAIL_LIST
+fi
+cp -r $NOVA_HOME/doxygen/doxygen-${VERSION}/templates/html/search.js $NOVA_WWW/html/search/
+if [ $? -eq 0 ]; then
+    echo "Copy of $NOVA_HOME/doxygen/doxygen-${VERSION}/templates/html/search.js complete" | tee -a $DOXY_LOG
+else
+    echo "Copy of $NOVA_HOME/doxygen/doxygen-${VERSION}/templates/html/search.js failed." | tee -a $DOXY_LOG
+    cat $DOXY_LOG | mail -s "Doxygen search.js copy failed!" $EMAIL_LIST
+fi
+
+echo "Now generating PDF of CAF - caf::StandardRecord documentation"
+cd $NOVA_HOME/doxygen/cafdox/latex
+
+# novasoft built version of tex-live 2016
+# UPS product candidate?
+export PATH=export PATH=$NOVA_HOME/latex/2016/bin/x86_64-linux/:$PATH
+
+make | tee -a $DOXY_LOG
+
+if [ -e "$NOVA_HOME/doxygen/cafdox/latex/refman.pdf" ]; then
+    echo "Successfully created CAF reference manual." | tee -a $DOXY_LOG
+    # Here is where we can move it to somewhere useful.
+    cp $NOVA_HOME/doxygen/cafdox/latex/refman.pdf $NOVA_WWW_CAF/caf_refman.pdf
+    if [ $? -eq 0 ]; then
+	echo "Copy of $NOVA_HOME/doxygen/cafdox/latex/refman.pdf complete" | tee -a $DOXY_LOG
+    else
+	echo "Copy of $NOVA_HOME/doxygen/cafdox/latex/refman.pdf failed." | tee -a $DOXY_LOG
+	cat $DOXY_LOG | mail -s "refman.pdf copy failed!" $EMAIL_LIST
+    fi
+else
+    echo "Failed to make CAF reference manual." | tee -a $DOXY_LOG
+    cat $DOXY_LOG | mail -s "caf refman creation failed!" $EMAIL_LIST
+fi
+echo
+echo Done at `date` | tee -a $DOXY_LOG

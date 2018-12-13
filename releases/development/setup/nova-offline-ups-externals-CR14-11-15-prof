@@ -1,0 +1,10 @@
+art          v1_12_02    -q+nu:+e6:+prof
+condb        v2_0b
+genie_xsec   R-2_8_0     -q+default
+genie_phyopt R-2_8_0     -q+dkcharmtau
+ifdh_art     v1_5_4      -q+nu:+prof:+e6:+s5
+nutools      v1_06_04    -q+prof:+e6
+psycopg2     v2_5_p2_7
+totalview    v8_9_0a
+novaddt      v03_00_02   -q+e6:+prof
+gdb          v7_8

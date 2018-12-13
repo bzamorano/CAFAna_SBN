@@ -1,0 +1,31 @@
+#######################
+
+
+#### Update GPVM node setup - slf5 - depricated
+#15 00 * * * /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/update-setup.sh >> /nova/app/home/novasoft/nightly_build/logs/update_setup.slf6.log 2>&1
+
+#### Update GPVM node setup - slf6 
+00 00 * * * /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/update-setup_slf6.sh  >> /nova/app/home/novasoft/nightly_build/logs/update_setup.slf6.log 2>&1
+
+#### Grab the latest Jenkins tarballs
+# Nightly builds of development
+*/10 * * * * /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/jenkins_builds/get_release_from_jenkins.sh -r development -o slf6 -f -x  >> /nova/app/home/novasoft/nightly_build/logs/get_release_from_jenkins.slf6.development.log 2>&1
+# Tagged Release builds 
+5-59/10 * * * * /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/jenkins_builds/get_release_from_jenkins.sh  -o slf6 -f -x  >> /nova/app/home/novasoft/nightly_build/logs/get_release_from_jenkins.slf6.release.log 2>&1
+
+
+#### Move the builds in to place on the gpvm nodes
+30 03 * * * /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/move_novabuild_all_varieties.sh -6 -d  >> /nova/app/home/novasoft/nightly_build/logs/move_novabuild.slf6.log 2>&1
+
+
+# datagram server for recording setup invocations
+# restart this every day so that log files are manageable and easily searched
+# if run from other than novabuild01.fnal.gov, need to change datagram_client.py
+# to send packets to the right node
+
+50 1 * * * /nova/app/home/novasoft/nightly_build/setup/datagram/run_datagram.sh >> /nova/app/home/novasoft/nightly_build/logs/run_datagram.log 2>&1
+
+### Run Logrotate on the log files
+10 00 * * * /usr/sbin/logrotate /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/crontabs/logrotate.conf --state=/nova/app/home/novasoft/nightly_build/logs/logrotate.state 2>&1 | mail -s "logrotate novabuild01" "dpershey@fnal.gov"
+
+00 04 * * * cp -r /nova/app/home/novasoft/nightly_build/logs/* /nusoft/app/web/htdoc/nova/novasoft/cronjob_logs/ 2>&1 | mail -s "copy logs novabuild01" "dpershey@fnal.gov"

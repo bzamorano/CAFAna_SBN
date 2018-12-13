@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R16-02-11-prod2genie-br
+Alignment           : R16-02-11-prod2genie-br
+AnalysisSkimmer     : R16-02-11-prod2genie-br
+BreakPointFitter    : R16-02-11-prod2genie-br
+BremShowerFilter    : R16-02-11-prod2genie-br
+CAFAna              : R16-02-11-prod2genie-br
+CAFMaker            : R16-02-11-prod2genie-br
+CAFReweight         : R16-02-11-prod2genie-br
+CalHit              : R16-02-11-prod2genie-br
+Calibration         : R16-02-11-prod2genie-br
+CalibrationUtils    : R16-02-11-prod2genie-br
+CalibrationDataProducts : R16-02-11-prod2genie-br
+Calibrator          : R16-02-11-prod2genie-br
+ChannelInfo         : R16-02-11-prod2genie-br
+CMap                : R16-02-11-prod2genie-br
+Commissioning       : R16-02-11-prod2genie-br
+CosmicExposureInfo  : R16-02-11-prod2genie-br
+CosRej              : R16-02-11-prod2genie-br
+CVN                 : R16-02-11-prod2genie-br
+DAQ2RawDigit        : R16-02-11-prod2genie-br
+Database	    : R16-02-11-prod2genie-br
+DataQuality         : R16-02-11-prod2genie-br
+DDTConverters       : R16-02-11-prod2genie-br
+Demo		    : R16-02-11-prod2genie-br
+DetectorPerformance : R16-02-11-prod2genie-br
+DiscreteTracker     : R16-02-11-prod2genie-br
+DiskUsage           : R16-02-11-prod2genie-br
+DQSpillFlags        : R16-02-11-prod2genie-br
+DSOResultPlotter    : R16-02-11-prod2genie-br
+ElasticArms         : R16-02-11-prod2genie-br
+Eval	            : R16-02-11-prod2genie-br
+EventDisplay        : R16-02-11-prod2genie-br
+EventGenerator      : R16-02-11-prod2genie-br
+EventSummary        : R16-02-11-prod2genie-br
+Filter              : R16-02-11-prod2genie-br
+FuzzyKVertex        : R16-02-11-prod2genie-br
+g4nova              : R16-02-11-prod2genie-br
+Geometry            : R16-02-11-prod2genie-br
+GeometryObjects     : R16-02-11-prod2genie-br
+HMatrixE            : R16-02-11-prod2genie-br
+HoughTransform      : R16-02-11-prod2genie-br
+HoughVertex         : R16-02-11-prod2genie-br
+IFDBSpillInfo       : R16-02-11-prod2genie-br
+LEM                 : R16-02-11-prod2genie-br
+MCCheater           : R16-02-11-prod2genie-br
+MCCheckOut          : R16-02-11-prod2genie-br
+Metadata            : R16-02-11-prod2genie-br
+MEFinder            : R16-02-11-prod2genie-br
+MichelEFilter       : R16-02-11-prod2genie-br
+MockDataDAQ         : R16-02-11-prod2genie-br
+MuonRemove	    : R16-02-11-prod2genie-br
+NDRockMuon          : R16-02-11-prod2genie-br
+NovaFTS             : R16-02-11-prod2genie-br
+NovaSimMixer        : R16-02-11-prod2genie-br
+NueSandbox          : R16-02-11-prod2genie-br
+NumuEnergy          : R16-02-11-prod2genie-br
+NumuSandbox         : R16-02-11-prod2genie-br
+OnlineMonitoring    : R16-02-11-prod2genie-br
+OscLib              : R16-02-11-prod2genie-br
+PhotonTransport     : R16-02-11-prod2genie-br
+Preselection        : R16-02-11-prod2genie-br
+Production          : R16-02-11-prod2genie-br
+QEEventFinder       : R16-02-11-prod2genie-br
+RawData             : R16-02-11-prod2genie-br
+ReadoutSim          : R16-02-11-prod2genie-br
+RecoBase            : R16-02-11-prod2genie-br
+RecoBaseHit         : R16-02-11-prod2genie-br
+RecoJMShower        : R16-02-11-prod2genie-br
+RecVarPID           : R16-02-11-prod2genie-br
+ReMId               : R16-02-11-prod2genie-br
+RunHistory	    : R16-02-11-prod2genie-br
+ShowerE             : R16-02-11-prod2genie-br
+ShowerLID           : R16-02-11-prod2genie-br
+Simulation          : R16-02-11-prod2genie-br
+Slicer              : R16-02-11-prod2genie-br
+SRT_NOVA            : R16-02-11-prod2genie-br
+StandardRecord      : R16-02-11-prod2genie-br
+SummaryData         : R16-02-11-prod2genie-br
+TimingFit           : R16-02-11-prod2genie-br
+TrackFit            : R16-02-11-prod2genie-br
+Utilities           : R16-02-11-prod2genie-br
+Validation          : R16-02-11-prod2genie-br
+VertexDT            : R16-02-11-prod2genie-br
+VertexFinder        : R16-02-11-prod2genie-br
+ZukCluster          : R16-02-11-prod2genie-br
+#
+# setup package
+#
+setup               : R16-02-11-prod2genie-br

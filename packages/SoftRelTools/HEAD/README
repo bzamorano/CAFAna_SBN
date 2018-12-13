@@ -1,0 +1,9 @@
+SRT has been stable for a long time, but we (on the NOvA experiment)
+are beginning to have issues with certain linux configurations,
+specifically SL6 Docker instances running on top of newer configurations.
+We intend to commit a small fix which will allow SRT to determine the
+linux version of the Docker instance instead of the underlying hardware.
+
+If you are still using SRT and want to discuss this potential change
+with us, please contact Alex Himmel at ahimmel@fnal.gov
+

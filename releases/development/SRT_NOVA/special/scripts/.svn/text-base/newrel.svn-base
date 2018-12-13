@@ -1,0 +1,30 @@
+# Add job directory to standard_dirs to be created when newrel is run
+script_defaults () {
+    release_type=test
+    empty=false
+    use_version_file=false
+    expected_release_args=2
+    standard_dirs=" tmp bin lib include man doc results job "
+    standard_files="GNUmakefile"
+    boot=false
+}
+
+# Original Dereference: If /dirA/dirB is a link to /dirA/dirC
+#  dereference /dirA/dirB
+# returns 
+#   dirC
+# If /dirZ/dirB is a regular directory
+#  dereference /dirA/dirB
+# returns 
+#   dirB
+
+# This leads to problems when using links for development base release.
+# This function will return the basename of the link without dereferencing it.
+dereference () {
+	curdir=`pwd`
+	cd $1 > /dev/null
+	name=`pwd`
+	name=`basename $name`
+	echo $name
+	cd $curdir
+}

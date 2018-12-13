@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.6">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.redmine.RedmineProjectProperty plugin="redmine@0.15">
+      <redmineWebsiteName>Fermilab Redmine</redmineWebsiteName>
+      <projectName>novaddt</projectName>
+    </hudson.plugins.redmine.RedmineProjectProperty>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@1.37">
+      <projectNameList>
+        <string>*</string>
+      </projectNameList>
+    </hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>EQUAL</name>
+          <description></description>
+          <defaultValue>e9</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ONQUAL</name>
+          <description>set this to &quot;on&quot; to initiate the online build, otherwise leave it blank</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NOVADAQDEPS_VER</name>
+          <description></description>
+          <defaultValue>v02_04_02</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NOVADAQVER</name>
+          <description></description>
+          <defaultValue>v10_01_00</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NOVADDTDEPS_VER</name>
+          <description></description>
+          <defaultValue>v02_00_07</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NOVADDTVER</name>
+          <description></description>
+          <defaultValue>v04_00_09</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NUVER</name>
+          <description>Scisoft version of nu products</description>
+          <defaultValue>v1_21_01</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>SQUAL</name>
+          <description></description>
+          <defaultValue>s30</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@1.8.4">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <matrixOptions>
+        <throttleMatrixBuilds>true</throttleMatrixBuilds>
+        <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
+      </matrixOptions>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>swarm</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.TextAxis>
+      <name>BUILDTYPE</name>
+      <values>
+        <string>debug</string>
+        <string>prof</string>
+      </values>
+    </hudson.matrix.TextAxis>
+    <hudson.matrix.LabelAxis>
+      <name>label1</name>
+      <values>
+        <string>SLF6</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+  </axes>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+cd $WORKSPACE
+rm -rfv $WORKSPACE/buildout
+mkdir -p $WORKSPACE/buildout
+rm -rf buildtemp
+mkdir -p buildtemp
+
+daqdepver=${NOVADAQDEPS_VER//v}
+daqdepver=${daqdepver//_/.}
+ddtdepver=${NOVADDTDEPS_VER//v}
+ddtdepver=${ddtdepver//_/.}
+
+buildqual=${EQUAL}
+builddaqqual=${EQUAL}
+
+cd ${WORKSPACE}/buildtemp
+export TOPLEV=${WORKSPACE}/buildtemp
+mkdir localProducts
+mkdir src
+mkdir build_novadaq
+mkdir build_novaddt
+export SRCDIR=${TOPLEV}/src
+export BUILDDAQ=${TOPLEV}/build_novadaq
+export BUILDDDT=${TOPLEV}/build_novaddt
+export LOCALPROD=${TOPLEV}/localProducts
+
+echo &quot;TOPLEV is ${TOPLEV}&quot;
+echo &quot;BUILDDAQ is ${BUILDDAQ}&quot;
+echo &quot;BUILDDDT is ${BUILDDDT}&quot;
+echo &quot;SRCDIR is ${SRCDIR}&quot;
+echo &quot;LOCALPROD is ${LOCALPROD}&quot;
+
+# checkout the novadaqdeps product version and make the tarball
+
+# check out the products necessary for building - this allows us to build on OS X as well
+
+# determine the build flavor
+# I commented this when added NUVER and SQUAL parameters to build
+# I think, there will be cases when we need these lines back
+#  if [ &quot;${EQUAL}&quot; = &quot;e7&quot; ]
+#  then
+#    export NUVER=v1_14_02
+#    export SQUAL=s15
+#  elif [ &quot;${EQUAL}&quot; = &quot;e9&quot; ]
+#  then
+#    export NUVER=v1_17_00
+#    export SQUAL=s21
+#  fi  
+
+OS=`uname`
+if [ &quot;${OS}&quot; = &quot;Linux&quot; ]
+then
+  flvr=slf`lsb_release -r | sed -e &apos;s/[[:space:]]//g&apos; | cut -f2 -d&quot;:&quot; | cut -f1 -d&quot;.&quot;`
+  source /grid/fermiapp/products/nova/externals/setup
+  cp -R /grid/fermiapp/products/nova/externals/.upsfiles ${LOCALPROD}
+  export PRODUCTS=${LOCALPROD}:${PRODUCTS}
+elif [ &quot;${OS}&quot; = &quot;Darwin&quot; ]
+then
+  flvr=d`uname -r | cut -f1 -d&quot;.&quot;`
+  #here was version numbers before
+  
+  # setup the local products directory
+  cd ${LOCALPROD}
+  curl --fail --silent --location --insecure -O http://scisoft.fnal.gov/scisoft/bundles/tools/pullProducts || exit 1
+  chmod +x pullProducts
+
+  # pull the nu products so that we have the correct version of gcc and ups
+  ./pullProducts ${LOCALPROD} ${flvr} nu-${NUVER} ${SQUAL}-${EQUAL} ${BUILDTYPE} 
+
+  cd ${TOPLEV}
+  source ${LOCALPROD}/setup
+  
+else 
+  echo &quot;ERROR: unrecognized operating system ${OS}&quot;
+  exit 1
+fi
+echo &quot;build flavor is ${flvr}&quot;
+echo &quot;&quot;
+
+if [ &quot;$ONQUAL&quot; == &quot;on&quot; ];
+ then 
+ buildqual=${EQUAL}:${ONQUAL}
+ builddaqqual=${EQUAL}:${ONQUAL}
+else
+ buildqual=${EQUAL}:${SQUAL}
+fi
+
+
+
+export NOVADAQDEPFILE=&quot;novadaqdeps-${daqdepver}-noarch.tar.bz2&quot;
+export NOVADDTDEPFILE=&quot;novaddtdeps-${ddtdepver}-noarch.tar.bz2&quot;
+
+dorp=&quot;-d&quot;
+if [ &quot;${BUILDTYPE/debug}&quot; = &quot;${BUILDTYPE}&quot; ]; then
+   dorp=&quot;-p&quot;
+fi
+
+echo &quot;BUILDTYPE is ${BUILDTYPE}&quot;
+echo &quot;setting the build  qualifier to ${dorp}&quot;
+
+svn co http://cdcvs.fnal.gov/subversion/novaart-novadaqdeps/tags/${NOVADAQDEPS_VER} novadaqdeps
+tar -cjf ${NOVADAQDEPFILE} novadaqdeps/
+rm -rf novadaqdeps
+cp -pv $PWD/${NOVADAQDEPFILE} ${LOCALPROD}/
+if [ &quot;${dorp}&quot; == &quot;-d&quot; ] &amp;&amp; [ &quot;${OS}&quot; = &quot;Darwin&quot; ]; then
+ cp -pv ${NOVADAQDEPFILE} ${WORKSPACE}/buildout
+fi  
+rm *.bz2
+
+# checkout the novaddtdeps product version and make the tarball
+svn co http://cdcvs.fnal.gov/subversion/novaddt-novaddtdeps/tags/${NOVADDTDEPS_VER} novaddtdeps
+tar -cjf ${NOVADDTDEPFILE} novaddtdeps/
+rm -rf novaddtdeps
+cp -pv $PWD/${NOVADDTDEPFILE} ${LOCALPROD}/
+if [ &quot;${dorp}&quot; == &quot;-d&quot; ] &amp;&amp; [ &quot;${OS}&quot; = &quot;Darwin&quot; ]; then
+ cp -pv ${NOVADDTDEPFILE} ${WORKSPACE}/buildout
+fi  
+rm *.bz2
+
+# setup the local products directory
+cd ${LOCALPROD}
+tar -xf ${NOVADAQDEPFILE}
+tar -xf ${NOVADDTDEPFILE}
+
+# check out the source code to build
+NOVADAQCVSTAG=&quot;R${NOVADAQVER:1}&quot;
+echo ${NOVADAQCVSTAG}
+cd ${SRCDIR}             
+cvs -d :pserver:anonymous@cdcvs.fnal.gov:/cvs/nova checkout -d novadaqups -r ${NOVADAQCVSTAG} Online/pkgs/ups
+sh  novadaqups/bootstrap.sh $PWD
+rm -rf novadaqups
+mv novadaq/${NOVADAQVER}/cet cet
+rm -rf novadaq
+mv cet novadaq
+svn co http://cdcvs.fnal.gov/subversion/novaddt.svn/tags/${NOVADDTVER} novaddt
+
+
+# build the novadaq code
+cd ${BUILDDAQ}  
+source ${SRCDIR}/novadaq/ups/setup_for_development ${dorp} ${builddaqqual}
+buildtool -j8 -p
+buildtool -i -I ${LOCALPROD}
+
+if [ &quot;${dorp}&quot; == &quot;-d&quot; ] &amp;&amp; [ &quot;${OS}&quot; = &quot;Darwin&quot; ]; then
+  # make a source code tarball
+  novadaqdotver=`echo ${NOVADAQVER} | sed -e &apos;s/_/./g&apos; | sed -e &apos;s/^v//&apos;`
+  tar -cf novadaq-${novadaqdotver}-source.tar ${SRCDIR}/novadaq
+  bzip2 novadaq-${novadaqdotver}-source.tar
+fi
+
+cp -pv $PWD/nova*.tar.bz2 $WORKSPACE/buildout
+
+# build the novaddt code
+cd ${BUILDDDT}  
+source ${SRCDIR}/novaddt/ups/setup_for_development ${dorp} ${buildqual}
+buildtool -j8 -p
+
+if [ &quot;${dorp}&quot; == &quot;-d&quot; ] &amp;&amp; [ &quot;${OS}&quot; = &quot;Darwin&quot; ]; then
+  # make a source code tarball, no need to tar up the svn directory
+  novaddtdotver=`echo ${NOVADDTVER} | sed -e &apos;s/_/./g&apos; | sed -e &apos;s/^v//&apos;`
+  rm -rf ${SRCDIR}/novaddt/.svn
+  tar -cf novaddt-${novaddtdotver}-source.tar ${SRCDIR}/novaddt
+  bzip2 novaddt-${novaddtdotver}-source.tar
+fi
+
+cp -pv $PWD/nova*.tar.bz2 $WORKSPACE/buildout
+
+# make sure to copy the novadaqdeps tarball to the buildout as well
+cp -pv ${LOCALPROD}/nova*.tar.bz2 ${WORKSPACE}/buildout
+
+# clean up after ourselves - there are about 10 GB of files in ${LOCALPROD}
+rm -rf ${LOCALPROD}
+
+#exit 0</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>buildout/**</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>novaddt_build_output</childProjects>
+      <threshold>
+        <name>FAILURE</name>
+        <ordinal>2</ordinal>
+        <color>RED</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

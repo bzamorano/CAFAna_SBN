@@ -1,0 +1,27 @@
+/GNUmakefile/1.2/Mon Sep 27 15:42:36 1999//
+/addpkg/1.9/Tue Apr  2 21:12:04 2002//
+/cvsmigrate/1.6/Mon Feb  6 17:32:42 2006//
+/depend/1.1/Tue May 18 03:21:28 1999//
+/lnkpkg/1.2/Wed May 19 14:48:42 1999//
+/newdist/1.3/Tue Apr 30 19:19:56 2002//
+/newpkg/1.5/Tue Apr  2 21:12:04 2002//
+/newrel/1.7/Tue Apr  2 21:12:04 2002//
+/newver/1.3/Thu Nov  4 22:30:18 1999//
+/pkgstatus/1.1.1.1/Wed Apr 28 18:33:55 1999//
+/reldb/1.2/Tue Apr 25 22:13:16 2000//
+/relpathto/1.1/Wed Jun  9 21:56:23 1999//
+/rmpkg/1.4/Tue Jan  9 22:15:49 2001//
+/rmrel/1.3/Tue Apr  2 21:12:04 2002//
+/rmver/1.1/Mon May 17 17:39:25 1999//
+/srt_environment/1.21/Fri Sep  2 19:34:14 2016//
+/srt_freeze/1.2/Mon May 17 17:40:16 1999//
+/srt_int_drop/1.4/Thu Aug 23 12:39:32 2001//
+/srt_int_info/1.7/Fri Apr  9 15:23:52 2010//
+/srt_int_mkdir/1.3/Thu Apr 13 22:16:26 2000//
+/srt_int_querypkg/1.4/Tue Apr  2 21:12:04 2002//
+/srt_layer_init/1.1/Tue May  9 22:20:42 2000//
+/srt_layer_link/1.2/Tue Apr  2 21:12:04 2002//
+/srt_super_init/1.2/Tue Mar  7 22:47:08 2000//
+/statusrel/1.3/Tue Apr  2 21:12:04 2002//
+/verify_include/1.1/Mon Jun  4 20:15:38 2001//
+D

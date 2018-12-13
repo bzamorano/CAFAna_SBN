@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/subversion/novaart.pkgs.svn/!svn/ver/20988/trunk/Utilities/BlessedPlots/libs
+END
+PullExternalLibs.sh
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/subversion/novaart.pkgs.svn/!svn/ver/20988/trunk/Utilities/BlessedPlots/libs/PullExternalLibs.sh
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/subversion/novaart.pkgs.svn/!svn/ver/16723/trunk/Utilities/BlessedPlots/libs/__init__.py
+END

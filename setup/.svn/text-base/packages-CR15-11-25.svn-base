@@ -1,0 +1,33 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+Calibration         : CR15-11-25
+CalibrationUtils    : CR15-11-25
+CalibrationDataProducts : CR15-11-25
+Calibrator          : CR15-11-25
+ChannelInfo         : CR15-11-25
+CMap                : CR15-11-25
+Database	    : CR15-11-25
+DAQ2RawDigit        : CR15-11-25
+EventDisplay        : CR15-11-25
+Geometry            : CR15-11-25
+GeometryObjects     : CR15-11-25
+MCCheater           : CR15-11-25
+MichelEFilter       : CR15-11-25
+OnlineMonitoring    : CR15-11-25
+RawData             : CR15-11-25
+RecoBase            : CR15-11-25
+RecoBaseHit         : CR15-11-25
+RunHistory	    : CR15-11-25
+Simulation          : CR15-11-25
+SRT_NOVA            : CR15-11-25
+SummaryData         : CR15-11-25
+Utilities           : CR15-11-25
+#
+# setup package 
+#
+setup               : CR15-11-25

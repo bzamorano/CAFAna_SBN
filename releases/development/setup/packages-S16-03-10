@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S16-03-10
+Alignment           : S16-03-10
+AnalysisSkimmer     : S16-03-10
+BreakPointFitter    : S16-03-10
+BremShowerFilter    : S16-03-10
+CAFAna              : S16-03-10
+CAFMaker            : S16-03-10
+CAFReweight         : S16-03-10
+CalHit              : S16-03-10
+Calibration         : S16-03-10
+CalibrationUtils    : S16-03-10
+CalibrationDataProducts : S16-03-10
+Calibrator          : S16-03-10
+ChannelInfo         : S16-03-10
+CMap                : S16-03-10
+Commissioning       : S16-03-10
+CosmicExposureInfo  : S16-03-10
+CosRej              : S16-03-10
+CVN                 : S16-03-10
+DAQ2RawDigit        : S16-03-10
+Database	    : S16-03-10
+DataQuality         : S16-03-10
+DDTConverters       : S16-03-10
+Demo		    : S16-03-10
+DetectorPerformance : S16-03-10
+DiscreteTracker     : S16-03-10
+DiskUsage           : S16-03-10
+DQSpillFlags        : S16-03-10
+DSOResultPlotter    : S16-03-10
+ElasticArms         : S16-03-10
+Eval	            : S16-03-10
+EventDisplay        : S16-03-10
+EventGenerator      : S16-03-10
+EventSummary        : S16-03-10
+Filter              : S16-03-10
+FuzzyKVertex        : S16-03-10
+g4nova              : S16-03-10
+Geometry            : S16-03-10
+GeometryObjects     : S16-03-10
+HoughTransform      : S16-03-10
+HoughVertex         : S16-03-10
+IFDBSpillInfo       : S16-03-10
+LEM                 : S16-03-10
+MCCheater           : S16-03-10
+MCCheckOut          : S16-03-10
+Metadata            : S16-03-10
+MEFinder            : S16-03-10
+MockDataDAQ         : S16-03-10
+MuonRemove	    : S16-03-10
+NDRockMuon          : S16-03-10
+NovaFTS             : S16-03-10
+NovaSimMixer        : S16-03-10
+NueSandbox          : S16-03-10
+NumuEnergy          : S16-03-10
+NumuSandbox         : S16-03-10
+NusSandbox          : S16-03-10
+OnlineMonitoring    : S16-03-10
+OscLib              : S16-03-10
+PhotonTransport     : S16-03-10
+Preselection        : S16-03-10
+Production          : S16-03-10
+QEEventFinder       : S16-03-10
+RawData             : S16-03-10
+ReadoutSim          : S16-03-10
+RecoBase            : S16-03-10
+RecoBaseHit         : S16-03-10
+RecoJMShower        : S16-03-10
+RecVarPID           : S16-03-10
+ReMId               : S16-03-10
+RunHistory	    : S16-03-10
+ShowerE             : S16-03-10
+ShowerLID           : S16-03-10
+Simulation          : S16-03-10
+Slicer              : S16-03-10
+SRT_NOVA            : S16-03-10
+StandardRecord      : S16-03-10
+SummaryData         : S16-03-10
+TimingFit           : S16-03-10
+TrackFit            : S16-03-10
+Utilities           : S16-03-10
+Validation          : S16-03-10
+VertexDT            : S16-03-10
+VertexFinder        : S16-03-10
+XnuePID             : S16-03-10
+ZukCluster          : S16-03-10
+#
+# setup package
+#
+setup               : S16-03-10

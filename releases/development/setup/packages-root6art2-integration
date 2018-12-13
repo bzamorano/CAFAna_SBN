@@ -1,0 +1,155 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : root6art2-integration
+Alignment           : root6art2-integration
+AnalysisSkimmer     : root6art2-integration
+BreakPointFitter    : root6art2-integration
+BremShowerFilter    : root6art2-integration
+CAFAna              : root6art2-integration
+CAFMaker            : root6art2-integration
+CAFReweight         : root6art2-integration
+CalHit              : root6art2-integration
+Calibration         : root6art2-integration
+CalibrationUtils    : root6art2-integration
+CalibrationDataProducts : root6art2-integration
+Calibrator          : root6art2-integration
+CelestialLocator    : root6art2-integration
+ChannelInfo         : root6art2-integration
+CMap                : root6art2-integration
+Commissioning       : root6art2-integration
+CosmicExposureInfo  : root6art2-integration
+CosRej              : root6art2-integration
+CVN                 : root6art2-integration
+DAQ2RawDigit        : root6art2-integration
+Database	    : root6art2-integration
+DataQuality         : root6art2-integration
+DDTConverters       : root6art2-integration
+Demo		    : root6art2-integration
+DetectorPerformance : root6art2-integration
+DiscreteTracker     : root6art2-integration
+DiskUsage           : root6art2-integration
+DQSpillFlags        : root6art2-integration
+DSOResultPlotter    : root6art2-integration
+ElasticArms         : root6art2-integration
+Eval	            : root6art2-integration
+EventDisplay        : root6art2-integration
+EventGenerator      : root6art2-integration
+EventSummary        : root6art2-integration
+Filter              : root6art2-integration
+FNEX                : root6art2-integration
+FuzzyKVertex        : root6art2-integration
+g4nova              : root6art2-integration
+Geometry            : root6art2-integration
+GeometryObjects     : root6art2-integration
+HoughTrack          : root6art2-integration
+HoughTransform      : root6art2-integration
+HoughVertex         : root6art2-integration
+IFDBSpillInfo       : root6art2-integration
+LEM                 : root6art2-integration
+MCCheater           : root6art2-integration
+MCCheckOut          : root6art2-integration
+MCReweight          : root6art2-integration
+Metadata            : root6art2-integration
+MEFinder            : root6art2-integration
+MockDataDAQ         : root6art2-integration
+MuonRemove	    : root6art2-integration
+NCID                : root6art2-integration
+NDAna               : root6art2-integration
+NDRockMuon          : root6art2-integration
+NovaFTS             : root6art2-integration
+NovaSimMixer        : root6art2-integration
+NueSandbox          : root6art2-integration
+NumuEnergy          : root6art2-integration
+NumuSandbox         : root6art2-integration
+NusSandbox          : root6art2-integration
+OnlineMonitoring    : root6art2-integration
+OscLib              : root6art2-integration
+PhotonTransport     : root6art2-integration
+Preselection        : root6art2-integration
+Production          : root6art2-integration
+ProductMorgue       : root6art2-integration
+QEEventFinder       : root6art2-integration
+RawData             : root6art2-integration
+ReadoutSim          : root6art2-integration
+RecoBase            : root6art2-integration
+RecoBaseHit         : root6art2-integration
+RecoJMShower        : root6art2-integration
+RecoValidation      : root6art2-integration
+RecVarPID           : root6art2-integration
+ReMId               : root6art2-integration
+RunHistory	    : root6art2-integration
+ShowerE             : root6art2-integration
+ShowerLID           : root6art2-integration
+Simulation          : root6art2-integration
+Slicer              : root6art2-integration
+SRT_NOVA            : root6art2-integration
+StandardRecord      : root6art2-integration
+SummaryData         : root6art2-integration
+Supernova           : root6art2-integration
+SupernovaUtilities  : root6art2-integration
+TDSlicer            : root6art2-integration
+TimingFit           : root6art2-integration
+TrackFit            : root6art2-integration
+TriggerMonitoring   : root6art2-integration
+Utilities           : root6art2-integration
+Validation          : root6art2-integration
+VertexDT            : root6art2-integration
+VertexFinder        : root6art2-integration
+XnuePID             : root6art2-integration
+XSecReco            : root6art2-integration
+ZukCluster          : root6art2-integration
+#
+# NOvADDT packages go here
+#
+CalibrationTriggers     : v11_00_04-br
+DAQStatusTriggers       : v11_00_04-br
+DAQUnpackUtils          : v11_00_04-br
+DDTBaseDataProducts     : v11_00_04-br
+DDTCore                 : v11_00_04-br
+DDTDemo                 : v11_00_04-br
+DDTGlobalConfigurations : v11_00_04-br
+DDTMessageSender        : v11_00_04-br
+DDTPrescale             : v11_00_04-br
+DDTUtilities	        : v11_00_04-br
+ExoticsTriggers         : v11_00_04-br
+HitSlicers              : v11_00_04-br
+HitSorters              : v11_00_04-br
+MoonShadowTrigger       : v11_00_04-br
+NuETriggers             : v11_00_04-br
+NuMuTriggers            : v11_00_04-br
+PatRec		        : v11_00_04-br
+OnlineCalibration       : v11_00_04-br
+SlowMonopoleTrigger     : v11_00_04-br
+Statistics              : v11_00_04-br
+SuperNovaDDT            : v11_00_04-br
+Tracking                : v11_00_04-br
+SRT_NOVADDT             : v11_00_04-br
+#
+# NOvA Online packages go here
+#
+DAQChannelMap           : R11_Branch
+DAQDataFormats          : R11_Branch
+DAQMessages             : R11_Branch
+DAQQualityCheck         : R11_Branch
+DatabaseUtils           : R11_Branch
+EventDispatcher_CommandSet : R11_Branch
+EventDispatcher         : R11_Branch
+NovaDAQConventions      : R11_Branch
+NovaDAQMonitorClient    : R11_Branch
+NovaDAQUtilities        : R11_Branch
+NovaTimingUtilities     : R11_Branch
+PackageVersion          : R11_Branch
+RawFileParser           : R11_Branch
+rms                     : R11_Branch
+ShmRdWr                 : R11_Branch
+ShmMilliBlock           : R11_Branch
+SRT_NOVADAQ             : R11_Branch
+#
+# setup package
+#
+setup               : root6art2-integration

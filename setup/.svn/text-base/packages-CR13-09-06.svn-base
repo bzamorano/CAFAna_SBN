@@ -1,0 +1,113 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NuSoft NuTools packages here
+#
+EventDisplayBase    : CR13-09-06
+EventGeneratorBase  : CR13-09-06
+G4Base              : CR13-09-06
+MagneticField       : CR13-09-06
+NuBeamWeights       : CR13-09-06
+NuReweight          : CR13-09-06
+SimulationBase      : CR13-09-06
+#
+# NOvA Offline packages go here
+#
+Alignment           : CR13-09-06
+BNBInfo		    : CR13-09-06
+BreakPointFitter    : CR13-09-06
+CAFAna              : CR13-09-06
+CAFMaker            : CR13-09-06
+CAFReweight         : CR13-09-06
+CalHit              : CR13-09-06
+Calibration         : CR13-09-06
+CalibrationDataProducts : CR13-09-06
+Calibrator          : CR13-09-06
+CellToCell          : CR13-09-06
+ChannelInfo         : CR13-09-06
+ClusterMakerSS      : CR13-09-06
+CMap                : CR13-09-06
+Commissioning       : CR13-09-06
+CosmicExposureInfo  : CR13-09-06
+CosRej              : CR13-09-06
+DAQ2RawDigit        : CR13-09-06
+Database	    : CR13-09-06
+DDTConverters       : CR13-09-06
+Demo		    : CR13-09-06
+DetectorPerformance : CR13-09-06
+DiscreteTracker     : CR13-09-06
+ElasticArms         : CR13-09-06
+Eval	            : CR13-09-06
+EventDisplay        : CR13-09-06
+EventGenerator      : CR13-09-06
+EventSummary        : CR13-09-06
+Filter              : CR13-09-06
+FLUGGValidation     : CR13-09-06
+FuzzyKVertex        : CR13-09-06
+g4nova              : CR13-09-06
+Geometry            : CR13-09-06
+HMatrixE            : CR13-09-06
+HoughTransform      : CR13-09-06
+KalmanFilter3D      : CR13-09-06
+LEM                 : CR13-09-06
+MCCheater           : CR13-09-06
+MCCheckOut          : CR13-09-06
+Metadata            : CR13-09-06
+MichelEFilter       : CR13-09-06
+MockDataDAQ         : CR13-09-06
+MuonRemove	    : CR13-09-06
+NCAna               : CR13-09-06
+NovaBeamMat         : CR13-09-06
+NovaSimMixer        : CR13-09-06
+NueSandbox          : CR13-09-06
+NuMISpillInfo       : CR13-09-06
+NuMuBDTSelector     : CR13-09-06
+NumuEnergy          : CR13-09-06
+NumuSandbox         : CR13-09-06
+OnlineMonitoring    : CR13-09-06
+OscLib              : CR13-09-06
+PhotonTransport     : CR13-09-06
+Preselection        : CR13-09-06
+QEEventFinder       : CR13-09-06
+RawData             : CR13-09-06
+ReadoutSim          : CR13-09-06
+RecoBase            : CR13-09-06
+RecoJMShower        : CR13-09-06
+RecVarPID           : CR13-09-06
+ReMId               : CR13-09-06
+RunHistory	    : CR13-09-06
+ShowerAna           : CR13-09-06
+Simulation          : CR13-09-06
+Slicer              : CR13-09-06
+SRT_NOVA            : CR13-09-06
+StandardRecord      : CR13-09-06
+SummaryData         : CR13-09-06
+TimingFit           : CR13-09-06
+TrackFit            : CR13-09-06
+Utilities           : CR13-09-06
+Validation          : CR13-09-06
+VertexFinder        : CR13-09-06
+#
+# NOvA Online packages go here
+#
+DatabaseUtils	    : off2013-07-20
+DAQChannelMap       : off2013-07-20
+DAQDataFormats      : off2013-07-20
+DAQQualityCheck     : off2013-07-20
+EventDispatcher_CommandSet : off2013-04-09a
+NovaDatabase        : off2013-07-20
+NovaDAQConventions  : off2013-07-20
+NovaDAQUtilities    : off2013-07-20
+NovaTimingUtilities : off2013-07-20
+PackageVersion      : off2013-07-20
+RawFileParser       : off2013-07-20
+#
+# NOvA DDT packages go here
+#
+DDTBaseDataProducts : ddt2013-07-22
+#
+# setup package 
+#
+setup               : CR13-09-06

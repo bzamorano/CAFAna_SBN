@@ -1,0 +1,97 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S14-09-29
+Alignment           : S14-09-29
+BNBInfo		    : S14-09-29
+BreakPointFitter    : S14-09-29
+BremShowerFilter    : S14-09-29
+CAFAna              : S14-09-29
+CAFMaker            : S14-09-29
+CAFReweight         : S14-09-29
+CalHit              : S14-09-29
+Calibration         : S14-09-29
+CalibrationUtils    : S14-09-29
+CalibrationDataProducts : S14-09-29
+Calibrator          : S14-09-29
+CellToCell          : S14-09-29
+ChannelInfo         : S14-09-29
+ClusterMakerSS      : S14-09-29
+CMap                : S14-09-29
+Commissioning       : S14-09-29
+CosmicExposureInfo  : S14-09-29
+CosRej              : S14-09-29
+DAQ2RawDigit        : S14-09-29
+Database	    : S14-09-29
+DDTConverters       : S14-09-29
+debug_tools         : S14-09-29
+Demo		    : S14-09-29
+DetectorPerformance : S14-09-29
+DiscreteTracker     : S14-09-29
+DSOResultPlotter    : S14-09-29
+ElasticArms         : S14-09-29
+Eval	            : S14-09-29
+EventDisplay        : S14-09-29
+EventGenerator      : S14-09-29
+EventSummary        : S14-09-29
+FEBFlashFilter      : S14-09-29
+Filter              : S14-09-29
+FuzzyKVertex        : S14-09-29
+g4nova              : S14-09-29
+Geometry            : S14-09-29
+GeometryObjects     : S14-09-29
+HMatrixE            : S14-09-29
+HoughTransform      : S14-09-29
+IFDBSpillInfo       : S14-09-29
+KalmanFilter3D      : S14-09-29
+LIDBuilder          : S14-09-29
+LEM                 : S14-09-29
+MCCheater           : S14-09-29
+MCCheckOut          : S14-09-29
+Metadata            : S14-09-29
+MichelEFilter       : S14-09-29
+MockDataDAQ         : S14-09-29
+MultiProngNeutrinoSearch : S14-09-29
+MuonRemove	    : S14-09-29
+NCAna               : S14-09-29
+NovaFTS             : S14-09-29
+NovaSimMixer        : S14-09-29
+NueSandbox          : S14-09-29
+NuMuBDTSelector     : S14-09-29
+NumuEnergy          : S14-09-29
+NumuSandbox         : S14-09-29
+OnlineMonitoring    : S14-09-29
+OscLib              : S14-09-29
+PhotonTransport     : S14-09-29
+Preselection        : S14-09-29
+ProductionScripts   : S14-09-29
+QEEventFinder       : S14-09-29
+RawData             : S14-09-29
+ReadoutSim          : S14-09-29
+RecoBase            : S14-09-29
+RecoBaseHit         : S14-09-29
+RecoJMShower        : S14-09-29
+RecVarPID           : S14-09-29
+ReMId               : S14-09-29
+RunHistory	    : S14-09-29
+ShowerAna           : S14-09-29
+ShowerLID           : S14-09-29
+Simulation          : S14-09-29
+Slicer              : S14-09-29
+SRT_NOVA            : S14-09-29
+StandardRecord      : S14-09-29
+SummaryData         : S14-09-29
+TimingFit           : S14-09-29
+TrackFit            : S14-09-29
+Utilities           : S14-09-29
+Validation          : S14-09-29
+VertexFinder        : S14-09-29
+ZukCluster          : S14-09-29
+#
+# setup package 
+#
+setup               : S14-09-29

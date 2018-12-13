@@ -1,0 +1,20 @@
+art v1_09_03 -q+nu:+e5:+prof
+artdaq v1_06_01 -q+nu:+e5:+eth:+prof
+cppcheck v1_59
+cry v1_7a -q+prof:+e5
+cstxsd v3_3_0_p02b -q+gcc482
+genie v2_8_0f -q+prof:+e5
+genie_xsec R-2_8_0 -q+default
+genie_phyopt R-2_8_0 -q+dkcharmtau
+ifbeam v1_4_2 -q+prof:+e5
+ifdh_art v1_4_2 -q+nu:+prof:+e5
+nucondb v1_4_2 -q+prof:+e5
+libwda v2_9_5
+NumiBeamDB v2_0_0 -q+R53418GCC48
+nutools v1_02_02 -q+prof:+e5
+psycopg2 v2_5_p2_7
+totalview v8_9_0a
+xerces_c v3_1_1a -q+prof:+e5
+novaddt v01_00_00 -q e5:prof
+novadaq v02_00_00 -q e5:prof
+NovaGridUtils

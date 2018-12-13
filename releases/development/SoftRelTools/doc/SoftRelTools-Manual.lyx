@@ -1,0 +1,2026 @@
+#This file was created by <amundson> Tue Dec 14 12:28:29 1999
+#LyX 0.12 (C) 1995-1998 Matthias Ettrich and the LyX Team
+\lyxformat 2.15
+\textclass article
+\begin_preamble
+\date{Manual Version 1.02\\December 14, 1999}
+\end_preamble
+\language english
+\inputencoding default
+\fontscheme times
+\graphics default
+\paperfontsize 12
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+SoftRelTools Manual
+\layout Author
+
+James Amundson 
+\newline 
+Computing Division
+\newline 
+Fermi National Accelerator Laboratory 
+\layout Standard
+
+
+\latex latex 
+
+\backslash 
+newpage
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents
+
+\end_inset 
+
+
+\layout Standard
+
+
+\latex latex 
+
+\backslash 
+newpage
+\layout Section*
+
+About this manual
+\layout Standard
+
+This manual describes SoftRelTools version 2.
+ It is intended to augment the documentation in 
+\begin_inset Quotes eld
+\end_inset 
+
+A UNIX Based Software Management System,
+\begin_inset Quotes erd
+\end_inset 
+
+ edited by Robert Harris, Computing Division Note: GU0013, which provides
+ a more general introduction to SoftRelTools.
+ It is available at 
+\layout LyX-Code
+
+<http://www-cdf.fnal.gov/offline/code_management/run2_cmgt/run2_cmgt.html>.
+\layout Subsection*
+
+Manual Changelog
+\layout Description
+
+v1.01 April 28, 1999: Inital public version.
+\layout Description
+
+v1.02 December 14, 1999: Updated name of cvs repository.
+\layout Section
+
+Introduction
+\layout Standard
+
+The primary purpose of SoftRelTools version 2 is to provide a backward-compatibl
+e replacement for the original SoftRelTools written by Bob Jacobsen.
+ SoftRelTools is designed to be easier to use and to maintain than the original
+ SoftRelTools.
+ Ease of use and maintainability are enhanced by increased functionality
+ and modular structure.
+ Maintainability is further enhanced by the seperation of the basic tool
+ from project and site specific settings through an inheritance heierarchy.
+\layout Standard
+
+The modules and their relationships are described by the following figure:
+\layout Standard
+\added_space_top 0.3cm \added_space_bottom 0.3cm \align center 
+
+\begin_inset Figure size 446 293
+file modules.eps
+subcaption The modules of SoftRelTools and their connections.
+width 4 75
+flags 9
+
+\end_inset 
+
+
+\layout Standard
+
+The inheritance heierarchy from base to project and site-specific settings
+ is orthogonal to the separation of the tool into modules.
+ In the figure below, each pane represents the collection of modules shown
+ in the figure above.
+\layout Standard
+\added_space_top 0.3cm \added_space_bottom 0.3cm \align center 
+
+\begin_inset Figure size 446 291
+file inheritance.eps
+width 4 75
+flags 9
+
+\end_inset 
+
+
+\layout Standard
+
+The SoftRelTools base is largely self-contained.
+ The project and site specific behavior is implemented through optional
+ additional packages, SRT_$PROJECT and SRT_SITE.
+\layout Section
+
+SoftRelTools for users
+\layout Subsection
+
+Introduction
+\layout Standard
+
+All of the publicly available SoftRelTools files live in a distribution
+ directory.
+ For the purposes of the manual we we refer to this directory as $SRT_DIST.
+ In order to use SoftRelTools, users must have sourced the file $SRT_DIST/srt/sr
+t.csh or $SRT_DIST/srt/srt.sh, depending on the users' shell.
+ Of course, this assumes that a SoftRelTools distribution in $SRT_DIST has
+ been installed.
+ (See SoftRelTools for librarians.) After srt.(c)sh has been sourced, the
+ command 
+\begin_inset Quotes eld
+\end_inset 
+
+srt_setup
+\begin_inset Quotes erd
+\end_inset 
+
+ will set up SoftRelTools for use.
+ srt_setup is described in the srt_setup man page and in the section on
+ the SoftRelTools environment.
+\layout Standard
+
+The following example shows how a user can work with a package 
+\begin_inset Quotes eld
+\end_inset 
+
+Hello
+\begin_inset Quotes erd
+\end_inset 
+
+ that is part of a release 
+\begin_inset Quotes eld
+\end_inset 
+
+development
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ It assumes that SRT has been set up.
+\layout Enumerate
+
+Create a test release called 
+\begin_inset Quotes eld
+\end_inset 
+
+myrelease
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_deeper 
+\layout LyX-Code
+
+newrel --test development myrelease
+\layout LyX-Code
+
+cd myrelease
+\end_deeper 
+\layout Enumerate
+
+Add the Hello package to 
+\begin_inset Quotes eld
+\end_inset 
+
+myrelease
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_deeper 
+\layout LyX-Code
+
+addpkg Hello
+\end_deeper 
+\layout Enumerate
+
+Set the local context, i.e., tell SRT to work with the current release.
+ This is optional, but it speeds compilation.
+\begin_deeper 
+\layout LyX-Code
+
+srt_setup -a
+\end_deeper 
+\layout Enumerate
+
+Build all packages in the release
+\begin_deeper 
+\layout LyX-Code
+
+gmake
+\end_deeper 
+\layout Enumerate
+
+Here is a transcript of the steps above on my machine:
+\layout LyX-Code
+
+
+\size footnotesize 
+> newrel --test development myrelease
+\layout LyX-Code
+
+
+\size footnotesize 
+read user srtrc
+\layout LyX-Code
+
+
+\size footnotesize 
+Creating a test release "myrelease" in the directory
+\layout LyX-Code
+
+
+\size footnotesize 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ /home/amundson/work
+\layout LyX-Code
+
+
+\size footnotesize 
+Linking tmp to /tmp/myrelease/tmp
+\layout LyX-Code
+
+
+\size footnotesize 
+Linking bin to /tmp/myrelease/bin
+\layout LyX-Code
+
+
+\size footnotesize 
+Linking lib to /tmp/myrelease/lib
+\layout LyX-Code
+
+
+\size footnotesize 
+> cd myrelease/
+\layout LyX-Code
+
+
+\size footnotesize 
+> addpkg Hello
+\layout LyX-Code
+
+
+\size footnotesize 
+Release development uses Hello version HEAD, will check that out
+\layout LyX-Code
+
+
+\size footnotesize 
+Adding package "Hello" to ".".
+\layout LyX-Code
+
+
+\size footnotesize 
+cvs checkout: Updating Hello
+\layout LyX-Code
+
+
+\size footnotesize 
+U Hello/GNUmakefile
+\layout LyX-Code
+
+
+\size footnotesize 
+U Hello/Hello.cc
+\layout LyX-Code
+
+
+\size footnotesize 
+U Hello/Hello.h
+\layout LyX-Code
+
+
+\size footnotesize 
+U Hello/HelloExample.cc
+\layout LyX-Code
+
+
+\size footnotesize 
+> srt_setup -a
+\layout LyX-Code
+
+
+\size footnotesize 
+> gmake
+\layout LyX-Code
+
+
+\size footnotesize 
+<**include**>
+\layout LyX-Code
+
+
+\size footnotesize 
+<**include**> Hello
+\layout LyX-Code
+
+
+\size footnotesize 
+<**lib**>
+\layout LyX-Code
+
+
+\size footnotesize 
+<**lib**> Hello
+\layout LyX-Code
+
+
+\size footnotesize 
+<**compiling**> Hello.cc
+\layout LyX-Code
+
+
+\size footnotesize 
+<**building library**> libHello
+\layout LyX-Code
+
+
+\size footnotesize 
+<**bin**>
+\layout LyX-Code
+
+
+\size footnotesize 
+<**bin**> Hello
+\layout LyX-Code
+
+
+\size footnotesize 
+<**compiling**> HelloExample.cc
+\layout LyX-Code
+
+
+\size footnotesize 
+<**building**> HelloExample
+\layout LyX-Code
+
+
+\size footnotesize 
+>
+\layout Standard
+
+The lines 
+\begin_inset Quotes eld
+\end_inset 
+
+read user srtrc
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+Linking...
+ to ...
+\begin_inset Quotes erd
+\end_inset 
+
+ after newrel are a result of my ~/.srtrc file.
+ See the section on user preferences for the code management system.
+\layout Subsection
+
+Details
+\layout Standard
+
+To learn more about the commands newrel, addpkg, etc., read the section on
+ the code management system.
+ To learn more about building your own packages, read the section on the
+ build system.
+\layout Section
+
+SoftRelTools for librarians
+\layout Subsection
+
+Installing SoftRelTools
+\layout Standard
+
+(The following information is duplicated in the file README.install in the
+ SoftRelTools/install directory.)
+\layout Standard
+
+This version of SoftRelTools needs two things to get started:
+\layout Enumerate
+
+A working boot release.
+ 
+\layout Enumerate
+
+A properly installed srt directory in the main release area.
+\layout Standard
+
+Once these two things are in place, users must
+\layout Enumerate
+
+Source the $SRT_DIST/srt/srt.(c)sh file appropriate for their shells.
+ 
+\layout Enumerate
+
+Execute "srt_setup".
+\layout Standard
+
+Instructions for creating the boot release and srt directory follow:
+\layout Subsubsection*
+
+To create a completely new SoftRelTools distribution:
+\layout Enumerate
+
+Get srt_distribution.tar and untar it.
+ (srt_distribution.tar is distributed separately.) 
+\layout Enumerate
+
+You now have a directory called srt_distribution.
+ Move/rename it to whatever you want, but the instructions will refer to
+ this directory as srt_distribution.
+\layout Enumerate
+
+cd to srt_distribution/srt directory.
+\layout Enumerate
+
+Execute the install script with "./install -p <your project>".
+ You can see the options to install with "./install --help".
+ The install script writes the location of the srt directory to the srt.(c)sh
+ files.
+ If you move the distribution, you will have to run install again.
+ The project and cvsroot files can be modified by hand if you wish.
+\layout Subsubsection*
+
+To update an old SoftRelTools distribution to work with the new SoftRelTools:
+\layout Enumerate
+
+Untar the file boot_release.tar from this directory in your distribution
+ "releases" directory.
+\layout Enumerate
+
+Copy the srt directory from this directory to the distribution directory
+ (the directory the old SoftRelTools called $BFDIST.)
+\layout Enumerate
+
+cd to the new srt directory
+\layout Enumerate
+
+See step 4above.
+\layout Subsection
+
+Setting project preferences
+\layout Standard
+
+There are several new files that can hold settings that apply to all users.
+\layout Description
+
+$SRT_DIST/srt/cvsroot holds the default value of CVSROOT for the distribution.
+ It can be overridden for each package; see below.
+ The contents of this file can be set by the install script or by hand.
+\layout Description
+
+$SRT_DIST/srt/project holds the name of the project.
+ It corresponds to the EXPERIMENT variable in the old SRT.
+ There can be only one project per distribution.
+ The contents of this file can be set by the install script or by hand.
+\layout Description
+
+$SRT_DIST/srt/srt.csh is the file to be sources by csh and tcsh users.
+ Only one line of it should ever be modified.
+ The install script modifies it for you.
+\layout Description
+
+$SRT_DIST/srt/srt.sh the file to be sources by ksh, zsh and bash users.
+ Only one line of it should ever be modified.
+ The install script modifies it for you.
+\layout Description
+
+$SRT_DIST/srt/srt_envrc contains default environment variable settings.
+ See the section on environment variables.
+\layout Description
+
+$SRT_DIST/srt/srtrc contains default system settings for directory creation/link
+ing in newrel.
+ See the section on code management.
+\layout Description
+
+$SRT_DIST/packages/<package>/cvsroot is an optional file for each package.
+ If it exists, addpkg will automatically use it to determine the value of
+ CVSROOT for <package>.
+ This file will be written automatically if newpkg is called with the -d
+ <cvsroot> argument.
+ It can also me modified by hand.
+\layout Subsection
+
+The project-specific package
+\layout Standard
+
+SoftRelTools will look for the package SRT_$SRT_PROJECT (i.e., SRT_D0, SRT_CDF,
+ etc.).
+ This package can be used to augment and/or replace behavior of the central
+ SoftRelTools.
+ The mechanism for this is described in the section on the inheritance hierarchy.
+\layout Subsection
+
+The site-specific package
+\layout Standard
+
+The package SRT_SITE (note the fixed name) is similar to the project-specific
+ package.
+ It is only intended for situations where two different machines for the
+ same project need to behave differently.
+ Its behavior supersedes both the default behavior and the project-specific
+ behavior.
+\layout Section
+
+The inheritance hierarchy
+\layout Subsection
+
+Introduction
+\layout Standard
+
+The version of SoftRelTools at Fermilab is modified frequently -- on the
+ order of once per day.
+ These changes fall into two categories: 1) Bug fixes.
+ 2) Local changes in settings, etc.
+ The goal of the inheritance hierarchy in SoftRelTools is to allow projects
+ to be able to make both kinds of changes quickly, without having to worry
+ about affecting other projects.
+ Changes of the first type can be incorporated into the base package in
+ a controlled manner.
+ Changes of the second type can stay with the projects, where they belong.
+\layout Standard
+
+As the term implies, the inheritance hierarchy is based on the concepts
+ of object-oriented design.
+ Think of the site-specific parts of SoftRelTools inheriting from the project-sp
+ecific parts, which inherit from the base.
+ However, SoftRelTools is implemented in primarily in GNU Make and Bourne
+ Shell -- neither of which are very well-suited to object-oriented programming.
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+Inheritance
+\begin_inset Quotes erd
+\end_inset 
+
+ in SoftRelTools should really be considered an analogy.
+ The analogy will break down if pushed too far.
+\layout Standard
+
+All of the modules in SoftRelTools can be modified first at the project
+ level then the site level.
+ The site has the final word.
+ There are two mechanisms available:
+\layout Enumerate
+
+All the modules of SoftRelTools look in the 
+\begin_inset Quotes eld
+\end_inset 
+
+special
+\begin_inset Quotes erd
+\end_inset 
+
+ subdirectory of the project and site packages.
+ If a file corresponding to the current file exists in the 
+\begin_inset Quotes eld
+\end_inset 
+
+special
+\begin_inset Quotes erd
+\end_inset 
+
+ directory it is sourced.
+ The specialization files are included in addition to the original file,
+ the purpose being to augment or modify the behavior of the base package.
+ This is the preferred method of incorporating changes.
+\layout Enumerate
+
+The include paths in SoftRelTools also look in the project and site packages.
+ This allows replacement of the SoftRelTools base files.
+ The replacement method should only be used if the override method is unsuitable.
+ It is considered a goal that replacement does not need to be used.
+ Replacement files go in the 
+\begin_inset Quotes eld
+\end_inset 
+
+SoftRelTools
+\begin_inset Quotes erd
+\end_inset 
+
+ subdirectory of the project and site packages.
+\layout Subsection
+
+Details
+\layout Subsubsection
+
+Makefile fragments
+\layout Standard
+
+All makefile fragments in SoftRelTools/include look for the a corresponding
+ file in SRT_$SRT_PROJECT/special.
+ Files in subdirectories of SoftRelTools/include go into the corresponding
+ subdirectories of SRT_$SRT_PROJECT/special.
+ A few special files can be specialized both at the beginning and the end:
+\layout Description
+
+standard.mk looks for pre_standard.mk and post_standard.mk.
+\layout Description
+
+GNUmakefile.main looks for pre_GNUmakefile.main and post_GNUmakefile.main.
+\layout Standard
+
+All other files look for files of the same name as themselves.
+\layout Subsubsection
+
+Scripts
+\layout Standard
+
+All of the scripts in SoftRelTools consist of a set of subroutines, including
+ one called 
+\begin_inset Quotes eld
+\end_inset 
+
+main
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ If specialization files are found in the 
+\begin_inset Quotes eld
+\end_inset 
+
+scripts
+\begin_inset Quotes erd
+\end_inset 
+
+ subdirectory of the project-specific package, they are sourced before any
+ of the subroutines are called.
+ The specialization files can contain replacements for old subroutines and/or
+ new subroutines.
+\layout Subsubsection
+
+Examples
+\layout Itemize
+
+Add a new target to standard.mk
+\begin_deeper 
+\layout Itemize
+
+put the lines
+\layout LyX-Code
+
+foo:
+\layout LyX-Code
+
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+echo 
+\begin_inset Quotes eld
+\end_inset 
+
+bar
+\begin_inset Quotes erd
+\end_inset 
+
+
+\layout Standard
+
+in special/post_standard.mk in the project-specific package.
+ Now 
+\begin_inset Quotes eld
+\end_inset 
+
+gmake foo
+\begin_inset Quotes erd
+\end_inset 
+
+ will return 
+\begin_inset Quotes eld
+\end_inset 
+
+bar
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\end_deeper 
+\layout Itemize
+
+Add the --no_exceptions flag to the C++ compiler flags for the Kai compiler:
+\begin_deeper 
+\layout Itemize
+
+put the line
+\layout LyX-Code
+
+override CXXFLAGS += --no_exceptions 
+\layout Standard
+
+in the special/compilers/KCC.mk in the project-specific package.
+\end_deeper 
+\layout Itemize
+
+Provide additional actions for addpkg
+\begin_deeper 
+\layout Itemize
+
+put the lines
+\layout LyX-Code
+
+extra_actions () {
+\layout LyX-Code
+
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+echo "Now executing top secret extra actions"
+\layout LyX-Code
+
+}
+\layout LyX-Code
+
+
+\protected_separator 
+
+\layout LyX-Code
+
+main () {
+\layout LyX-Code
+
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+script_defaults
+\layout LyX-Code
+
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+process_args $*
+\layout LyX-Code
+
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+actions
+\layout LyX-Code
+
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ods_actions
+\layout LyX-Code
+
+}
+\layout Standard
+
+in scripts/addpkg in the project-specific package.
+ Now addpkg will print an extra message every time it is called.
+ Notice that this example required both providing a new subroutine, extra_action
+s, and a replacing an existing routine, main.
+\end_deeper 
+\layout Section
+
+The environment variables
+\layout Subsection
+
+srt_setup and srt_environment
+\layout Standard
+
+SoftRelTools includes two commands, srt_setup and srt_environment, for examining
+ and manipulating the user environmental variables.
+ The former is actually an alias that calls the latter with certain options.
+ The default behavior for srt_environment is to print the current settings.
+ Sample output is below.
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT settings:
+\layout LyX-Code
+
+
+\size footnotesize 
+Variables for backward compatibility:
+\layout LyX-Code
+
+
+\size footnotesize 
+BFARCH = Linux2-KCC_3_3
+\layout LyX-Code
+
+
+\size footnotesize 
+BFDIST = /home/amundson/work/dist
+\layout LyX-Code
+
+
+\size footnotesize 
+BFCURRENT = development
+\layout LyX-Code
+
+
+\size footnotesize 
+
+\protected_separator 
+
+\layout LyX-Code
+
+
+\size footnotesize 
+Automatic and derived variables:
+\layout LyX-Code
+
+
+\size footnotesize 
+PATH = /home/amundson/work/myrelease/bin/Linux2-KCC_3_3:/home/amundson/work/dist
+\layout LyX-Code
+
+
+\size footnotesize 
+/releases/development/bin/Linux2-KCC_3_3:/fnal/ups/prd/kai/v3_3f_1/Linux+2/KCC_B
+\layout LyX-Code
+
+
+\size footnotesize 
+ASE/bin:/home/amundson/work/dist/releases/boot/bin/generic:/opt/kde/bin:/fnal/up
+\layout LyX-Code
+
+
+\size footnotesize 
+s/prd/ups/v4_3/Linux+2/bin:/opt/kde/bin:/home/amundson/work/dist/releases/boot/b
+\layout LyX-Code
+
+
+\size footnotesize 
+in/generic:/home/amundson/bin:/usr/sbin:/bin:/usr/bin:/etc:/usr/etc:/usr/bin/X11
+\layout LyX-Code
+
+
+\size footnotesize 
+:/usr/local/bin:.:/home/t1/amundson/bin:/home/t1/amundson/bin
+\layout LyX-Code
+
+
+\size footnotesize 
+LD_LIBRARY_PATH = /home/amundson/work/myrelease/lib/Linux2-KCC_3_3:/home/amundso
+\layout LyX-Code
+
+
+\size footnotesize 
+n/work/dist/releases/development/lib/Linux2-KCC_3_3:
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_PRIVATE_CONTEXT = /home/amundson/work/myrelease
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_PUBLIC_CONTEXT = /home/amundson/work/dist/releases/development
+\layout LyX-Code
+
+
+\size footnotesize 
+MAKEFILES = "SoftRelTools/preamble.mk"
+\layout LyX-Code
+
+
+\size footnotesize 
+MAKEFLAGS = "-r -I/home/amundson/work/myrelease/SRT_ODS -I/home/amundson/work/di
+\layout LyX-Code
+
+
+\size footnotesize 
+st/releases/development/SRT_ODS -I/home/amundson/work/myrelease/include
+ -I/home/
+\layout LyX-Code
+
+
+\size footnotesize 
+amundson/work/dist/releases/development/include"
+\layout LyX-Code
+
+
+\size footnotesize 
+CVSROOT = /home/amundson/repository
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_SUBDIR = Linux2-KCC_3_3
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_PROJECT = ODS
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_ARCH = Linux2
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_ENV_SET = yes
+\layout LyX-Code
+
+
+\size footnotesize 
+
+\protected_separator 
+
+\layout LyX-Code
+
+
+\size footnotesize 
+User settable variables:
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_LOCAL = /home/amundson/work/myrelease
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_DIST = /home/amundson/work/dist
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_BASE_RELEASE = development
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_CXX = KCC_3_3
+\layout LyX-Code
+
+
+\size footnotesize 
+SRT_QUAL = default
+\layout Standard
+
+The most important changes from the original SoftRelTools settings are the
+ replacement of SRT_ for BF as the variable prefix and the splitting of
+ the BFARCH architecture-C++ compiler combination into SRT_ARCH and SRT_CPP,
+ respectively.
+ SoftRelTools currently maintains the appropriate values of the BF variables,
+ but it does not use them internally
+\layout Standard
+
+The first time srt_setup is called, variables are set to their default settings,
+ SRT_CXX=$DEFAULT_SRT_CXX, etc.
+ The defaults can be restored later by 
+\begin_inset Quotes eld
+\end_inset 
+
+srt_setup -d
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Standard
+
+Users can alter the values of variables by putting one or more assignments
+ on the command line
+\layout LyX-Code
+
+srt_setup SRT_CXX=EGCS_1_1
+\layout LyX-Code
+
+srt_setup SRT_QUAL=maxopt SRT_BASE_RELEASE=test
+\layout Subsection
+
+System defaults
+\layout Standard
+
+srt_setup and srt_environment source the file $SRT_DIST/srt/srt_envrc.
+ This allows the librarian to set defaults for an entire project.
+ For example, the srt_envrc might contain the lines
+\layout Standard
+
+DEFAULT_SRT_CXX=KCC_3_3
+\layout Standard
+
+DEFAULT_SRT_BASE_RELEASE=development
+\layout Standard
+
+Since the file is sourced by the shell script, it can contain any shell
+ commands.
+ Only the resulting value of the variables matter.
+\layout Subsection
+
+User defaults
+\layout Standard
+
+srt_setup and srt_environment also source the file $HOME/.srt_envrc.
+ (Note the presence of a leading dot in the user file, but not in the system
+ file.) This allows the user to set his/her own defaults.
+ Again, the file is sourced by the shell script, so it can contain any shell
+ commands.
+\layout Section
+
+The code management system
+\layout Subsection
+
+Introduction
+\layout Standard
+
+The scripts for the code management system are described by the man pages.
+ Additionally, every script will describe its own actions and options when
+ invoked with 
+\begin_inset Quotes eld
+\end_inset 
+
+--help
+\begin_inset Quotes erd
+\end_inset 
+
+ or an argument it does not understand.
+ The 
+\begin_inset Quotes eld
+\end_inset 
+
+newrel
+\begin_inset Quotes erd
+\end_inset 
+
+ command looks for system and user preferences.
+ 
+\layout Standard
+
+Scripts with the prefix 
+\begin_inset Quotes eld
+\end_inset 
+
+srt_int
+\begin_inset Quotes erd
+\end_inset 
+
+ are used internally by SoftRelTools.
+ They will not generally be useful to users.
+ Note that the srt_int_querypkg script is technically part of the build
+ system, not the code management system.
+ That means that changes to the build system can affect srt_int_querypkg.
+ The code management scripts are designed to be independent of the build
+ system.
+\layout Subsection
+
+System preferences for newrel
+\layout Standard
+
+newrel sources the file $SRT_DIST/srt/srtrc for directory creation preferences.
+ If the variable 
+\begin_inset Quotes eld
+\end_inset 
+
+extra_dirs
+\begin_inset Quotes erd
+\end_inset 
+
+ is defined, it is merged with the list of directories to be created.
+ It should be in the form of a space-separated list of directory names.
+ extra_dirs has two purposes:
+\layout Enumerate
+
+Extra directories can be created.
+\layout Enumerate
+
+Directories can be made into links to other areas.
+ The syntax for this is 
+\begin_inset Quotes eld
+\end_inset 
+
+foo>/tmp/bar
+\begin_inset Quotes erd
+\end_inset 
+
+, which means that the directory foo will be made into a link to /tmp/bar.
+ If /tmp/bar does not exist, newrel will (attempt to) create it.
+\layout Standard
+
+As in other places, srtrc is really a script which is sourced, so shell
+ logic can be used.
+ All that matters is the final value of extra_dirs.
+ If 
+\begin_inset Quotes eld
+\end_inset 
+
+extra_dirs
+\begin_inset Quotes erd
+\end_inset 
+
+ is not defined, newrel looks for 
+\begin_inset Quotes eld
+\end_inset 
+
+stddirs
+\begin_inset Quotes erd
+\end_inset 
+
+ for backward compatibility with the old SoftRelTools.
+\layout Standard
+
+The variable 
+\begin_inset Quotes eld
+\end_inset 
+
+release
+\begin_inset Quotes erd
+\end_inset 
+
+ (the name of the new release) is guaranteed to be available when srtrc
+ is sourced.
+\layout Subsection
+
+User preferences for newrel
+\layout Standard
+
+newrel also sources the file $HOME/.srtrc (note the leading dot) for directory
+ creation preferences.
+ See above for details.
+ The following example .srtrc file is useful:
+\layout LyX-Code
+
+
+\size footnotesize 
+extra_dirs=
+\backslash 
+
+\layout LyX-Code
+
+
+\size footnotesize 
+"$extra_dirs tmp>/tmp/$release/tmp bin>/tmp/$release/bin lib>/tmp/$release/lib
+ "
+\layout Standard
+
+It redirects all the directories containing large binary files to /tmp in
+ such a way as not to interfere with other releases.
+ Adding to the previous value of $extra_dirs makes certain that system-level
+ defaults are also respected.
+\layout Section
+
+The build system
+\layout Standard
+
+Introduction
+\layout Standard
+
+The build system in SoftRelTools is based on GNU Make.
+ Make is a very flexible tool with a steep learning curve.
+ SoftRelTools allows users to build and install a variety of objects without
+ learning the intricacies of Make.
+ At the same time, the power of Make is available for users who need to
+ go beyond simple functionality.
+ SoftRelTools provides a method to build libraries, binaries, standalone
+ object files, man pages and documentation files.
+ It also provides a method for packages to use multiple subdirectories and
+ subpackages.
+ Packages make their header files available to other packages through a
+ configurable directory.
+\layout Standard
+
+In order to use the SoftRelTools build system, the user must create a GNUmakefil
+e.
+ The GNUmakefile must at least include the line 
+\layout LyX-Code
+
+include SoftRelTools/standard.mk
+\layout Standard
+
+at the end of the file.
+\layout Subsection
+
+Exported headers
+\layout Standard
+
+All of the header files that are to be made available to other packages
+ need to be placed in one subdirectory.
+ The subdirectory may be the main package directory.
+ SoftRelTools will use the subdirectory indicated by the variable PACKAGE_INCLUD
+E.
+ If PACKAGE_INCLUDE is not found, SoftRelTools will look for a subdirectory
+ with the same name as the package directory.
+ If that fails, it will then look for subdirectories named include, then
+ src, in that order.
+ As a last resort, it will use the package directory itself as the header
+ directory.
+\layout Standard
+
+Exported headers can be used as follows
+\layout LyX-Code
+
+#include <Package/Header.hh>
+\layout Standard
+
+where Package is any package in the SoftRelTools distribution, including
+ the current package.
+ SoftRelTools sets the include paths accordingly.
+\layout Subsection
+
+Subdirectories and Subpackages
+\layout Standard
+
+Packages can use an arbitrary hierarchy of subdirectories.
+ SoftRelTools will attempt to launch builds in the subdirectories listed
+ in the variable SUBDIRS.
+ SoftRelTools will only launch make in directories containing a GNUmakefile.
+ All subdirectories put their intermediate build products (object files,
+ dependency files, etc.) in the same temporary directory.
+\layout Standard
+
+Subpackages are very similar to subdirectories.
+ A subpackage is distinguished by setting the variable SUBPACKAGE to the
+ subpackage name.
+ Each subdirectory of the subpackage must define SUBPACKAGE.
+ Subpackages have their own temporary areas.
+ Packages can have a mixture of subdirectories and subpackages, but this
+ is not necessarily encouraged.
+\layout Subsubsection
+
+Preferences for Subdirectories and Subpackages
+\layout Standard
+
+If the variable 
+\begin_inset Quotes eld
+\end_inset 
+
+SORT_SUBDIRS
+\begin_inset Quotes erd
+\end_inset 
+
+ is set, subdirectories are built in alphabetical order.
+ Otherwise they are built in the given order.
+\layout Subsection
+
+Libraries
+\layout Standard
+
+SoftRelTools can build static and shared libraries.
+ To build the library libFoo, include the line
+\layout Standard
+
+LIB=libFoo.a
+\layout Standard
+
+libFoo will be static, shared or both, if the variable LIB_TYPE is 
+\begin_inset Quotes eld
+\end_inset 
+
+static
+\begin_inset Quotes erd
+\end_inset 
+
+, 
+\begin_inset Quotes eld
+\end_inset 
+
+shared
+\begin_inset Quotes erd
+\end_inset 
+
+, or 
+\begin_inset Quotes eld
+\end_inset 
+
+both
+\begin_inset Quotes erd
+\end_inset 
+
+, respectively.
+ (
+\begin_inset Quotes eld
+\end_inset 
+
+Both
+\begin_inset Quotes erd
+\end_inset 
+
+ means generating two libraries, e.g., libFoo.a and libFoo.so.) The default is
+ to create static libraries.
+ The suffix on the filename is irrelevant -- SoftRelTools will give the
+ library the appropriate suffix depending on library type and platform.
+ Static and shared libraries can also be built by setting the variables
+ SHAREDLIB and STATICLIB, respectively.
+ The value of LIB_TYPE is ignored for SHAREDLIB and STATICLIB.
+\layout Standard
+
+The contents of the created libraries are defined by the following variables:
+\layout Description
+
+LIBCCFILES C++ files with the suffix .cc.
+\layout Description
+
+LIBCXXFILES C++ files with the suffix .cxx.
+\layout Description
+
+LIBCPPFILES C++ files with the suffix .cpp.
+\layout Description
+
+LIBCFILES C files with the suffix .c.
+\layout Description
+
+LIBFFILES Fortran files with suffixes .f or .F.
+ The latter will be run through the C preprocessor before compiling.
+\layout Description
+
+LIBLIBS The contents of LIBLIBS are added to the end of the link line when
+ the libraries are linked.
+ They are not included in the dependencies.
+\layout Subsubsection
+
+Preferences for Libraries
+\layout Standard
+
+As described above, libraries specified by the LIB variable will be built
+ static, shared, or both depending on the value of the LIB_TYPE variable.
+ The library rules in the old SoftRelTools included all the object files
+ found in the library temporary directory into the library.
+ It is preferable to link exactly those objects requested, however many
+ packages rely on the old behavior.
+ SoftRelTools will use the old behavior (all objects in the directory) if
+ the variable CATCHALL_LIBS is set.
+ Otherwise, it will only link the requested objects.
+\layout Subsection
+
+Binaries and Test Binaries
+\layout Standard
+
+SoftRelTools will attempt to build all files listed in the BIN variable
+ during the bin stage.
+ SoftRelTools will attempt to build all files listed in the TBIN variable
+ during the tbin stage.
+ The tbin stage is not normally built by 
+\begin_inset Quotes eld
+\end_inset 
+
+gmake all
+\begin_inset Quotes erd
+\end_inset 
+
+; it must be invoked explicitly.
+\layout Standard
+
+SoftRelTools provides rules for generating three different kinds of 
+\begin_inset Quotes eld
+\end_inset 
+
+binary
+\begin_inset Quotes erd
+\end_inset 
+
+ files.
+\layout Subsubsection
+
+Scripts 
+\layout Standard
+
+Files listed in the SCRIPTS variable are assumed to be scripts.
+ They are copied into the binary destination directory and made executable.
+ Note that normal usage requires listing the script in the BIN variable
+ (to tell SoftRelTools that it needs to be built during the bin stage) 
+\emph on 
+and
+\emph toggle 
+ the SCRIPT variable (to tell SoftRelTools how to build it.) A single directory
+ can build an arbitrary number of scripts.
+\layout Subsubsection
+
+Simple binaries 
+\layout Standard
+
+Each file listed in the SIMPLEBINS variable is built into a single binary
+ of the same name.
+ It looks for a single source file with the given name and a suffix .cc,
+ .cpp, .cxx, .c or .f.
+ They will each be linked with BINLIBS, described below.
+ A single directory can build and arbitrary number of simple binaries.
+ Note, however, that all simple binaries in a 
+\emph on 
+package
+\emph toggle 
+ are built in the same temporary directory.
+ As with the other binary types, normal usage requires listing simple binaries
+ in both the BIN variable and the SIMPLEBINS variable.
+\layout Subsubsection
+
+Complex binaries
+\layout Standard
+
+A subdirectory may specify in COMPLEXBIN one complex binary to be built.
+ The following contents may be specified:
+\layout Description
+
+BINCCFILES C++ files with the suffix .cc.
+\layout Description
+
+BINCXXFILES C++ files with the suffix .cxx.
+\layout Description
+
+BINCPPFILES C++ files with the suffix .cpp.
+\layout Description
+
+BINCFILES C files with the suffix .c.
+\layout Description
+
+BINFFILES Fortran files with suffixes .f or .F.
+ The latter will be run through the C preprocessor before compiling.
+\layout Description
+
+BINSTANDALONEOFILES Stand-alone object files to be linked with the binary.
+\layout Standard
+
+The binary will be linked with BINLIBS, described below.
+ Each complex binary has a unique temporary directory.
+ As with the other binary types, normal usage requires listing simple binaries
+ in both the BIN variable and the COMPLEXBIN variable.
+\layout Subsubsection
+
+Link libraries for simple and complex binaries
+\layout Standard
+
+All binaries in a directory will be linked with the contents of BINLIBS.
+ (Note that specifying extra libraries at link time is not usually a problem.)
+ Local libraries should be listed as dependencies of the files that use
+ them.
+ Local libraries mean libraries built by SoftRelTools.
+ External libraries, however, should 
+\emph on 
+not
+\emph toggle 
+ normally be listed as dependencies.
+ A change in external libraries should be followed by a clean build.
+ SoftRelTools places the contents of BINLIBS on the binary dependency line,
+ but with the contents of NODEP_LIBS filtered out.
+ Having libraries listed in NODEP_LIBS that are not in BINLIBS is perfectly
+ acceptable.
+ For backward compatability, if BINLIBS is empty, LOADLIBES is used instead.
+\layout Subsubsection
+
+Rules for test binaries
+\layout Standard
+
+All of the rules for for binaries apply to test binaries, also.
+\layout Subsubsection
+
+Preferences for binaries
+\layout Standard
+
+If OLD_BIN_RULES is defined, SoftRelTools includes the binary rules from
+ the original SoftRelTools.
+\layout Subsection
+
+Standalone objects
+\layout Standard
+
+Standalone objects are built directly in the library directory.
+\layout Description
+
+OBJCCFILES C++ files with the suffix .cc.
+\layout Description
+
+OBJCXXFILES C++ files with the suffix .cxx.
+\layout Description
+
+OBJCPPFILES C++ files with the suffix .cpp.
+\layout Description
+
+OBJCFILES C files with the suffix .c.
+\layout Description
+
+OBJFFILES Fortran files with suffixes .f or .F.
+ The latter will be run through the C preprocessor before compiling.
+\layout Subsection
+
+Man pages
+\layout Standard
+
+Files listed in the MANPAGES variable will be installed during the bin stage.
+ foo.1 will be installed in man/man1, foo.2 will be installed in man/man2
+ directory, etc.
+\layout Subsection
+
+Documentation files
+\layout Standard
+
+Files listed in the DOCS variable will be installed into the doc directory
+ during the bin stage.
+\layout Subsection
+
+Generated include files
+\layout Standard
+
+Files listed in the INC variable will be built during the include stage.
+ SoftRelTools does not provide the rules for building the files.
+\layout Subsection
+
+Generated code
+\layout Standard
+
+Files listed in the CODEGENFILES variable will be built during the codegen
+ files.
+ SoftRelTools does not provide rules for code generation by default, but
+ rules can be included by including the files SoftRelTools/idl.mk, SoftRelTools/j
+ava.mk and SoftRelTools/yacc.mk.
+\layout Subsection
+
+SoftRelTools version
+\layout Standard
+
+SoftRelTools version 2 defines
+\layout LyX-Code
+
+SRT_VERSION=2
+\layout Standard
+
+in case a package needs to check to see whether the rewrite is available.
+\layout Subsection
+
+Building with qualifiers
+\layout Standard
+
+Qualifiers are named sets of flags.
+ The name is placed in the SRT_QUAL environment variable.
+ The value of SRT_QUAL passed to srt_setup determines which set of qualifiers
+ are being used for the other packages.
+ The local package can be built with any value of SRT_QUAL.
+\layout Subsubsection
+
+Examples
+\layout Standard
+
+Building the hello package.
+\layout Itemize
+
+A standard build
+\layout LyX-Code
+
+
+\size small 
+> srt_setup
+\layout LyX-Code
+
+
+\size small 
+> srt_setup -a
+\layout LyX-Code
+
+
+\size small 
+> gmake
+\layout LyX-Code
+
+
+\size small 
+<**compiling**> Hello.cc
+\layout LyX-Code
+
+
+\size small 
+<**building library**> libHello
+\layout LyX-Code
+
+
+\size small 
+<**building**> HelloExample
+\layout Itemize
+
+A build using optimized settings
+\layout LyX-Code
+
+
+\size small 
+> srt_setup SRT_QUAL=maxopt
+\layout LyX-Code
+
+
+\size small 
+> gmake clean
+\layout LyX-Code
+
+
+\size small 
+> gmake
+\layout LyX-Code
+
+
+\size small 
+<**compiling**> Hello.cc
+\layout LyX-Code
+
+
+\size small 
+<**building library**> libHello
+\layout LyX-Code
+
+
+\size small 
+<**building**> HelloExample
+\layout Itemize
+
+Use default release, but optimize locally by passing a different value of
+ SRT_QUAL to gmake:
+\layout LyX-Code
+
+
+\size small 
+> srt_setup SRT_QUAL=default
+\layout LyX-Code
+
+
+\size small 
+> gmake clean
+\layout LyX-Code
+
+
+\size small 
+> gmake SRT_QUAL=maxopt 
+\layout LyX-Code
+
+
+\size small 
+<**compiling**> Hello.cc
+\layout LyX-Code
+
+
+\size small 
+<**building library**> libHello
+\layout LyX-Code
+
+
+\size small 
+<**building**> HelloExample
+\layout Standard
+
+Other combinations are possible.
+ For example,a package that does not compile properly under optimization
+ can easily redefine SRT_QUAL in the GNUmakefile itself, overriding other
+ settings.
+\layout Subsection
+
+Debugging
+\layout Standard
+
+SoftRelTools provides the following debugging aids:
+\layout Subsubsection
+
+VERBOSE flag
+\layout Standard
+
+Normally, SoftRelTools executes its commands silently.
+ If the variable VERBOSE is defined SoftRelTools will print each command
+ before it is executed.
+ The value of VERBOSE is irrelevant; it only has to be non-null.
+\layout Subsubsection
+
+echo_*
+\layout Standard
+
+Typing gmake echo_FOO will echo the value of the variable FOO at target
+ execution time.
+ It also prints the value of the make 
+\begin_inset Quotes eld
+\end_inset 
+
+origin
+\begin_inset Quotes erd
+\end_inset 
+
+ command for the variable FOO.
+ Obviously, it works for any variable.
+\layout Subsubsection
+
+sortecho_*
+\layout Standard
+
+sortecho_FOO is similar to echo_FOO, but it sorts the contents of FOO and
+ prints them in a single column suitable for input to diff.
+ It is useful for comparing the values of complicated flags.
+\layout Subsubsection
+
+gmake --debug
+\layout Standard
+
+This is really a function of make.
+ The debug flag causes make to generate extremely verbose output.
+ However, SoftRelTools works hard to minimize the extraneous content of
+ the output.
+\layout Subsection
+
+Example packages
+\layout Standard
+
+Several example packages are available:
+\layout Description
+
+Hello builds a hello world library and a corresponding executable.
+\layout Description
+
+BinExamples builds all the available binary types.
+ It depends on Hello.
+\layout Description
+
+UsesSubpackages uses both subpackages and and subdirectories.
+\layout Description
+
+TemplateArray is an example using C++ templates.
+\layout Section
+
+The external package system
+\layout Standard
+
+The external package system breaks down into two parts: the interface to
+ the standard compilers and linkers and the interface to external libraries,
+ etc.
+\layout Subsection
+
+Standard compilers and linkers: arch_spec.mk
+\layout Standard
+
+The external interface to arch_spec.mk is essentially unchanged: the build
+ system includes arch_spec.mk, which sets a variables for the compilers,
+ flags, etc.
+ The most important change is that SoftRelTools relies on the SRT_ variables
+ as input instead of the BF variables.
+ The SoftRelTools variables have been maintained.
+ 
+\layout Subsubsection
+
+Internal structure of arch_spec.mk
+\layout Standard
+
+The original SoftRelTools contained all settings for all architecture/compiler
+ combinations in one file.
+ This has been substantially rearranged in SoftRelTools version 2.
+ arch_spec.mk has been split into three: the main arch_spec.mk, the C++ compiler
+ files and the platform files.
+ The compiler and platform files live in the compiler and platform subdirectorie
+s of the include directory of SoftRelTools.
+ Since some settings depend on both compiler and platform, a choice had
+ to be made.
+ The convention is that compiler-specific information lives in the compiler
+ file, even if it is platform-specific.
+ There are still if statements in the compiler files, but they are very
+ simple.
+\layout Subsubsection
+
+Macros defined by arch_spec.mk
+\layout Standard
+
+SoftRelTools now defines macros for compilation.
+ All permutations of (C++, c, Fortran, Preprocessed Fortran) + 
+\layout Standard
+
+(pic, non-pic)+ (with depends, without depends) are defined.
+ Additionally, both on-the-fly and separate dependency generation are included.
+ For details, see arch_spec.mk.
+\layout Subsubsection
+
+Qualifiers in arch_spec.mk
+\layout Standard
+
+Qualifiers are named sets of flags.
+ The name is placed in the SRT_QUAL environment variable.
+ By default, SoftRelTools defines two sets:
+\layout Description
+
+default turns on debugging symbols and turns off optimization
+\layout Description
+
+maxopt turns off debugging symbols and sets the highest available generic
+ optimization
+\layout Standard
+
+Qualifiers have to be defined by hand in the compiler and platform files.
+ There is no (nor can there be) any automatic way to define flags across
+ architectures and compilers.
+ New qualifiers can be defined in the project-specific package by specializing
+ the compiler and platform files.
+\layout Subsection
+
+External libraries, etc.: arch_spec_*.mk
+\layout Standard
+
+SoftRelTools attempts to create a standard for arch_spec_*.mk files where
+ none existed before.
+ arch_spec_*.mk files should:
+\layout Itemize
+
+Follow the SoftRelTools inheritance hierarchy.
+ This is achieved through the include path in make and the behavior of the
+ file itself.
+ The file's job is taken care of by including the file override_arch_spec.mk.
+\layout Itemize
+
+Define a subset of the following:
+\begin_deeper 
+\layout Enumerate
+
+necessary C++ include path and/or C++ macro definitions
+\begin_deeper 
+\layout Itemize
+
+Modifies the variable CPPFLAGS
+\end_deeper 
+\layout Enumerate
+
+necessary library path
+\begin_deeper 
+\layout Itemize
+
+Modifies the variable LDFLAGS
+\end_deeper 
+\layout Enumerate
+
+necessary libraries
+\begin_deeper 
+\layout Itemize
+
+Modifies the variable LOADLIBES
+\end_deeper 
+\layout Enumerate
+
+necessary executable path
+\layout Enumerate
+
+external dependencies
+\begin_deeper 
+\layout Itemize
+
+External dependencies are automatically included unless the variable NO_AUTO_EXT
+_DEPENDS is set.
+\layout Itemize
+
+The variable arch_spec_depends contains the external dependencies on exit.
+\end_deeper 
+\end_deeper 
+\layout Itemize
+
+Optionally use an environmental variable if necessary to locate external
+ packages.
+\begin_deeper 
+\layout Itemize
+
+If the variable is not set, use a default value and set the variable arch_spec_w
+arning to an appropriate warning string.
+\end_deeper 
+\layout Itemize
+
+If the package is unavailable set the variable arch_spec_error to an appropriate
+ error string.
+\layout Itemize
+
+Set the variable arch_spec_warning for other messages.
+\layout Standard
+
+The error and warning messages are printed to stdout if the variable VERBOSE
+ is set.
+\layout Standard
+
+A few packages do not follow these guidelines for legacy reasons.
+ Each one has a comment to that effect.
+\layout Section
+
+Availability
+\layout Standard
+
+SoftRelTools is available for anonymous cvs access at 
+\layout LyX-Code
+
+:pserver:anonymous@srtcvs.fnal.gov:/srtcvs 
+\layout Standard
+
+Login with 
+\layout LyX-Code
+
+cvs -d :pserver:anonymous@srtcvs.fnal.gov:/srtcvs login 
+\layout Standard
+
+The password is 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+anoncvs
+\family default 
+
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ The project-specific and example packages are available from the same location.
+\layout Standard
+
+The SoftRelTools boot distribution is available at 
+\layout LyX-Code
+
+<http://RunIIComputing.fnal.gov/cmgt/srt_distribution.tar.gz>.
+\layout Standard
+
+This document is available at 
+\layout LyX-Code
+
+<http://RunIIComputing.fnal.gov/cmgt/SoftRelTools-Manual/SoftRelTools-Manual.html>.
+\layout Standard
+
+It is also part of the SoftRelTools package.
+\the_end

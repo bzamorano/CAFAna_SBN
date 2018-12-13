@@ -1,0 +1,97 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : daqmap_2014_06_25
+Alignment           : daqmap_2014_06_25
+BNBInfo		    : daqmap_2014_06_25
+BreakPointFitter    : daqmap_2014_06_25
+CAFAna              : daqmap_2014_06_25
+CAFMaker            : daqmap_2014_06_25
+CAFReweight         : daqmap_2014_06_25
+CalHit              : daqmap_2014_06_25
+Calibration         : daqmap_2014_06_25
+CalibrationUtils    : daqmap_2014_06_25
+CalibrationDataProducts : daqmap_2014_06_25
+Calibrator          : daqmap_2014_06_25
+CellToCell          : daqmap_2014_06_25
+ChannelInfo         : daqmap_2014_06_25
+ClusterMakerSS      : daqmap_2014_06_25
+CMap                : daqmap_2014_06_25
+Commissioning       : daqmap_2014_06_25
+CosmicExposureInfo  : daqmap_2014_06_25
+CosRej              : daqmap_2014_06_25
+DAQ2RawDigit        : daqmap_2014_06_25
+Database	    : daqmap_2014_06_25
+DDTConverters       : daqmap_2014_06_25
+debug_tools         : daqmap_2014_06_25
+Demo		    : daqmap_2014_06_25
+DetectorPerformance : daqmap_2014_06_25
+DiscreteTracker     : daqmap_2014_06_25
+DSOResultPlotter    : daqmap_2014_06_25
+ElasticArms         : daqmap_2014_06_25
+Eval	            : daqmap_2014_06_25
+EventDisplay        : daqmap_2014_06_25
+EventGenerator      : daqmap_2014_06_25
+EventSummary        : daqmap_2014_06_25
+FEBFlashFilter      : daqmap_2014_06_25
+Filter              : daqmap_2014_06_25
+FLUGGValidation     : daqmap_2014_06_25
+FuzzyKVertex        : daqmap_2014_06_25
+g4nova              : daqmap_2014_06_25
+Geometry            : daqmap_2014_06_25
+GeometryObjects     : daqmap_2014_06_25
+HMatrixE            : daqmap_2014_06_25
+HoughTransform      : daqmap_2014_06_25
+IFDBSpillInfo       : daqmap_2014_06_25
+KalmanFilter3D      : daqmap_2014_06_25
+LIDBuilder          : daqmap_2014_06_25
+LEM                 : daqmap_2014_06_25
+MCCheater           : daqmap_2014_06_25
+MCCheckOut          : daqmap_2014_06_25
+Metadata            : daqmap_2014_06_25
+MichelEFilter       : daqmap_2014_06_25
+MockDataDAQ         : daqmap_2014_06_25
+MultiProngNeutrinoSearch : daqmap_2014_06_25
+MuonRemove	    : daqmap_2014_06_25
+NCAna               : daqmap_2014_06_25
+NovaBeamMat         : daqmap_2014_06_25
+NovaFTS             : daqmap_2014_06_25
+NovaSimMixer        : daqmap_2014_06_25
+NueSandbox          : daqmap_2014_06_25
+NuMuBDTSelector     : daqmap_2014_06_25
+NumuEnergy          : daqmap_2014_06_25
+NumuSandbox         : daqmap_2014_06_25
+OnlineMonitoring    : daqmap_2014_06_25
+OscLib              : daqmap_2014_06_25
+PhotonTransport     : daqmap_2014_06_25
+Preselection        : daqmap_2014_06_25
+QEEventFinder       : daqmap_2014_06_25
+RawData             : daqmap_2014_06_25
+ReadoutSim          : daqmap_2014_06_25
+RecoBase            : daqmap_2014_06_25
+RecoBaseHit         : daqmap_2014_06_25
+RecoJMShower        : daqmap_2014_06_25
+RecVarPID           : daqmap_2014_06_25
+ReMId               : daqmap_2014_06_25
+RunHistory	    : daqmap_2014_06_25
+ShowerAna           : daqmap_2014_06_25
+ShowerLID           : daqmap_2014_06_25
+Simulation          : daqmap_2014_06_25
+Slicer              : daqmap_2014_06_25
+SRT_NOVA            : daqmap_2014_06_25
+StandardRecord      : daqmap_2014_06_25
+SummaryData         : daqmap_2014_06_25
+TimingFit           : daqmap_2014_06_25
+TrackFit            : daqmap_2014_06_25
+Utilities           : daqmap_2014_06_25
+Validation          : daqmap_2014_06_25
+VertexFinder        : daqmap_2014_06_25
+ZukCluster          : daqmap_2014_06_25
+#
+# setup package 
+#
+setup               : daqmap_2014_06_25

@@ -1,0 +1,202 @@
+#!/bin/sh
+#
+# Script to simultaneously commit to both a branch and the trunk of
+# a repository. Intended for applying bug fixes to release branches.
+#
+# Alex Himmel ahimmel@fnal.gov
+#
+
+if echo $@ | grep "\-h" >> /dev/null; then
+    echo "This script commits the local changes to both the current branch and to the trunk.
+It passes all command line arguments (except for this one) to svn commit.
+
+If the script gets part way through and runs into a problem, the state is saved.
+So, when the script is run again in the same directory it will pick up where it
+left off. For example, if the script is run and merge conflicts are found in the
+trunk, you can resolve the conflicts and then just rerun this script. To stop this
+behavior remove the status file .branch_commit_status.
+"
+    exit 0
+fi
+
+
+tmp_message_file=$PWD/.tmp_log_message
+status_file=$PWD/.branch_commit_status
+
+[ ! -e $status_file ] && touch $status_file
+
+if grep "Branch commit success" $status_file > /dev/null; then
+    # Retrieve environment variables from the status file
+    echo "svn_branch_commit: Branch commit already successful, retrieving status"
+    lastrev=`grep lastrev $status_file | awk '{print $NF}'`
+    branchurl=`grep branchurl $status_file | awk '{print $NF}'`
+    branchname=`grep branchname $status_file | awk '{print $NF}'`
+    trunkurl=`grep trunkurl $status_file | awk '{print $NF}'`
+    here=`grep here $status_file | awk '{print $NF}'`
+else
+
+    # Find the working path to use in case we are trying to
+    # perform the commit from outside the repository working area
+    here=""
+    for arg in "$@"; do
+        if [ -e "$arg" ]; then
+            if [ X$here == X ]; then
+                here=$arg
+            else
+                if svn info $PWD > /dev/null; then
+                    echo "Passed multiple locations, using $PWD as the working copy location. You have 5 seconds to cancel with ctrl-c."
+                    for i in 5 4 3 2 1; do
+                        echo -n "$i..."
+                        sleep 1
+                    done
+                    here=$PWD
+                else
+                    echo "Passed multiple locations, but $PWD is not a working copy location, so cannot proceed. Canceling svn_branch_commit."
+                    exit 1
+                fi
+            fi
+        fi
+    done
+    
+    # Make the commit using the passed arguments
+    echo "svn commit $@"
+    svn commit "$@"
+    retval=$?
+    
+    # If the commit fails, bail now and start over next time
+    if [ $retval != 0 ]; then
+        echo "Commit failed, canceling svn_branch_commit"
+        rm $status_file
+        exit $retval
+    fi
+
+    # Find the last revision number, accounting for possible mixed revisions
+    if [ -d $here ]; then
+        dirhere=$here
+    else
+        dirhere=`dirname $here`
+    fi
+    lastrev=`svnversion $dirhere | awk -F':' '{ print $NF }' | sed 's/[^0-9]*//g'`
+
+    # Find the full url or our current location on the branch
+    branchurl=`svn info $here | grep 'URL' | awk '{print $NF}'`
+
+    # Find the name of the branch
+    branchname=`echo $branchurl | egrep -o '(branches)/[^/]+|trunk' | egrep -o '[^/]+$'`
+
+    # Create the url for this location on the trunk
+    trunkurl=`echo $branchurl | sed -e "s|branches/$branchname|trunk|"`
+
+
+    if [ $branchname == "trunk" ]; then
+        echo "Already on the trunk, no further action required."
+        rm $status_file
+        exit 0
+    fi
+    
+    # Store the commit message to put into the later merge commit
+    [ -e $tmp_message_file ] && rm $tmp_message_file
+    echo "Merging revision $lastrev from $branchname to the trunk." > $tmp_message_file
+    svn log $here -r $lastrev | tail -n +4 | head -n -1 >> $tmp_message_file
+
+    # Store the successful merge and some environment variables in the status file
+    echo "Branch commit success" >> $status_file
+    echo "lastrev    $lastrev" >> $status_file
+    echo "branchurl  $branchurl" >> $status_file
+    echo "branchname $branchname" >> $status_file
+    echo "trunkurl   $trunkurl" >> $status_file
+    echo "here       $here" >> $status_file
+fi
+
+   
+if grep "Branch switch success" $status_file > /dev/null; then
+    echo "Switch from $branchname to trunk already successful"
+else
+    # Switch the trunk version of this location
+    echo "svn switch $trunkurl $here"
+    svn switch $trunkurl $here
+    retval=$?
+    
+    # If the switch fails, bail now, but retry the switch next time
+    if [ $retval != 0 ]; then
+        echo "Switch from $branchname to trunk failed, pausing svn_branch_commit. Rerun from this same directory to resume at this point." 
+        echo
+        echo "The cause at this stage is often uncommited changes. Unfortunately additional commits right now cannot be handled automatically. To continue using this script, you will need to store your altered files in a temporary location, revert those files to their repository versions, and then continue with this script. Once this script has completed, you can then retrieve those altered files from their temporary location and use this script again."
+        exit $retval
+    fi
+
+    echo "Branch switch success" >> $status_file
+fi
+
+
+#
+# Should now be on the trunk in the same location
+#
+
+if grep "Merge performed" $status_file > /dev/null; then
+    echo "Merge of release $lastrev from $branchname to trunk already performed"
+else
+    # Merge the changes from our branch back to the trunk
+    echo "svn merge -c $lastrev $branchurl $here"
+    svn merge -c $lastrev $branchurl $here
+    retval=$?
+
+    # Merge has been done, failure code means a conflict found, so do not redo merge
+    echo "Merge performed" >> $status_file
+
+    # If a merge conflict was found, exit the script now
+    if [ $retval != 0 ]; then
+        echo "Merge failed, probably due to a conflict, pausing svn_branch_commit. Resolve the conflicts, then rerun from this same directory to continue with commiting the changes."
+        exit $retval
+    fi
+fi
+
+#
+# The merge should be completed and all conflicts resolved now
+#
+if grep "Trunk commit success" $status_file > /dev/null; then
+    echo "Commit on the trunk already successful"
+else
+    echo "svn commit $here -F $tmp_message_file"
+    svn commit $here -F $tmp_message_file
+    retval=$?
+
+    # If this commit fails, pause here to allow error to be resolved and try again next time
+    if [ $retval != 0 ]; then
+        echo "Commit to the trunk failed, pausing svn_branch_commit. Rerun from this same directory to resume at this point."
+        exit $retval
+    fi
+
+    echo "Trunk commit success" >> $status_file
+fi
+
+
+
+#
+# Trunk should now contain the merged commits from the branch
+#
+
+if grep "Trunk switch success" $status_file > /dev/null; then
+    echo "Switch from trunk to $branchname already successful"
+else
+    # Switch the trunk version of this location
+    echo "svn switch $branchurl $here"
+    svn switch $branchurl $here
+    retval=$?
+    
+    # If the switch fails, bail now, but retry the switch next time
+    if [ $retval != 0 ]; then
+        echo "Switch from trunk to $branchname failed, pausing svn_branch_commit. Rerun from this same directory to resume at this point."
+        exit $retval
+    fi
+
+    echo "Trunk switch success" >> $status_file
+fi
+
+#
+# All steps successfully complete, clean up
+#
+echo "Success!"
+rm $status_file
+rm $tmp_message_file
+

@@ -1,0 +1,99 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NuSoft NuTools packages here
+#
+EventDisplayBase    : CR13-03-08
+EventGeneratorBase  : CR13-03-08
+G4Base              : CR13-03-08
+MagneticField       : CR13-03-08
+NuBeamWeights       : CR13-03-08
+NuReweight          : CR13-03-08
+SimulationBase      : CR13-03-08
+#
+# NOvA Offline packages go here
+#
+Alignment           : CR13-03-08
+BNBInfo		    : CR13-03-08
+CAFAna              : CR13-03-08
+CAFMaker            : CR13-03-08
+CalHit              : CR13-03-08
+Calibration         : CR13-03-08
+CalibrationDataProducts : CR13-03-08
+Calibrator          : CR13-03-08
+CellToCell          : CR13-03-08
+ChannelInfo         : CR13-03-08
+ClusterMakerSS      : CR13-03-08
+CMap                : CR13-03-08
+Commissioning       : CR13-03-08
+CosmicCalib         : CR13-03-08
+CosmicExposureInfo  : CR13-03-08
+DAQ2RawDigit        : CR13-03-08
+Demo		    : CR13-03-08
+DetectorPerformance : CR13-03-08
+DiscreteTracker     : CR13-03-08
+ElasticArms         : CR13-03-08
+Eval	            : CR13-03-08
+EventDisplay        : CR13-03-08
+EventGenerator      : CR13-03-08
+EventSummary        : CR13-03-08
+Filter              : CR13-03-08
+FLUGGValidation     : CR13-03-08
+FuzzyKVertex        : CR13-03-08
+g4nova              : CR13-03-08
+Geometry            : CR13-03-08
+HMatrixE            : CR13-03-08
+HoughTransform      : CR13-03-08
+LEM                 : CR13-03-08
+MCCheater           : CR13-03-08
+MCCheckOut          : CR13-03-08
+MichelEFilter       : CR13-03-08
+MockDataDAQ         : CR13-03-08
+MuonRemove	    : CR13-03-08
+NCAna               : CR13-03-08
+NovaBeamMat         : CR13-03-08
+NovaSimMixer        : CR13-03-08
+NueSandbox          : CR13-03-08
+NuMISpillInfo       : CR13-03-08
+NuMuBDTSelector     : CR13-03-08
+NumuEnergy          : CR13-03-08
+NumuSandbox         : CR13-03-08
+OnlineMonitoring    : CR13-03-08
+OscLib              : CR13-03-08
+PhotonTransport     : CR13-03-08
+QEEventFinder       : CR13-03-08
+RawData             : CR13-03-08
+ReadoutSim          : CR13-03-08
+RecoBase            : CR13-03-08
+RecoJMShower        : CR13-03-08
+RecVarPID           : CR13-03-08
+ReMId               : CR13-03-08
+ShowerAna           : CR13-03-08
+Simulation          : CR13-03-08
+Slicer              : CR13-03-08
+SRT_NOVA            : CR13-03-08
+SummaryData         : CR13-03-08
+TrackFit            : CR13-03-08
+Utilities           : CR13-03-08
+Validation          : CR13-03-08
+VertexFinder        : CR13-03-08
+#
+# NOvA Online packages go here
+#
+DatabaseUtils	    : off2013-03-07
+DAQChannelMap       : off2013-03-07
+DAQDataFormats      : off2013-03-07
+DAQQualityCheck     : off2013-03-07
+EventDispatcher_CommandSet : off2013-03-07
+NovaDatabase        : off2013-03-07
+NovaDAQConventions  : off2013-03-07
+NovaDAQUtilities    : off2013-03-07
+NovaTimingUtilities : off2013-03-07
+PackageVersion      : off2013-03-07
+RawFileParser       : off2013-03-07
+#
+# setup package 
+#
+setup               : CR13-03-08

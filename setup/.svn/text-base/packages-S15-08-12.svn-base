@@ -1,0 +1,92 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S15-08-12
+Alignment           : S15-08-12
+BreakPointFitter    : S15-08-12
+BremShowerFilter    : S15-08-12
+CAFAna              : S15-08-12
+CAFMaker            : S15-08-12
+CAFReweight         : S15-08-12
+CalHit              : S15-08-12
+Calibration         : S15-08-12
+CalibrationUtils    : S15-08-12
+CalibrationDataProducts : S15-08-12
+Calibrator          : S15-08-12
+ChannelInfo         : S15-08-12
+ClusterMakerSS      : S15-08-12
+CMap                : S15-08-12
+Commissioning       : S15-08-12
+CosmicExposureInfo  : S15-08-12
+CosRej              : S15-08-12
+DAQ2RawDigit        : S15-08-12
+Database	    : S15-08-12
+DDTConverters       : S15-08-12
+Demo		    : S15-08-12
+DetectorPerformance : S15-08-12
+DiscreteTracker     : S15-08-12
+DQSpillFlags        : S15-08-12
+DSOResultPlotter    : S15-08-12
+ElasticArms         : S15-08-12
+Eval	            : S15-08-12
+EventDisplay        : S15-08-12
+EventGenerator      : S15-08-12
+EventSummary        : S15-08-12
+Filter              : S15-08-12
+FuzzyKVertex        : S15-08-12
+g4nova              : S15-08-12
+Geometry            : S15-08-12
+GeometryObjects     : S15-08-12
+HMatrixE            : S15-08-12
+HoughTransform      : S15-08-12
+HoughVertex         : S15-08-12
+IFDBSpillInfo       : S15-08-12
+LEM                 : S15-08-12
+MCCheater           : S15-08-12
+MCCheckOut          : S15-08-12
+Metadata            : S15-08-12
+MEFinder            : S15-08-12
+MichelEFilter       : S15-08-12
+MockDataDAQ         : S15-08-12
+MuonRemove	    : S15-08-12
+NDRockMuon          : S15-08-12
+NovaFTS             : S15-08-12
+NovaSimMixer        : S15-08-12
+NueSandbox          : S15-08-12
+NumuEnergy          : S15-08-12
+NumuSandbox         : S15-08-12
+OnlineMonitoring    : S15-08-12
+OscLib              : S15-08-12
+PhotonTransport     : S15-08-12
+Preselection        : S15-08-12
+Production          : S15-08-12
+QEEventFinder       : S15-08-12
+RawData             : S15-08-12
+ReadoutSim          : S15-08-12
+RecoBase            : S15-08-12
+RecoBaseHit         : S15-08-12
+RecoJMShower        : S15-08-12
+RecVarPID           : S15-08-12
+ReMId               : S15-08-12
+RunHistory	    : S15-08-12
+ShowerLID           : S15-08-12
+Simulation          : S15-08-12
+Slicer              : S15-08-12
+SRT_NOVA            : S15-08-12
+StandardRecord      : S15-08-12
+SummaryData         : S15-08-12
+TimingFit           : S15-08-12
+TrackFit            : S15-08-12
+Utilities           : S15-08-12
+Validation          : S15-08-12
+VertexDT            : S15-08-12
+VertexFinder        : S15-08-12
+ZukCluster          : S15-08-12
+#
+# setup package
+#
+setup               : S15-08-12

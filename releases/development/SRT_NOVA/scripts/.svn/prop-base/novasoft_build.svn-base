@@ -1,0 +1,17 @@
+K 14
+svn:executable
+V 1
+*
+K 13
+svn:mergeinfo
+V 643
+/branches/R15-11-03-ana-br/SRT_NOVA/scripts/novasoft_build:16613
+/branches/R15-11-17-miniprod-br/SRT_NOVA/scripts/novasoft_build:17177
+/branches/R17-11-14-prod4reco-br/SRT_NOVA/scripts/novasoft_build:30099
+/branches/R18-04-20-art2.11-br/SRT_NOVA/scripts/novasoft_build:31279-32339
+/branches/art2root6-integration-trunk/SRT_NOVA/scripts/novasoft_build:28192-30258
+/branches/cmake_build/SRT_NOVA/scripts/novasoft_build:9129-9387
+/branches/daqmap_2014_06_25/SRT_NOVA/scripts/novasoft_build:9790-9910
+/branches/feature_caf_size/SRT_NOVA/scripts/novasoft_build:17005-24277
+/branches/root6art2-integration/SRT_NOVA/scripts/novasoft_build:26662-28946
+END

@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/novaart.pkgs.svn/!svn/ver/28081/trunk/Utilities/BlessedPlots
+END
+RunBlessedPlots.py
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/subversion/novaart.pkgs.svn/!svn/ver/21226/trunk/Utilities/BlessedPlots/RunBlessedPlots.py
+END
+blessed_plot_runner.sh
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/subversion/novaart.pkgs.svn/!svn/ver/26523/trunk/Utilities/BlessedPlots/blessed_plot_runner.sh
+END
+BlessedPlotsProposed.json
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/subversion/novaart.pkgs.svn/!svn/ver/26522/trunk/Utilities/BlessedPlots/BlessedPlotsProposed.json
+END
+make_static_page.py
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/subversion/novaart.pkgs.svn/!svn/ver/26528/trunk/Utilities/BlessedPlots/make_static_page.py
+END
+bp.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/subversion/novaart.pkgs.svn/!svn/ver/26525/trunk/Utilities/BlessedPlots/bp.py
+END
+log.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/subversion/novaart.pkgs.svn/!svn/ver/16723/trunk/Utilities/BlessedPlots/log.py
+END
+helpers.py
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/subversion/novaart.pkgs.svn/!svn/ver/20988/trunk/Utilities/BlessedPlots/helpers.py
+END
+BlessedPlots.json
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/subversion/novaart.pkgs.svn/!svn/ver/28081/trunk/Utilities/BlessedPlots/BlessedPlots.json
+END
+config.py
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/subversion/novaart.pkgs.svn/!svn/ver/26521/trunk/Utilities/BlessedPlots/config.py
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/subversion/novaart.pkgs.svn/!svn/ver/20988/trunk/Utilities/BlessedPlots/Makefile
+END

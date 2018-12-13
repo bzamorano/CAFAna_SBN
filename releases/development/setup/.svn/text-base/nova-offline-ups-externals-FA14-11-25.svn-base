@@ -1,0 +1,22 @@
+art		 v1_12_02    -q+nu:+e6:+debug
+condb		 v2_0b
+genie_xsec	 R-2_8_0     -q+default
+genie_phyopt	 R-2_8_0     -q+dkcharmtau
+ifdh_art	 v1_5_4      -q+nu:+debug:+e6:+s5
+nutools		 v1_06_04    -q+debug:+e6
+psycopg2	 v2_5_p2_7
+totalview	 v8_9_0a
+novaddt		 v03_00_02   -q+e6:+debug
+gdb		 v7_8
+valgrind	 v3_6_1
+jobsub_client	 v1_0
+eid		 v01.00
+hmatrix		 v01.00
+lemlittle	 v01.02
+qepid		 v01.00
+remid		 v01.00
+rvp		 v01.00
+ucana		 v01.02
+lid		 v01.00
+calibcsvs	 v01.00
+NovaGridUtils

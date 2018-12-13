@@ -1,0 +1,67 @@
+SoftRelTools : HEAD
+EventDisplayBase : s12-07-21
+EventGeneratorBase : s12-07-21
+G4Base : s12-07-21
+MagneticField : s12-07-21
+NuBeamWeights : s12-07-21
+SimulationBase : s12-07-21
+Alignment : s12-07-21
+BNBInfo : s12-07-21
+CAFMaker : s12-07-21
+CalHit : s12-07-21
+Calibrator : s12-07-21
+CellToCell : s12-07-21
+ChannelInfo : s12-07-21
+ClusterMakerSS : s12-07-21
+CMap : s12-07-21
+Commissioning : s12-07-21
+CosmicCalib : s12-07-21
+CosmicExposureInfo : s12-07-21
+DAQ2RawDigit : s12-07-21
+DetectorPerformance : s12-07-21
+DiscreteTracker : s12-07-21
+ElasticArms : s12-07-21
+Eval : s12-07-21
+EventDisplay : s12-07-21
+EventGenerator : s12-07-21
+Filter : s12-07-21
+FLUGGValidation : s12-07-21
+FuzzyKVertex : s12-07-21
+g4nova : s12-07-21
+Geometry : s12-07-21
+HMatrixE : s12-07-21
+HoughTransform : s12-07-21
+MCCheater : s12-07-21
+MCCheckOut : s12-07-21
+MichelEFilter : s12-07-21
+MuonRemove : s12-07-21
+NovaBeamMat : s12-07-21
+NuMISpillInfo : s12-07-21
+OnlineMonitoring : s12-07-21
+OscLib : s12-07-21
+PhotonTransport : s12-07-21
+RawData : s12-07-21
+ReadoutSim : s12-07-21
+RecoBase : s12-07-21
+RecoJMShower : s12-07-21
+setup : s12-07-21
+Simulation : 
+Slicer : 
+SRT_NOVA : 
+SummaryData : 
+TrackFit : 
+Utilities : 
+Validation : 
+VertexFinder : 
+LEM : 
+NueAna : 
+DatabaseUtils : 
+DAQChannelMap : 
+DAQDataFormats : 
+DAQQualityCheck : 
+EventDispatcher_CommandSet : 
+NovaDatabase : 
+NovaDAQUtilities : 
+NovaTimingUtilities : 
+PackageVersion : 
+RawFileParser : 

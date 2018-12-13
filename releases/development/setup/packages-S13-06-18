@@ -1,0 +1,111 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NuSoft NuTools packages here
+#
+EventDisplayBase    : S13-06-18
+EventGeneratorBase  : S13-06-18
+G4Base              : S13-06-18
+MagneticField       : S13-06-18
+NuBeamWeights       : S13-06-18
+NuReweight          : S13-06-18
+SimulationBase      : S13-06-18
+#
+# NOvA Offline packages go here
+#
+Alignment           : S13-06-18
+BNBInfo		    : S13-06-18
+BreakPointFitter    : S13-06-18
+CAFAna              : S13-06-18
+CAFMaker            : S13-06-18
+CAFReweight         : S13-06-18
+CalHit              : S13-06-18
+Calibration         : S13-06-18
+CalibrationDataProducts : S13-06-18
+Calibrator          : S13-06-18
+CellToCell          : S13-06-18
+ChannelInfo         : S13-06-18
+ClusterMakerSS      : S13-06-18
+CMap                : S13-06-18
+Commissioning       : S13-06-18
+CosmicCalib         : S13-06-18
+CosmicExposureInfo  : S13-06-18
+CosRej              : S13-06-18
+DAQ2RawDigit        : S13-06-18
+Database	    : S13-06-18
+DDTConverters       : S13-06-18
+Demo		    : S13-06-18
+DetectorPerformance : S13-06-18
+DiscreteTracker     : S13-06-18
+ElasticArms         : S13-06-18
+Eval	            : S13-06-18
+EventDisplay        : S13-06-18
+EventGenerator      : S13-06-18
+EventSummary        : S13-06-18
+Filter              : S13-06-18
+FLUGGValidation     : S13-06-18
+FuzzyKVertex        : S13-06-18
+g4nova              : S13-06-18
+Geometry            : S13-06-18
+HMatrixE            : S13-06-18
+HoughTransform      : S13-06-18
+KalmanFilter3D      : S13-06-18
+LEM                 : S13-06-18
+MCCheater           : S13-06-18
+MCCheckOut          : S13-06-18
+Metadata            : S13-06-18
+MichelEFilter       : S13-06-18
+MockDataDAQ         : S13-06-18
+MuonRemove	    : S13-06-18
+NCAna               : S13-06-18
+NovaBeamMat         : S13-06-18
+NovaSimMixer        : S13-06-18
+NueSandbox          : S13-06-18
+NuMISpillInfo       : S13-06-18
+NuMuBDTSelector     : S13-06-18
+NumuEnergy          : S13-06-18
+NumuSandbox         : S13-06-18
+OnlineMonitoring    : S13-06-18
+OscLib              : S13-06-18
+PhotonTransport     : S13-06-18
+QEEventFinder       : S13-06-18
+RawData             : S13-06-18
+ReadoutSim          : S13-06-18
+RecoBase            : S13-06-18
+RecoJMShower        : S13-06-18
+RecVarPID           : S13-06-18
+ReMId               : S13-06-18
+ShowerAna           : S13-06-18
+Simulation          : S13-06-18
+Slicer              : S13-06-18
+SRT_NOVA            : S13-06-18
+StandardRecord      : S13-06-18
+SummaryData         : S13-06-18
+TrackFit            : S13-06-18
+Utilities           : S13-06-18
+Validation          : S13-06-18
+VertexFinder        : S13-06-18
+#
+# NOvA Online packages go here
+#
+DatabaseUtils	    : off2013-06-06
+DAQChannelMap       : off2013-06-06
+DAQDataFormats      : off2013-06-06
+DAQQualityCheck     : off2013-06-06
+EventDispatcher_CommandSet : off2013-04-09a
+NovaDatabase        : off2013-06-06
+NovaDAQConventions  : off2013-06-06
+NovaDAQUtilities    : off2013-06-06
+NovaTimingUtilities : off2013-06-06
+PackageVersion      : off2013-06-06
+RawFileParser       : off2013-06-06
+#
+# NOvA DDT packages go here
+#
+DDTBaseDataProducts : ddt2013-05-08
+#
+# setup package 
+#
+setup               : S13-06-18

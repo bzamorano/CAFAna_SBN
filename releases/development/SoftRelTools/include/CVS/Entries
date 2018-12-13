@@ -1,0 +1,44 @@
+/GNUmakefile.main/1.23/Thu Feb  1 17:11:57 2001//
+/arch_spec.mk/1.19/Thu Aug 17 19:01:31 2017//
+/arch_spec_CLHEP.mk/1.1.1.1/Wed Apr 28 18:33:58 1999//
+/arch_spec_Inventor.mk/1.4/Fri May 14 21:41:46 1999//
+/arch_spec_Motif.mk/1.3/Tue May 18 15:58:19 1999//
+/arch_spec_OBJY.mk/1.1.1.1/Wed Apr 28 18:33:56 1999//
+/arch_spec_ObjectSpace.mk/1.1.1.1/Wed Apr 28 18:33:59 1999//
+/arch_spec_Python.mk/1.2/Fri Jul  9 14:57:46 1999//
+/arch_spec_RW.mk/1.1.1.1/Wed Apr 28 18:33:58 1999//
+/arch_spec_STL.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+/arch_spec_Tcl.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+/arch_spec_X11.mk/1.4/Fri Mar  5 16:11:46 2004//
+/arch_spec_XDR.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+/arch_spec_ace.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+/arch_spec_boost.mk/1.1/Mon Jun  3 21:14:20 2002//
+/arch_spec_cern.mk/1.6/Wed Jun 19 15:51:16 2002//
+/arch_spec_cmsim.mk/1.1.1.1/Wed Apr 28 18:33:59 1999//
+/arch_spec_f77.mk/1.8/Mon Mar  8 14:45:20 2004//
+/arch_spec_fortmain.mk/1.1.1.1/Wed Apr 28 18:34:00 1999//
+/arch_spec_geant.mk/1.3/Tue Nov 30 20:11:11 1999//
+/arch_spec_herwig.mk/1.1.1.1/Wed Apr 28 18:33:59 1999//
+/arch_spec_idl.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+/arch_spec_isajet.mk/1.1.1.1/Wed Apr 28 18:33:58 1999//
+/arch_spec_java.mk/1.1.1.1/Wed Apr 28 18:34:00 1999//
+/arch_spec_msql.mk/1.1.1.1/Wed Apr 28 18:34:00 1999//
+/arch_spec_ocs.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+/arch_spec_orbacus.mk/1.1/Wed May 16 22:45:24 2001//
+/arch_spec_pythia.mk/1.2/Tue May 18 15:46:33 1999//
+/arch_spec_qq.mk/1.1.1.1/Wed Apr 28 18:33:59 1999//
+/arch_spec_root.mk/1.2/Fri May 14 22:06:35 1999//
+/arch_spec_stdhep.mk/1.1.1.1/Wed Apr 28 18:33:58 1999//
+/arch_spec_yacc.mk/1.1.1.1/Wed Apr 28 18:33:59 1999//
+/common.mk/1.2/Mon May 22 22:44:53 2000//
+/idl.mk/1.1.1.1/Wed Apr 28 18:33:58 1999//
+/java.mk/1.1.1.1/Wed Apr 28 18:33:58 1999//
+/preamble.mk/1.7/Wed Mar  7 22:31:40 2001//
+/refresh.mk/1.8/Fri Aug 13 14:30:11 1999//
+/specialize_arch_spec.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+/srt_super.mk/1.4/Thu Feb  8 23:11:20 2001//
+/standard.mk/1.37/Thu Aug 17 19:02:57 2017//
+/yacc.mk/1.1.1.1/Wed Apr 28 18:33:57 1999//
+D/compilers////
+D/platforms////
+D/super_extra////

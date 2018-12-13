@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+#ANG                 : R15-11-17-miniprodmec.c
+AirShower           : R15-11-17-miniprodmec.c
+Alignment           : R15-11-17-miniprodmec.c
+AnalysisSkimmer     : R15-11-17-miniprodmec.c
+BreakPointFitter    : R15-11-17-miniprodmec.c
+BremShowerFilter    : R15-11-17-miniprodmec.c
+CAFAna              : R15-11-17-miniprodmec.c
+CAFMaker            : R15-11-17-miniprodmec.c
+CAFReweight         : R15-11-17-miniprodmec.c
+CalHit              : R15-11-17-miniprodmec.c
+Calibration         : R15-11-17-miniprodmec.c
+CalibrationUtils    : R15-11-17-miniprodmec.c
+CalibrationDataProducts : R15-11-17-miniprodmec.c
+Calibrator          : R15-11-17-miniprodmec.c
+ChannelInfo         : R15-11-17-miniprodmec.c
+ClusterMakerSS      : R15-11-17-miniprodmec.c
+CMap                : R15-11-17-miniprodmec.c
+Commissioning       : R15-11-17-miniprodmec.c
+CosmicExposureInfo  : R15-11-17-miniprodmec.c
+CosRej              : R15-11-17-miniprodmec.c
+DAQ2RawDigit        : R15-11-17-miniprodmec.c
+Database	    : R15-11-17-miniprodmec.c
+DDTConverters       : R15-11-17-miniprodmec.c
+Demo		    : R15-11-17-miniprodmec.c
+DetectorPerformance : R15-11-17-miniprodmec.c
+DiscreteTracker     : R15-11-17-miniprodmec.c
+DiskUsage           : R15-11-17-miniprodmec.c
+DQSpillFlags        : R15-11-17-miniprodmec.c
+DSOResultPlotter    : R15-11-17-miniprodmec.c
+ElasticArms         : R15-11-17-miniprodmec.c
+Eval	            : R15-11-17-miniprodmec.c
+EventDisplay        : R15-11-17-miniprodmec.c
+EventGenerator      : R15-11-17-miniprodmec.c
+EventSummary        : R15-11-17-miniprodmec.c
+Filter              : R15-11-17-miniprodmec.c
+FuzzyKVertex        : R15-11-17-miniprodmec.c
+g4nova              : R15-11-17-miniprodmec.c
+Geometry            : R15-11-17-miniprodmec.c
+GeometryObjects     : R15-11-17-miniprodmec.c
+HMatrixE            : R15-11-17-miniprodmec.c
+HoughTransform      : R15-11-17-miniprodmec.c
+HoughVertex         : R15-11-17-miniprodmec.c
+IFDBSpillInfo       : R15-11-17-miniprodmec.c
+LEM                 : R15-11-17-miniprodmec.c
+MCCheater           : R15-11-17-miniprodmec.c
+MCCheckOut          : R15-11-17-miniprodmec.c
+Metadata            : R15-11-17-miniprodmec.c
+MEFinder            : R15-11-17-miniprodmec.c
+MichelEFilter       : R15-11-17-miniprodmec.c
+MockDataDAQ         : R15-11-17-miniprodmec.c
+MuonRemove	    : R15-11-17-miniprodmec.c
+NDRockMuon          : R15-11-17-miniprodmec.c
+NovaFTS             : R15-11-17-miniprodmec.c
+NovaSimMixer        : R15-11-17-miniprodmec.c
+NueSandbox          : R15-11-17-miniprodmec.c
+NumuEnergy          : R15-11-17-miniprodmec.c
+NumuSandbox         : R15-11-17-miniprodmec.c
+OnlineMonitoring    : R15-11-17-miniprodmec.c
+OscLib              : R15-11-17-miniprodmec.c
+PhotonTransport     : R15-11-17-miniprodmec.c
+Preselection        : R15-11-17-miniprodmec.c
+Production          : R15-11-17-miniprodmec.c
+QEEventFinder       : R15-11-17-miniprodmec.c
+RawData             : R15-11-17-miniprodmec.c
+ReadoutSim          : R15-11-17-miniprodmec.c
+RecoBase            : R15-11-17-miniprodmec.c
+RecoBaseHit         : R15-11-17-miniprodmec.c
+RecoJMShower        : R15-11-17-miniprodmec.c
+RecVarPID           : R15-11-17-miniprodmec.c
+ReMId               : R15-11-17-miniprodmec.c
+RunHistory	    : R15-11-17-miniprodmec.c
+ShowerE             : R15-11-17-miniprodmec.c
+ShowerLID           : R15-11-17-miniprodmec.c
+Simulation          : R15-11-17-miniprodmec.c
+Slicer              : R15-11-17-miniprodmec.c
+SRT_NOVA            : R15-11-17-miniprodmec.c
+StandardRecord      : R15-11-17-miniprodmec.c
+SummaryData         : R15-11-17-miniprodmec.c
+TimingFit           : R15-11-17-miniprodmec.c
+TrackFit            : R15-11-17-miniprodmec.c
+Utilities           : R15-11-17-miniprodmec.c
+Validation          : R15-11-17-miniprodmec.c
+VertexDT            : R15-11-17-miniprodmec.c
+VertexFinder        : R15-11-17-miniprodmec.c
+ZukCluster          : R15-11-17-miniprodmec.c
+#
+# setup package
+#
+setup               : R15-11-17-miniprodmec.c

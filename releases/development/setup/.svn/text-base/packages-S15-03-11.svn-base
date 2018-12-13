@@ -1,0 +1,90 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S15-03-11
+Alignment           : S15-03-11
+BreakPointFitter    : S15-03-11
+BremShowerFilter    : S15-03-11
+CAFAna              : S15-03-11
+CAFMaker            : S15-03-11
+CAFReweight         : S15-03-11
+CalHit              : S15-03-11
+Calibration         : S15-03-11
+CalibrationUtils    : S15-03-11
+CalibrationDataProducts : S15-03-11
+Calibrator          : S15-03-11
+ChannelInfo         : S15-03-11
+ClusterMakerSS      : S15-03-11
+CMap                : S15-03-11
+Commissioning       : S15-03-11
+CosmicExposureInfo  : S15-03-11
+CosRej              : S15-03-11
+DAQ2RawDigit        : S15-03-11
+Database	    : S15-03-11
+DDTConverters       : S15-03-11
+Demo		    : S15-03-11
+DetectorPerformance : S15-03-11
+DiscreteTracker     : S15-03-11
+DQSpillFlags        : S15-03-11
+DSOResultPlotter    : S15-03-11
+ElasticArms         : S15-03-11
+Eval	            : S15-03-11
+EventDisplay        : S15-03-11
+EventGenerator      : S15-03-11
+EventSummary        : S15-03-11
+Filter              : S15-03-11
+FuzzyKVertex        : S15-03-11
+g4nova              : S15-03-11
+Geometry            : S15-03-11
+GeometryObjects     : S15-03-11
+HMatrixE            : S15-03-11
+HoughTransform      : S15-03-11
+IFDBSpillInfo       : S15-03-11
+LEM                 : S15-03-11
+MCCheater           : S15-03-11
+MCCheckOut          : S15-03-11
+Metadata            : S15-03-11
+MichelEFilter       : S15-03-11
+MockDataDAQ         : S15-03-11
+MuonRemove	    : S15-03-11
+NDRockMuon          : S15-03-11
+NovaFTS             : S15-03-11
+NovaSimMixer        : S15-03-11
+NueSandbox          : S15-03-11
+NumuEnergy          : S15-03-11
+NumuSandbox         : S15-03-11
+OnlineMonitoring    : S15-03-11
+OscLib              : S15-03-11
+PhotonTransport     : S15-03-11
+Preselection        : S15-03-11
+Production          : S15-03-11
+QEEventFinder       : S15-03-11
+RawData             : S15-03-11
+ReadoutSim          : S15-03-11
+RecoBase            : S15-03-11
+RecoBaseHit         : S15-03-11
+RecoJMShower        : S15-03-11
+RecVarPID           : S15-03-11
+ReMId               : S15-03-11
+RunHistory	    : S15-03-11
+ShowerLID           : S15-03-11
+Simulation          : S15-03-11
+Slicer              : S15-03-11
+SRT_NOVA            : S15-03-11
+StandardRecord      : S15-03-11
+SummaryData         : S15-03-11
+TimingFit           : S15-03-11
+TrackFit            : S15-03-11
+Utilities           : S15-03-11
+Validation          : S15-03-11
+VertexDT            : S15-03-11
+VertexFinder        : S15-03-11
+ZukCluster          : S15-03-11
+#
+# setup package
+#
+setup               : S15-03-11

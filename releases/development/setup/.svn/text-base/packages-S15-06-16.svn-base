@@ -1,0 +1,91 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S15-06-16
+Alignment           : S15-06-16
+BreakPointFitter    : S15-06-16
+BremShowerFilter    : S15-06-16
+CAFAna              : S15-06-16
+CAFMaker            : S15-06-16
+CAFReweight         : S15-06-16
+CalHit              : S15-06-16
+Calibration         : S15-06-16
+CalibrationUtils    : S15-06-16
+CalibrationDataProducts : S15-06-16
+Calibrator          : S15-06-16
+ChannelInfo         : S15-06-16
+ClusterMakerSS      : S15-06-16
+CMap                : S15-06-16
+Commissioning       : S15-06-16
+CosmicExposureInfo  : S15-06-16
+CosRej              : S15-06-16
+DAQ2RawDigit        : S15-06-16
+Database	    : S15-06-16
+DDTConverters       : S15-06-16
+Demo		    : S15-06-16
+DetectorPerformance : S15-06-16
+DiscreteTracker     : S15-06-16
+DQSpillFlags        : S15-06-16
+DSOResultPlotter    : S15-06-16
+ElasticArms         : S15-06-16
+Eval	            : S15-06-16
+EventDisplay        : S15-06-16
+EventGenerator      : S15-06-16
+EventSummary        : S15-06-16
+Filter              : S15-06-16
+FuzzyKVertex        : S15-06-16
+g4nova              : S15-06-16
+Geometry            : S15-06-16
+GeometryObjects     : S15-06-16
+HMatrixE            : S15-06-16
+HoughTransform      : S15-06-16
+HoughVertex         : S15-06-16
+IFDBSpillInfo       : S15-06-16
+LEM                 : S15-06-16
+MCCheater           : S15-06-16
+MCCheckOut          : S15-06-16
+Metadata            : S15-06-16
+MichelEFilter       : S15-06-16
+MockDataDAQ         : S15-06-16
+MuonRemove	    : S15-06-16
+NDRockMuon          : S15-06-16
+NovaFTS             : S15-06-16
+NovaSimMixer        : S15-06-16
+NueSandbox          : S15-06-16
+NumuEnergy          : S15-06-16
+NumuSandbox         : S15-06-16
+OnlineMonitoring    : S15-06-16
+OscLib              : S15-06-16
+PhotonTransport     : S15-06-16
+Preselection        : S15-06-16
+Production          : S15-06-16
+QEEventFinder       : S15-06-16
+RawData             : S15-06-16
+ReadoutSim          : S15-06-16
+RecoBase            : S15-06-16
+RecoBaseHit         : S15-06-16
+RecoJMShower        : S15-06-16
+RecVarPID           : S15-06-16
+ReMId               : S15-06-16
+RunHistory	    : S15-06-16
+ShowerLID           : S15-06-16
+Simulation          : S15-06-16
+Slicer              : S15-06-16
+SRT_NOVA            : S15-06-16
+StandardRecord      : S15-06-16
+SummaryData         : S15-06-16
+TimingFit           : S15-06-16
+TrackFit            : S15-06-16
+Utilities           : S15-06-16
+Validation          : S15-06-16
+VertexDT            : S15-06-16
+VertexFinder        : S15-06-16
+ZukCluster          : S15-06-16
+#
+# setup package
+#
+setup               : S15-06-16

@@ -1,0 +1,25 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+CAFAna              : T17-05-05-sblana.a
+CMap                : T17-05-05-sblana.a
+Geometry            : T17-05-05-sblana.a
+GeometryObjects     : T17-05-05-sblana.a
+MCReweight          : T17-05-05-sblana.a
+Metadata            : T17-05-05-sblana.a
+OscLib              : T17-05-05-sblana.a
+RawData             : T17-05-05-sblana.a
+RecoBase            : T17-05-05-sblana.a
+RunHistory          : T17-05-05-sblana.a	
+SRT_NOVA            : T17-05-05-sblana.a
+StandardRecord      : T17-05-05-sblana.a
+SummaryData         : T17-05-05-sblana.a
+Utilities           : T17-05-05-sblana.a
+#
+# setup package 
+#
+setup               : T17-05-05-sblana.a

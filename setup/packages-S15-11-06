@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+ANG                 : S15-11-06
+AirShower           : S15-11-06
+Alignment           : S15-11-06
+AnalysisSkimmer     : S15-11-06
+BreakPointFitter    : S15-11-06
+BremShowerFilter    : S15-11-06
+CAFAna              : S15-11-06
+CAFMaker            : S15-11-06
+CAFReweight         : S15-11-06
+CalHit              : S15-11-06
+Calibration         : S15-11-06
+CalibrationUtils    : S15-11-06
+CalibrationDataProducts : S15-11-06
+Calibrator          : S15-11-06
+ChannelInfo         : S15-11-06
+ClusterMakerSS      : S15-11-06
+CMap                : S15-11-06
+Commissioning       : S15-11-06
+CosmicExposureInfo  : S15-11-06
+CosRej              : S15-11-06
+DAQ2RawDigit        : S15-11-06
+Database	    : S15-11-06
+DDTConverters       : S15-11-06
+Demo		    : S15-11-06
+DetectorPerformance : S15-11-06
+DiscreteTracker     : S15-11-06
+DiskUsage           : S15-11-06
+DQSpillFlags        : S15-11-06
+DSOResultPlotter    : S15-11-06
+ElasticArms         : S15-11-06
+Eval	            : S15-11-06
+EventDisplay        : S15-11-06
+EventGenerator      : S15-11-06
+EventSummary        : S15-11-06
+Filter              : S15-11-06
+FuzzyKVertex        : S15-11-06
+g4nova              : S15-11-06
+Geometry            : S15-11-06
+GeometryObjects     : S15-11-06
+HMatrixE            : S15-11-06
+HoughTransform      : S15-11-06
+HoughVertex         : S15-11-06
+IFDBSpillInfo       : S15-11-06
+LEM                 : S15-11-06
+MCCheater           : S15-11-06
+MCCheckOut          : S15-11-06
+Metadata            : S15-11-06
+MEFinder            : S15-11-06
+MichelEFilter       : S15-11-06
+MockDataDAQ         : S15-11-06
+MuonRemove	    : S15-11-06
+NDRockMuon          : S15-11-06
+NovaFTS             : S15-11-06
+NovaSimMixer        : S15-11-06
+NueSandbox          : S15-11-06
+NumuEnergy          : S15-11-06
+NumuSandbox         : S15-11-06
+OnlineMonitoring    : S15-11-06
+OscLib              : S15-11-06
+PhotonTransport     : S15-11-06
+Preselection        : S15-11-06
+Production          : S15-11-06
+QEEventFinder       : S15-11-06
+RawData             : S15-11-06
+ReadoutSim          : S15-11-06
+RecoBase            : S15-11-06
+RecoBaseHit         : S15-11-06
+RecoJMShower        : S15-11-06
+RecVarPID           : S15-11-06
+ReMId               : S15-11-06
+RunHistory	    : S15-11-06
+ShowerE             : S15-11-06
+ShowerLID           : S15-11-06
+Simulation          : S15-11-06
+Slicer              : S15-11-06
+SRT_NOVA            : S15-11-06
+StandardRecord      : S15-11-06
+SummaryData         : S15-11-06
+TimingFit           : S15-11-06
+TrackFit            : S15-11-06
+Utilities           : S15-11-06
+Validation          : S15-11-06
+VertexDT            : S15-11-06
+VertexFinder        : S15-11-06
+ZukCluster          : S15-11-06
+#
+# setup package
+#
+setup               : S15-11-06

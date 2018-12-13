@@ -1,0 +1,62 @@
+#!/bin/sh
+
+if [ ! -f "SoftRelTools-Manual.tex" ]; then
+	echo "You need to export SoftRelTools-Manual.tex from LyX before"
+	echo "running this script."
+	exit 1
+fi
+
+if [ -d "SoftRelTools-Manual" ]; then
+	rm -r SoftRelTools-Manual
+fi
+
+if [ -d "SoftRelTools-Manual-onebig" ]; then
+	rm -r SoftRelTools-Manual-onebig
+fi
+
+if [ -d "SoftRelTools-Manual-chunks" ]; then
+	rm -r SoftRelTools-Manual-chunks
+fi
+
+rm -f log
+
+echo "Fixing figures..."
+sed -e 's/includegraphics{\([^}]*\)}/epsfig{file=\1,clip=}/g' SoftRelTools-Manual.tex > tmp
+mv tmp SoftRelTools-Manual.tex
+
+sed -e 's/\\usepackage{graphics}/\\usepackage{graphics} \\usepackage{epsfig}/g' SoftRelTools-Manual.tex > tmp
+mv tmp SoftRelTools-Manual.tex
+
+echo "Running LaTeX..."
+latex SoftRelTools-Manual.tex 1>> log 2>> log  
+latex SoftRelTools-Manual.tex 1>> log 2>> log  
+latex SoftRelTools-Manual.tex 1>> log 2>> log  
+dvips -o SoftRelTools-Manual.ps SoftRelTools-Manual.dvi 1>> log 2>> log  
+
+echo "Running latex2html on chunk version..."
+latex2html -split 4 SoftRelTools-Manual.tex 1>> log 2>> log  
+
+echo "Converting <http:.*> into real links..."
+# Make http references into real links:
+for hfile in SoftRelTools-Manual/*
+do
+	sed -e 's|&lt;\(http:.*\)&gt;|<A HREF="\1">\1</A>|g' $hfile > tmp.out
+	mv tmp.out $hfile
+done
+mv SoftRelTools-Manual SoftRelTools-Manual-chunks
+
+echo "Running latex2html on onebig version..."
+latex2html -split 0 SoftRelTools-Manual.tex 1>> log 2>> log  
+
+echo "Converting <http:.*> into real links..."
+# Make http references into real links:
+for hfile in SoftRelTools-Manual/*
+do
+	sed -e 's|&lt;\(http:.*\)&gt;|<A HREF="\1">\1</A>|g' $hfile > tmp.out
+	mv tmp.out $hfile
+done
+mv SoftRelTools-Manual SoftRelTools-Manual-onebig
+
+# clean up
+rm -f SoftRelTools-Manual.aux SoftRelTools-Manual.dvi SoftRelTools-Manual.log\
+ SoftRelTools-Manual.toc

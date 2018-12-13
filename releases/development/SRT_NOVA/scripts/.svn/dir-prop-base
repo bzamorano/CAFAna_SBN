@@ -1,0 +1,12 @@
+K 13
+svn:mergeinfo
+V 452
+/branches/R15-11-03-ana-br/SRT_NOVA/scripts:16613
+/branches/R15-11-17-miniprod-br/SRT_NOVA/scripts:17177
+/branches/R18-04-20-art2.11-br/SRT_NOVA/scripts:31279-32339
+/branches/art2root6-integration-trunk/SRT_NOVA/scripts:28192-30258
+/branches/cmake_build/SRT_NOVA/scripts:9129-9387
+/branches/daqmap_2014_06_25/SRT_NOVA/scripts:9790-9910
+/branches/feature_caf_size/SRT_NOVA/scripts:17005-24277
+/branches/root6art2-integration/SRT_NOVA/scripts:26662-28946
+END

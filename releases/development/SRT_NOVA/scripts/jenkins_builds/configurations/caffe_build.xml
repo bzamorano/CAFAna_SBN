@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.6">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@1.37">
+      <projectNameList>
+        <string>*</string>
+      </projectNameList>
+    </hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>CAFFEVER</name>
+          <description></description>
+          <defaultValue>1.00.02</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ARTVER</name>
+          <description></description>
+          <defaultValue>v1_15_01</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>EQUAL</name>
+          <description></description>
+          <defaultValue>e7</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@1.8.4">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <matrixOptions>
+        <throttleMatrixBuilds>true</throttleMatrixBuilds>
+        <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
+      </matrixOptions>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>master</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.LabelAxis>
+      <name>label1</name>
+      <values>
+        <string>SLF5</string>
+        <string>SLF6</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+    <hudson.matrix.TextAxis>
+      <name>BUILDTYPE</name>
+      <values>
+        <string>debug</string>
+        <string>prof</string>
+      </values>
+    </hudson.matrix.TextAxis>
+  </axes>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+cd $WORKSPACE
+rm -rfv $WORKSPACE/buildout
+mkdir -p $WORKSPACE/buildout
+rm -rf buildtemp
+mkdir -p buildtemp
+
+cd ${WORKSPACE}/buildtemp
+export TOPLEV=${WORKSPACE}/buildtemp
+mkdir localProducts
+export LOCALPROD=${TOPLEV}/localProducts
+
+echo &quot;BUILDTYPE is ${BUILDTYPE}, e qualifier is ${EQUAL}&quot;
+echo &quot;TOPLEV is ${TOPLEV}&quot;
+echo &quot;LOCALPROD is ${LOCALPROD}&quot;
+
+# determine the build flavor
+OS=`uname`
+if [ &quot;${OS}&quot; = &quot;Linux&quot; ]
+then
+  flvr=slf`lsb_release -r | sed -e &apos;s/[[:space:]]//g&apos; | cut -f2 -d&quot;:&quot; | cut -f1 -d&quot;.&quot;`
+elif [ &quot;${OS}&quot; = &quot;Darwin&quot; ]
+then
+  flvr=d`uname -r | cut -f1 -d&quot;.&quot;`
+else 
+  echo &quot;ERROR: unrecognized operating system ${OS}&quot;
+  exit 1
+fi
+echo &quot;build flavor is ${flvr}&quot;
+echo &quot;&quot;
+
+
+# setup the local products directory
+cd ${TOPLEV}
+curl --fail --silent --location --insecure -O http://scisoft.fnal.gov/scisoft/bundles/tools/pullProducts || exit 1
+chmod +x pullProducts
+
+curl --fail --silent --location --insecure -O http://scisoft.fnal.gov/scisoft/bundles/tools/buildFW || exit 1
+chmod +x buildFW
+
+
+# pull the art products so that we have the correct version of gcc and ups
+./pullProducts ${LOCALPROD} ${flvr} art-${ARTVER} ${EQUAL} ${BUILDTYPE}
+
+#./pullProducts ${LOCALPROD} ${flvr} caffe-v1_00_00 ${EQUAL} ${BUILDTYPE}
+
+./pullProducts ${LOCALPROD} source caffe-${CAFFEVER}
+
+
+# 
+
+#source ${LOCALPROD}/setup
+
+#setup cmake v3_2_1
+
+
+./buildFW -f -t -b ${EQUAL} ${LOCALPROD} ${BUILDTYPE} caffe-${CAFFEVER}
+
+
+rm ${WORKSPACE}/buildout/*
+mv ${LOCALPROD}/../*.log ${WORKSPACE}/buildout
+mv ${LOCALPROD}/snappy*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/zlib*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/szip*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/leveldb*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/lmdb*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/hdf5*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/protobuf*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/gflags*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/glog*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/opencv*${EQUAL}.tar.bz2 ${WORKSPACE}/buildout
+mv ${LOCALPROD}/caffe*${BUILDTYPE}.tar.bz2 ${WORKSPACE}/buildout
+
+
+
+
+# clean up after ourselves
+rm -rf ${LOCALPROD}</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>buildout/**</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>false</onlyIfSuccessful>
+      <fingerprint>false</fingerprint>
+      <defaultExcludes>true</defaultExcludes>
+      <caseSensitive>true</caseSensitive>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
+  <buildWrappers/>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

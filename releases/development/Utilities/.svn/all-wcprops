@@ -1,0 +1,281 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/subversion/novaart.pkgs.svn/!svn/ver/34292/trunk/Utilities
+END
+RunEventFilter.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/subversion/novaart.pkgs.svn/!svn/ver/24568/trunk/Utilities/RunEventFilter.fcl
+END
+memtest.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/memtest.fcl
+END
+RewriteSpillData.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/subversion/novaart.pkgs.svn/!svn/ver/27092/trunk/Utilities/RewriteSpillData.fcl
+END
+runeventfiltjob.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/runeventfiltjob.fcl
+END
+MergeSubruns.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/subversion/novaart.pkgs.svn/!svn/ver/562/trunk/Utilities/MergeSubruns.fcl
+END
+services.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/novaart.pkgs.svn/!svn/ver/23504/trunk/Utilities/services.fcl
+END
+file_size_ana
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/subversion/novaart.pkgs.svn/!svn/ver/22920/trunk/Utilities/file_size_ana
+END
+concat_files.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/subversion/novaart.pkgs.svn/!svn/ver/6560/trunk/Utilities/concat_files.fcl
+END
+magfield_nova.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/magfield_nova.fcl
+END
+storegdmljob.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/subversion/novaart.pkgs.svn/!svn/ver/24013/trunk/Utilities/storegdmljob.fcl
+END
+compare-hdf5-caf
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/subversion/novaart.pkgs.svn/!svn/ver/32940/trunk/Utilities/compare-hdf5-caf
+END
+HoughCalc_service.cc
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/HoughCalc_service.cc
+END
+HashFunctions.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/subversion/novaart.pkgs.svn/!svn/ver/34292/trunk/Utilities/HashFunctions.h
+END
+RemoveBeamSpills_module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/RemoveBeamSpills_module.cc
+END
+NTree.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/subversion/novaart.pkgs.svn/!svn/ver/4416/trunk/Utilities/NTree.h
+END
+messageservice.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/messageservice.fcl
+END
+find-events-sam.pl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/subversion/novaart.pkgs.svn/!svn/ver/28001/trunk/Utilities/find-events-sam.pl
+END
+WriteHornCurrentCosmic_module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/WriteHornCurrentCosmic_module.cc
+END
+RemoveBeamSpills.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/subversion/novaart.pkgs.svn/!svn/ver/14602/trunk/Utilities/RemoveBeamSpills.fcl
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/CMakeLists.txt
+END
+RemoveBeamSpillsPrecise_module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/RemoveBeamSpillsPrecise_module.cc
+END
+sam_evd
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/subversion/novaart.pkgs.svn/!svn/ver/24369/trunk/Utilities/sam_evd
+END
+mergesubrunsjob.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/mergesubrunsjob.fcl
+END
+HoughCalc.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/subversion/novaart.pkgs.svn/!svn/ver/23430/trunk/Utilities/HoughCalc.h
+END
+WriteHornCurrentCosmic.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/novaart.pkgs.svn/!svn/ver/28487/trunk/Utilities/WriteHornCurrentCosmic.fcl
+END
+GNUmakefile
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/subversion/novaart.pkgs.svn/!svn/ver/32940/trunk/Utilities/GNUmakefile
+END
+RemoveBeamSpillsPrecise.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/subversion/novaart.pkgs.svn/!svn/ver/14602/trunk/Utilities/RemoveBeamSpillsPrecise.fcl
+END
+RawUtil.cxx
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/subversion/novaart.pkgs.svn/!svn/ver/32446/trunk/Utilities/RawUtil.cxx
+END
+StoreGDML_module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/StoreGDML_module.cc
+END
+find-events.pl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/subversion/novaart.pkgs.svn/!svn/ver/4200/trunk/Utilities/find-events.pl
+END
+AssociationUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/AssociationUtil.h
+END
+StoreGDML.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/subversion/novaart.pkgs.svn/!svn/ver/24013/trunk/Utilities/StoreGDML.fcl
+END
+rootlogon.C
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/subversion/novaart.pkgs.svn/!svn/ver/30346/trunk/Utilities/rootlogon.C
+END
+runeventfiltmcjob.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/runeventfiltmcjob.fcl
+END
+RunEventFilter_module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/subversion/novaart.pkgs.svn/!svn/ver/32482/trunk/Utilities/RunEventFilter_module.cc
+END
+RewriteSpillData_module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/novaart.pkgs.svn/!svn/ver/32340/trunk/Utilities/RewriteSpillData_module.cc
+END
+plot_timetracker
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/subversion/novaart.pkgs.svn/!svn/ver/18569/trunk/Utilities/plot_timetracker
+END
+rootlogon.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/novaart.pkgs.svn/!svn/ver/33763/trunk/Utilities/rootlogon.py
+END
+eventdump.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/subversion/novaart.pkgs.svn/!svn/ver/16800/trunk/Utilities/eventdump.fcl
+END
+MergeSubruns_module.cc
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/MergeSubruns_module.cc
+END
+HashFunctions.cxx
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/subversion/novaart.pkgs.svn/!svn/ver/34292/trunk/Utilities/HashFunctions.cxx
+END
+RawUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/subversion/novaart.pkgs.svn/!svn/ver/30259/trunk/Utilities/RawUtil.h
+END
+ifdh.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/subversion/novaart.pkgs.svn/!svn/ver/8577/trunk/Utilities/ifdh.fcl
+END
+doxymain.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/subversion/novaart.pkgs.svn/!svn/ver/10193/trunk/Utilities/doxymain.h
+END
+trimfile.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/subversion/novaart.pkgs.svn/!svn/ver/5532/trunk/Utilities/trimfile.fcl
+END
+utilities.fcl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/subversion/novaart.pkgs.svn/!svn/ver/23430/trunk/Utilities/utilities.fcl
+END

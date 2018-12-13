@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<matrix-project plugin="matrix-project@1.6">
+  <actions/>
+  <description>tagged release build of NOvA software using SRT build system</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.redmine.RedmineProjectProperty plugin="redmine@0.15">
+      <redmineWebsiteName>Fermilab Redmine</redmineWebsiteName>
+      <projectName>novaart</projectName>
+    </hudson.plugins.redmine.RedmineProjectProperty>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@1.37">
+      <projectNameList>
+        <string>*</string>
+      </projectNameList>
+    </hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>RELEASE</name>
+          <description>The name of the release to build</description>
+          <defaultValue>CR15-02-27</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>BRANCH</name>
+          <description>Is this actually the build of a BRANCH? 
+Set to FALSE the release is assumed to live in /tags/$RELEASE (or /trunk if RELEASE=development)
+Set to TRUE the release is assumed to live in /branches/$RELEASE</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>FALSE</string>
+              <string>TRUE</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>MTHREADED</name>
+          <description>Parallelise the build? Defaults to TRUE. 
+It can be easier to understand build errors when set to FALSE, although it will be slower.</description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>TRUE</string>
+              <string>FALSE</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@1.8.4">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+      <matrixOptions>
+        <throttleMatrixBuilds>true</throttleMatrixBuilds>
+        <throttleMatrixConfigurations>false</throttleMatrixConfigurations>
+      </matrixOptions>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>master</assignedNode>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <axes>
+    <hudson.matrix.LabelAxis>
+      <name>OS</name>
+      <values>
+        <string>SLF6</string>
+      </values>
+    </hudson.matrix.LabelAxis>
+    <hudson.matrix.TextAxis>
+      <name>BUILDTYPE</name>
+      <values>
+        <string>debug</string>
+        <string>maxopt</string>
+      </values>
+    </hudson.matrix.TextAxis>
+  </axes>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/usr/bin/env bash
+
+cd ${WORKSPACE}
+
+#Clean out the directory that the Jenkins setup / build scripts are kept in
+JENKINS_BUILD_SCRIPTS_DIR=${WORKSPACE}/jenkins_builds/
+
+if [ -e $JENKINS_BUILD_SCRIPTS_DIR ];then
+  rm -rf $JENKINS_BUILD_SCRIPTS_DIR ]
+fi
+
+cd ${WORKSPACE}
+svn co http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn/trunk/SRT_NOVA/scripts/jenkins_builds/
+
+#Do the setup 
+./jenkins_builds/jenkins_setup_script.sh 
+
+
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#!/usr/bin/env bash
+
+function echo_info(){
+	echo &quot;INFO : $@&quot; 
+}
+
+cd ${WORKSPACE}
+
+#Check that externals directories exist
+#We only need the first two
+echo_info &quot;Checking externals directories&quot;
+for dir in /grid/fermiapp/products/common/db /grid/fermiapp/products/nova/externals /nusoft/app/externals /nova/data/pidlibs/products /nova/app/home/novasoft/nova_offline_software/externals
+do 
+    if [ -e $dir ];
+    then 
+    	echo_info &quot;$dir exists&quot;
+    else 
+    	echo_info &quot;$dir does not exist&quot;;
+    fi;
+done
+echo_info &quot;Finished checking externals directories&quot;
+
+#Do the build
+./jenkins_builds/jenkins_build_script.sh
+
+#produces ${WORKSPACE}/buildout/novabuild.${RELEASE}.${OS}.${BUILDTYPE}.tar.bz2</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>nova_SRT_slf6_release_build_output</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients></recipients>
+      <dontNotifyEveryUnstableBuild>true</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers/>
+  <executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl">
+    <runSequentially>false</runSequentially>
+  </executionStrategy>
+</matrix-project>

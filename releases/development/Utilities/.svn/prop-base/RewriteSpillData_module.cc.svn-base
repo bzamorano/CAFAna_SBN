@@ -1,0 +1,9 @@
+K 13
+svn:mergeinfo
+V 399
+/branches/R17-09-05-prod4recopreview-br/Utilities/RewriteSpillData_module.cc:27579,28486
+/branches/R18-04-20-art2.11-br/Utilities/RewriteSpillData_module.cc:31279-32339
+/branches/art2root6-integration-trunk/Utilities/RewriteSpillData_module.cc:28192-30258
+/branches/cmake_build/Utilities/RewriteSpillData_module.cc:9129-9387
+/branches/daqmap_2014_06_25/Utilities/RewriteSpillData_module.cc:9790-9910
+END

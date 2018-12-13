@@ -1,0 +1,97 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : FA14-10-03b
+Alignment           : FA14-10-03b
+BNBInfo		    : FA14-10-03b
+BreakPointFitter    : FA14-10-03b
+BremShowerFilter    : FA14-10-03b
+CAFAna              : FA14-10-03b
+CAFMaker            : FA14-10-03b
+CAFReweight         : FA14-10-03b
+CalHit              : FA14-10-03b
+Calibration         : FA14-10-03b
+CalibrationUtils    : FA14-10-03b
+CalibrationDataProducts : FA14-10-03b
+Calibrator          : FA14-10-03b
+CellToCell          : FA14-10-03b
+ChannelInfo         : FA14-10-03b
+ClusterMakerSS      : FA14-10-03b
+CMap                : FA14-10-03b
+Commissioning       : FA14-10-03b
+CosmicExposureInfo  : FA14-10-03b
+CosRej              : FA14-10-03b
+DAQ2RawDigit        : FA14-10-03b
+Database	    : FA14-10-03b
+DDTConverters       : FA14-10-03b
+Demo		    : FA14-10-03b
+DetectorPerformance : FA14-10-03b
+DiscreteTracker     : FA14-10-03b
+DSOResultPlotter    : FA14-10-03b
+ElasticArms         : FA14-10-03b
+Eval	            : FA14-10-03b
+EventDisplay        : FA14-10-03b
+EventGenerator      : FA14-10-03b
+EventSummary        : FA14-10-03b
+FEBFlashFilter      : FA14-10-03b
+Filter              : FA14-10-03b
+FLUGGValidation     : FA14-10-03b
+FuzzyKVertex        : FA14-10-03b
+g4nova              : FA14-10-03b
+Geometry            : FA14-10-03b
+GeometryObjects     : FA14-10-03b
+HMatrixE            : FA14-10-03b
+HoughTransform      : FA14-10-03b
+IFDBSpillInfo       : FA14-10-03b
+KalmanFilter3D      : FA14-10-03b
+LIDBuilder          : FA14-10-03b
+LEM                 : FA14-10-03b
+MCCheater           : FA14-10-03b
+MCCheckOut          : FA14-10-03b
+Metadata            : FA14-10-03b
+MichelEFilter       : FA14-10-03b
+MockDataDAQ         : FA14-10-03b
+MultiProngNeutrinoSearch : FA14-10-03b
+MuonRemove	    : FA14-10-03b
+NCAna               : FA14-10-03b
+NovaFTS             : FA14-10-03b
+NovaSimMixer        : FA14-10-03b
+NueSandbox          : FA14-10-03b
+NuMuBDTSelector     : FA14-10-03b
+NumuEnergy          : FA14-10-03b
+NumuSandbox         : FA14-10-03b
+OnlineMonitoring    : FA14-10-03b
+OscLib              : FA14-10-03b
+PhotonTransport     : FA14-10-03b
+Preselection        : FA14-10-03b
+ProductionScripts   : FA14-10-03b
+QEEventFinder       : FA14-10-03b
+RawData             : FA14-10-03b
+ReadoutSim          : FA14-10-03b
+RecoBase            : FA14-10-03b
+RecoBaseHit         : FA14-10-03b
+RecoJMShower        : FA14-10-03b
+RecVarPID           : FA14-10-03b
+ReMId               : FA14-10-03b
+RunHistory	    : FA14-10-03b
+ShowerAna           : FA14-10-03b
+ShowerLID           : FA14-10-03b
+Simulation          : FA14-10-03b
+Slicer              : FA14-10-03b
+SRT_NOVA            : FA14-10-03b
+StandardRecord      : FA14-10-03b
+SummaryData         : FA14-10-03b
+TimingFit           : FA14-10-03b
+TrackFit            : FA14-10-03b
+Utilities           : FA14-10-03b
+Validation          : FA14-10-03b
+VertexFinder        : FA14-10-03b
+ZukCluster          : FA14-10-03b
+#
+# setup package 
+#
+setup               : FA14-10-03b

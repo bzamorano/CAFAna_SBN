@@ -1,0 +1,91 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S15-05-04c
+Alignment           : S15-05-04c
+BreakPointFitter    : S15-05-04c
+BremShowerFilter    : S15-05-04c
+CAFAna              : S15-05-04c
+CAFMaker            : S15-05-04c
+CAFReweight         : S15-05-04c
+CalHit              : S15-05-04c
+Calibration         : S15-05-04c
+CalibrationUtils    : S15-05-04c
+CalibrationDataProducts : S15-05-04c
+Calibrator          : S15-05-04c
+ChannelInfo         : S15-05-04c
+ClusterMakerSS      : S15-05-04c
+CMap                : S15-05-04c
+Commissioning       : S15-05-04c
+CosmicExposureInfo  : S15-05-04c
+CosRej              : S15-05-04c
+DAQ2RawDigit        : S15-05-04c
+Database	    : S15-05-04c
+DDTConverters       : S15-05-04c
+Demo		    : S15-05-04c
+DetectorPerformance : S15-05-04c
+DiscreteTracker     : S15-05-04c
+DQSpillFlags        : S15-05-04c
+DSOResultPlotter    : S15-05-04c
+ElasticArms         : S15-05-04c
+Eval	            : S15-05-04c
+EventDisplay        : S15-05-04c
+EventGenerator      : S15-05-04c
+EventSummary        : S15-05-04c
+Filter              : S15-05-04c
+FuzzyKVertex        : S15-05-04c
+g4nova              : S15-05-04c
+Geometry            : S15-05-04c
+GeometryObjects     : S15-05-04c
+HMatrixE            : S15-05-04c
+HoughTransform      : S15-05-04c
+HoughVertex         : S15-05-04c
+IFDBSpillInfo       : S15-05-04c
+LEM                 : S15-05-04c
+MCCheater           : S15-05-04c
+MCCheckOut          : S15-05-04c
+Metadata            : S15-05-04c
+MichelEFilter       : S15-05-04c
+MockDataDAQ         : S15-05-04c
+MuonRemove	    : S15-05-04c
+NDRockMuon          : S15-05-04c
+NovaFTS             : S15-05-04c
+NovaSimMixer        : S15-05-04c
+NueSandbox          : S15-05-04c
+NumuEnergy          : S15-05-04c
+NumuSandbox         : S15-05-04c
+OnlineMonitoring    : S15-05-04c
+OscLib              : S15-05-04c
+PhotonTransport     : S15-05-04c
+Preselection        : S15-05-04c
+Production          : S15-05-04c
+QEEventFinder       : S15-05-04c
+RawData             : S15-05-04c
+ReadoutSim          : S15-05-04c
+RecoBase            : S15-05-04c
+RecoBaseHit         : S15-05-04c
+RecoJMShower        : S15-05-04c
+RecVarPID           : S15-05-04c
+ReMId               : S15-05-04c
+RunHistory	    : S15-05-04c
+ShowerLID           : S15-05-04c
+Simulation          : S15-05-04c
+Slicer              : S15-05-04c
+SRT_NOVA            : S15-05-04c
+StandardRecord      : S15-05-04c
+SummaryData         : S15-05-04c
+TimingFit           : S15-05-04c
+TrackFit            : S15-05-04c
+Utilities           : S15-05-04c
+Validation          : S15-05-04c
+VertexDT            : S15-05-04c
+VertexFinder        : S15-05-04c
+ZukCluster          : S15-05-04c
+#
+# setup package
+#
+setup               : S15-05-04c

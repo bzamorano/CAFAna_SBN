@@ -1,0 +1,495 @@
+#!/usr/bin/perl
+
+$debug_level      = 1;
+$skip_cvs_command = 0;
+$skip_sys_command = 0;
+
+use Getopt::Long;
+Getopt::Long::config('bundling_override');
+
+my %options;
+GetOptions(\%options, 'rel=s','help','h','t','test','b','branch','c','clean');
+
+if ((defined $options{'h'}) || (defined $options{'help'})) {
+  print_help();
+}
+
+if (defined $options{'rel'}) {
+  $release = $options{'rel'};
+}
+else {
+  if (defined $ENV{"SRT_BASE_RELEASE"}) {
+    $release = $ENV{"SRT_BASE_RELEASE"};
+  }
+  else {
+    die "No release is defined\n";
+  }
+}
+
+if ((defined $options{'c'}) || (defined $options{'clean'})) {
+    $do_clean_checkout = 1;
+}
+else {
+    $do_clean_checkout = 0;
+}
+
+$SRT_DIST            = $ENV{"SRT_DIST"};
+$SRT_SUBDIR          = $ENV{"SRT_SUBDIR"};
+$SRT_PUBLIC_CONTEXT  = $ENV{"SRT_PUBLIC_CONTEXT"};
+$SRT_PRIVATE_CONTEXT = $ENV{"SRT_PRIVATE_CONTEXT"};
+$release_dir         = "$SRT_DIST/releases/$release";
+$test                = 0;
+$branch              = 0;
+$svn_add_pack        = "$release_dir/SRT_NOVA/scripts/addpkg_svn";
+
+if( (defined $options{'t'}) || (defined $options{'test'})) {
+    $test = 1;
+    $release_dir = "$SRT_PRIVATE_CONTEXT";
+    if (! (-e "$release_dir")) {
+	die "cannot find $SRT_PRIVATE_CONTEXT ";
+    }
+}
+
+if( (defined $options{'b'}) || (defined $options{'branch'})) {
+    $branch = 1;
+}
+
+$tmpcvsRoot = $ENV{'CVSROOT'};
+# Use anonymous checkout unless updating a test release
+if( $test ) {
+    if (! (defined $cvsRoot)) {
+    # look in the environment for it
+      $cvsRoot = $ENV{'CVSROOT'};
+    }
+
+    if ( !(defined $cvsRoot)) {
+    # last chance -hardwire to what should be the default.
+      $cvsRoot = 'svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn';
+    }
+}
+else{
+    $cvsRoot = 'http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn';
+}
+
+$ENV{'CVSROOT'} = $cvsRoot;
+
+unless (defined $ENV{'SRT_DIST'}) {
+  print "SRT_DIST variable is not defined! Source srt/srt.[c]sh first.\n";
+  print "Release $release not updated.\n";
+  exit(0);
+}
+
+if (! (-e "$release_dir") && !$test ) {
+  chdir("$SRT_DIST/releases");
+  do_sys_command("newrel -p -e $release");
+  print "Installing new release '$release'\n";
+}
+else {
+  print "Updating release '$release'\n";
+}
+
+# Have to put in some parsing of release version for backwards compatibility
+if( ($release eq "development") || ($release =~ /[[:alpha:]]/) ){
+    $comprel = '999999';
+}
+else{
+
+  # Define temp string based on release to extract date
+  my $myrel = $release;
+  my $rvar = substr($myrel,-1);
+
+  # Remove characters from the end of the string until a number is found
+  while ( !($rvar =~ /^?\d+$/ )){
+    chop($myrel);
+    $rvar = substr($myrel,-1);
+  }
+
+  # Now assuming the end of the string has the format YY?MM?DD, extract date
+  $dd = substr($myrel,-2);
+  $mm = substr($myrel,-5,2);
+  $yy = substr($myrel,-8,2);
+
+  $comprel = $yy.$mm.$dd;
+}
+
+# Date of change to Online versioned packages
+$comp = '130307';
+                                 
+rm_svn_dirs();
+update_setup();
+make_package_list();
+make_online_list();
+make_ddt_list();
+
+for ($i=0; $i<$npackage; ++$i) {
+  $package = @package_list[$i];
+  $version = @version_list[$i];
+  update_package(); 
+}
+
+# People don't like it when you switch variables on them
+$ENV{'CVSROOT'} = $tmpcvsRoot;
+
+#.......................................................................
+
+sub print_help {
+  print "******************************************************************\n";
+  print "*                                                                *\n";
+  print "*     Script to update a release that has already been imported  *\n";
+  print "*                   or to import a new release                   *\n";
+  print "*       Only packages which use HEAD version will be updated.    *\n";
+  print "*                                                                *\n";
+  print "*    Recognized arguments:                                       *\n";
+  print "*       -h or --help: print this message                         *\n";
+  print "*       -t or --test: update $SRT_PRIVATE_CONTEXT                *\n";
+  print "*       -rel <release>: specify release to be updated            *\n";
+  print "*       -b or --branch: release will be imported from branches   *\n";
+  print "*                                                                *\n";
+  print "******************************************************************\n";
+  exit(0);
+}
+
+#.......................................................................
+
+sub do_sys_command {
+#
+# Perform system command, but only if flag is set.
+#
+  if ( $debug_level>1) {
+    print "% $_[0]\n";
+    if ( $skip_sys_command>0 ) {
+      return 0;
+    }
+  }
+  if ($skip_sys_command==0) {
+    return system($_[0]);
+  }
+}
+
+#.......................................................................
+
+sub rm_svn_dirs {
+
+    if ( $do_clean_checkout ){
+
+#Check that the release directory exists
+	if (! (-e "$release_dir") ) {
+	    print "Error - release_dir \"$release_dir\" does not exist";
+	}
+
+#Check that we aren't trying to remove the SLF5 / SLF6 install directories
+	if (index($release_dir, '/grid/fermiapp/nova/novaart/novasvn') != -1) {
+	    print "Error: release_dir \"$release_dir\"\n";
+	    print "This directory should not be removed - this is where SLF5 builds live on GPVM nodes\n";
+	    exit(1);
+	}
+	
+	if (index($release_dir, '/nova/app/home/novasoft/slf6/novasoft') != -1) {
+	    print "Error: release_dir \"$release_dir\"\n";
+	    print "This directory should not be removed - this is where SLF6 builds live on GPVM nodes\n";
+	    exit(1);
+	}
+
+	do_sys_command("rm -rf $release_dir");
+	chdir("$SRT_DIST/releases");
+	do_sys_command("newrel -p -e $release");
+    }
+
+}
+
+#.......................................................................
+
+sub update_setup {
+#
+# Update the setup package
+#
+  #do nothing if this is a test release
+  if ( $test ){
+      return;
+  }
+    
+  chdir("$SRT_DIST");
+  unless (-e "setup") {
+    print "setup directory not found. Will try to add setup package.";
+    do_sys_command("svn checkout http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn/trunk/setup");
+ 
+    unless (-e "setup") {
+      die "Couldn't add setup package to release $release";
+    }
+  }
+  chdir("setup");
+  do_sys_command("svn update");
+
+  chdir("$SRT_DIST/releases");
+  unless (-e "$release_dir") {
+    die "No release $release found: $release_dir!";
+  }
+  chdir("$SRT_DIST/releases/$release");
+
+  #check out the SRT_NOVA package if necessary
+  unless (-e "$SRT_DIST/releases/$release/SRT_NOVA/scripts/addpkg_svn") {
+    if ( $release eq 'development') {
+      do_sys_command("svn checkout http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn/trunk/SRT_NOVA");
+    }
+    elsif ($branch) {
+      do_sys_command("svn checkout http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn/branches/$release/SRT_NOVA");
+    }
+    else {
+      do_sys_command("svn checkout http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn/tags/$release/SRT_NOVA");
+    }
+    chdir("$SRT_DIST/releases/$release/include");
+    do_sys_command("ln -sfT ../SRT_NOVA SRT_NOVA");
+  }
+
+}
+
+#.......................................................................
+    
+sub update_package() {
+  #
+  # SVN update a package in the release. If it does not exist, use
+  # addpkg_svn to add it to the release
+  #
+  $repository    = "svn";
+  $sub_url	 = "/trunk/";
+  $addpkg_cmd    = "$svn_add_pack -h $package";
+  $cvsupdate_cmd = "svn update";
+  $rmpkg_cmd 	 = "rmpkg -f $package";
+
+  #
+  # Handle tagged package versions
+  #
+  if ($version ne "HEAD") {
+    if ($branch) {
+      $addpkg_cmd  = "$svn_add_pack -b $package $version";
+      $sub_url	 = "/branches/$version/";
+    }
+    else {
+      $addpkg_cmd  = "$svn_add_pack $package $version";
+      $sub_url	 = "/tags/$version/";
+    }
+  }
+  #
+  # Handle SoftRelTools separately since it comes from a different
+  # repository
+  #
+  if ($package eq "SoftRelTools") {
+    $addpkg_cmd    = "addpkg -d :pserver:anonymous\@srtcvs.fnal.gov:/srtcvs -h $package";
+    $cvsupdate_cmd = "cvs update -d";
+    $repository = "cvs";
+  }
+  #
+  # Handle NUTOOLS-provided packages separately since they come from
+  # a different repository. Obsolete now that they are UPS products?
+  #
+  foreach my $nutools(@nutools_list) {
+    if($package eq $nutools) {
+      $nutools_cvsroot = "http://cdcvs.fnal.gov/subversion/nusoftsvn";
+      $addpkg_cmd      = "$svn_add_pack -h -d $nutools_cvsroot -s nutools $package";
+      $cvsupdate_cmd   = "svn update";
+      if ($version ne "HEAD") {
+        $addpkg_cmd    = "$svn_add_pack -d $nutools_cvsroot -s nutools $package $version";
+      }  
+    }
+  }
+  
+  #
+  # Handle ONLINE packages separately since they come from
+  # a different repository
+  #
+
+  if($comprel > $comp){
+    foreach my $online(@online_list) {
+      if($package eq $online) {
+	$repository      = "cvs";
+        $online_cvsroot  = ":pserver:anonymous\@cdcvs.fnal.gov:/cvs/nova";
+        $addpkg_cmd      = "addpkg -d $online_cvsroot -h $package; ln -sfT ../$package/cxx/include/ include/$package";
+        $cvsupdate_cmd   = "cvs update -d";
+        if ($version ne "HEAD") {
+          $addpkg_cmd    = "addpkg -d $online_cvsroot $package $version; ln -sfT ../$package/cxx/include/ include/$package";
+          $cvsupdate_cmd = "cvs update -d -r $version";
+        }  
+      }
+    }
+  }
+
+  #
+  # Handle DDT packages separately since they come from yet another different 
+  # repository
+  #
+
+  foreach my $ddt(@ddt_list) {
+    if($package eq $ddt) {
+      $ddt_cvsroot   = "http://cdcvs.fnal.gov/subversion/novaddt.svn";
+      $addpkg_cmd    = "$svn_add_pack -h -d $ddt_cvsroot $package";
+      $cvsupdate_cmd = "svn update";
+      if ($version ne "HEAD") {
+	# Might want to add a switch to use ddt from branch.
+	# Standard is to pull from tag 
+	$addpkg_cmd  = "$svn_add_pack -d $ddt_cvsroot $package $version";
+	$sub_url     = "/tags/$version/";
+	# Temporary - pulling novaddt from branch, non-standard practice  
+	#$addpkg_cmd    = "$svn_add_pack -d $ddt_cvsroot -b $package $version";
+      }
+    }
+  }
+
+  chdir("$release_dir");
+  if (-e "$package") {
+    chdir("$package");
+    if ($repository eq "svn" && !$test) {
+      if ( conflict($sub_url) ){
+	chdir("$release_dir");
+	print "Conflicting versions of $package found\n";
+	print "Removing $package from release $release\n";
+	do_sys_command($rmpkg_cmd); 
+	
+	print "Importing package $package\n";
+	do_sys_command($addpkg_cmd);
+      }
+      #
+      # No conflict so just update
+      #
+      else {
+	print "Updating package $package\n";
+	do_sys_command($cvsupdate_cmd);
+      }
+    }
+    #
+    # Either SVN repository or test release, so just update
+    # SVN can deal with different tags, and we don't want to
+    # blow away packages in users' test releases.
+    #
+    else {
+      chdir("$package");
+      print "Updating package $package\n";
+      do_sys_command($cvsupdate_cmd);
+    }
+  }
+  else {
+      unless ( $test ){
+          print "Importing package $package\n";
+	  do_sys_command($addpkg_cmd);
+      }
+  }
+}
+
+#.......................................................................
+sub conflict {
+#
+# Check for conflicting versions of a package in the release
+# and the version to be updated to (SVN only)
+#
+
+
+  my $inp = `svn info | grep 'URL'`;
+  my $res = index($inp, $_[0]);
+
+  if ( $res >= 0 ){
+    return 0;
+  }
+  else{
+    # First make sure the proposed new repository location actually
+    # exists. Die with helpful message if it doesn't.
+    #
+    do_sys_command("svn info $cvsRoot"."$_[0]"."$package") and die("Invalid repository $cvsRoot"."$_[0]"."$package");
+    return 1;
+  }
+}
+
+#.......................................................................
+sub make_package_list {
+#
+# Fill the package and tag arrays with contents of respective 
+# setup/packages-<release> file
+#
+  $n = 0;
+  if ( !$test ){
+      open(PKG_FILE,"$SRT_DIST/setup/packages-$release");
+  }
+  else{
+      open(PKG_FILE,"$SRT_PUBLIC_CONTEXT/setup/packages-$release");
+  }
+  PKG : while (<PKG_FILE>) {
+    $line = $_;
+    if ( index($line,"#") == -1 ) {
+      @f  = split(/:/,$line);
+      $nf = @f;
+      if ($nf == 2) {
+        $version = @f[1];
+      }
+      else {
+        $version = "HEAD";
+      }
+      @package_list[$n] = @f[0];
+      @version_list[$n] = $version;
+      ++$n; 
+    }
+  }
+
+  # Remove leading and trailing whitespaces in place
+  s{^\s+|\s+$}{}g foreach @package_list;
+  s{^\s+|\s+$}{}g foreach @version_list;
+
+  $npackage = $n;
+  if ($debug_level>1) {
+    for ($i=0; $i<$n; ++$i) {
+      print "Package @package_list[$i]: @version_list[$i] is in list\n";
+    }
+  }
+}
+#.......................................................................
+
+sub make_online_list{
+  @online_list =
+    (
+     "DAQChannelMap",
+     "DAQDataFormats",
+     "DAQMessages",
+     "DAQQualityCheck",
+     "DatabaseUtils",
+     "EventDispatcher_CommandSet",
+     "NovaDAQConventions",
+     "NovaDAQMonitorClient",
+     "NovaDAQUtilities",
+     "NovaDatabase",
+     "NovaTimingUtilities",
+     "PackageVersion",
+     "RawFileParser",
+     "rms",
+     "ShmMilliBlock",
+     "ShmRdWr"
+    );
+  $npkgonline = scalar @online_list; 
+}   
+#.......................................................................
+
+sub make_ddt_list{
+  @ddt_list =
+    (
+     "CalibrationTriggers",
+     "DAQStatusTriggers",
+     "DAQUnpackUtils",
+     "DDTBaseDataProducts", 
+     "DDTCore",
+     "DDTDemo",
+     "DDTGlobalConfigurations",
+     "DDTMessageSender",
+     "DDTPrescale",
+     "DDTUtilities",
+     "ExoticsTriggers",
+     "HitSlicers",
+     "HitSorters",
+     "MoonShadowTrigger",
+     "NuETriggers",
+     "NuMuTriggers",
+     "OnlineCalibration",
+     "PatRec",
+     "SlowMonopoleTrigger",
+     "Statistics",
+     "SuperNovaDDT",
+     "Tracking"
+    );
+  $npkgddt = scalar @ddt_list;
+}
+########################################################################

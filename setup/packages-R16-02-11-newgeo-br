@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R16-02-11-newgeo-br
+Alignment           : R16-02-11-newgeo-br
+AnalysisSkimmer     : R16-02-11-newgeo-br
+BreakPointFitter    : R16-02-11-newgeo-br
+BremShowerFilter    : R16-02-11-newgeo-br
+CAFAna              : R16-02-11-newgeo-br
+CAFMaker            : R16-02-11-newgeo-br
+CAFReweight         : R16-02-11-newgeo-br
+CalHit              : R16-02-11-newgeo-br
+Calibration         : R16-02-11-newgeo-br
+CalibrationUtils    : R16-02-11-newgeo-br
+CalibrationDataProducts : R16-02-11-newgeo-br
+Calibrator          : R16-02-11-newgeo-br
+ChannelInfo         : R16-02-11-newgeo-br
+CMap                : R16-02-11-newgeo-br
+Commissioning       : R16-02-11-newgeo-br
+CosmicExposureInfo  : R16-02-11-newgeo-br
+CosRej              : R16-02-11-newgeo-br
+CVN                 : R16-02-11-newgeo-br
+DAQ2RawDigit        : R16-02-11-newgeo-br
+Database	    : R16-02-11-newgeo-br
+DataQuality         : R16-02-11-newgeo-br
+DDTConverters       : R16-02-11-newgeo-br
+Demo		    : R16-02-11-newgeo-br
+DetectorPerformance : R16-02-11-newgeo-br
+DiscreteTracker     : R16-02-11-newgeo-br
+DiskUsage           : R16-02-11-newgeo-br
+DQSpillFlags        : R16-02-11-newgeo-br
+DSOResultPlotter    : R16-02-11-newgeo-br
+ElasticArms         : R16-02-11-newgeo-br
+Eval	            : R16-02-11-newgeo-br
+EventDisplay        : R16-02-11-newgeo-br
+EventGenerator      : R16-02-11-newgeo-br
+EventSummary        : R16-02-11-newgeo-br
+Filter              : R16-02-11-newgeo-br
+FuzzyKVertex        : R16-02-11-newgeo-br
+g4nova              : R16-02-11-newgeo-br
+Geometry            : R16-02-11-newgeo-br
+GeometryObjects     : R16-02-11-newgeo-br
+HMatrixE            : R16-02-11-newgeo-br
+HoughTransform      : R16-02-11-newgeo-br
+HoughVertex         : R16-02-11-newgeo-br
+IFDBSpillInfo       : R16-02-11-newgeo-br
+LEM                 : R16-02-11-newgeo-br
+MCCheater           : R16-02-11-newgeo-br
+MCCheckOut          : R16-02-11-newgeo-br
+Metadata            : R16-02-11-newgeo-br
+MEFinder            : R16-02-11-newgeo-br
+MichelEFilter       : R16-02-11-newgeo-br
+MockDataDAQ         : R16-02-11-newgeo-br
+MuonRemove	    : R16-02-11-newgeo-br
+NDRockMuon          : R16-02-11-newgeo-br
+NovaFTS             : R16-02-11-newgeo-br
+NovaSimMixer        : R16-02-11-newgeo-br
+NueSandbox          : R16-02-11-newgeo-br
+NumuEnergy          : R16-02-11-newgeo-br
+NumuSandbox         : R16-02-11-newgeo-br
+OnlineMonitoring    : R16-02-11-newgeo-br
+OscLib              : R16-02-11-newgeo-br
+PhotonTransport     : R16-02-11-newgeo-br
+Preselection        : R16-02-11-newgeo-br
+Production          : R16-02-11-newgeo-br
+QEEventFinder       : R16-02-11-newgeo-br
+RawData             : R16-02-11-newgeo-br
+ReadoutSim          : R16-02-11-newgeo-br
+RecoBase            : R16-02-11-newgeo-br
+RecoBaseHit         : R16-02-11-newgeo-br
+RecoJMShower        : R16-02-11-newgeo-br
+RecVarPID           : R16-02-11-newgeo-br
+ReMId               : R16-02-11-newgeo-br
+RunHistory	    : R16-02-11-newgeo-br
+ShowerE             : R16-02-11-newgeo-br
+ShowerLID           : R16-02-11-newgeo-br
+Simulation          : R16-02-11-newgeo-br
+Slicer              : R16-02-11-newgeo-br
+SRT_NOVA            : R16-02-11-newgeo-br
+StandardRecord      : R16-02-11-newgeo-br
+SummaryData         : R16-02-11-newgeo-br
+TimingFit           : R16-02-11-newgeo-br
+TrackFit            : R16-02-11-newgeo-br
+Utilities           : R16-02-11-newgeo-br
+Validation          : R16-02-11-newgeo-br
+VertexDT            : R16-02-11-newgeo-br
+VertexFinder        : R16-02-11-newgeo-br
+ZukCluster          : R16-02-11-newgeo-br
+#
+# setup package
+#
+setup               : R16-02-11-newgeo-br

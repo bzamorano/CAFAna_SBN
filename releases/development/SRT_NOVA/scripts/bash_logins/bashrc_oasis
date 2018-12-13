@@ -1,0 +1,121 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+export CVMFS_DISTRO_BASE=/net/nas01/Public/ouser.nova
+export SLF5=${CVMFS_DISTRO_BASE}/novasvn
+export SLF6=${CVMFS_DISTRO_BASE}/novasvnslf6
+# User specific aliases and functions
+function setup_nova_slf5
+{
+    source $CVMFS_DISTRO_BASE/novasvn/setup/setup_nova.sh -5 "${CVMFS_DISTRO_BASE}/novasvn/" -6 "${CVMFS_DISTRO_BASE}/novasvn/" -e "${CVMFS_DISTRO_BASE}/externals" "$@"
+    cd $SRT_PUBLIC_CONTEXT
+    echo "Working directory: $PWD"
+}
+
+function setup_nova_slf6(){
+    source $CVMFS_DISTRO_BASE/novasvnslf6/setup/setup_nova.sh -5 "${CVMFS_DISTRO_BASE}/novasvnslf6/" -6 "${CVMFS_DISTRO_BASE}/novasvnslf6/" -e "${CVMFS_DISTRO_BASE}/externals" "$@"
+    cd $SRT_PUBLIC_CONTEXT
+    echo "Working directory: $PWD"
+
+}
+
+function check_publish(){
+    while [ 1 ]; do date;   condor_q -submitter ouser.nova; sleep 60; done
+}
+
+function nova_cvmfs_copy_release_from_jenkins(){
+
+    local origin=$PWD
+
+    if [ $# -lt 3 ];then
+	echo "Usage: nova_cvmfs_copy_release_from_jenkins <release> <os> <buildnum>" >&2
+	return 1
+    fi
+    local release=$1
+    local this_os=$2
+    local THIS_OS=`echo $this_os | tr '[:lower:]' '[:upper:]'`
+    local buildnum=$3
+    
+
+    if [ "$this_os" == "slf5" ];then
+         local local_dir=${CVMFS_DISTRO_BASE}/novasvn/releases/
+
+    elif [ "$this_os" == "slf6" ];then
+         local local_dir=${CVMFS_DISTRO_BASE}/novasvnslf6/releases/
+    else
+	echo "ERROR: os \"${this_os}\" is not slf5 or slf6" >&2
+	return 1
+    fi
+
+    if [ -e ${local_dir}/${release} ];then
+	echo "ERROR: Release already exists \"${local_dir}/${release}\"" >&2
+	return 1
+    fi
+
+    local URL_BASE=https://buildmaster.fnal.gov/view/Nova/job/nova_SRT_${this_os}_release_build_output/${buildnum}/artifact/buildout
+    for build in debug maxopt;
+      do
+      local tarball=novabuild.${release}.${THIS_OS}.${build}.tar.bz2
+      echo "INFO : Getting tarball \"${tarball}\"" >&2
+      echo "       from URL_BASE \"${URL_BASE}\"" >&2
+      echo "INFO : Destination \"${local_dir}\"" >&2
+      if [ -e ${local_dir}/${tarball} ];then
+	  echo "ERROR: Tarball already exists \"${local_dir}/${tarball}\"" >&2
+	  return 1
+      fi
+
+      cd $local_dir
+      wget --no-check-certificate ${URL_BASE}/${tarball}
+      local RETVAL=$?
+      if [ "$RETVAL" != 0 ];then
+	  echo "ERROR: Problem downloading tarball" >&2
+	  cd $origin
+	  return 1
+      fi
+      echo "INFO : Unzipping the tarball" >&2
+      tar -xjf $tarball
+      echo "INFO : Removing tarball" >&2
+      rm  $tarball
+      echo "" >&2
+    done;
+
+}
+
+function nova_cvmfs_get_jenkins_build_number(){
+
+    if [ "$#" -lt 2 ];then
+        echo "Usage: nova_cvmfs_get_jenkins_build_number <release> <os>" >&2
+        return 1
+    fi
+
+
+    local release=$1
+    local this_os=$2
+    if [ "$this_os" == "slf5" ];then
+        local remote_dir=/build/nova/novasoft/releases
+    elif [ "$this_os" == "slf6" ];then
+        local remote_dir=/nova/app/home/novasoft/slf6/build/releases
+    else
+        echo "ERROR: os \"${this_os}\" is not slf5 or slf6" >&2
+        return 1
+    fi
+
+    local local_build_record=${HOME}/.jenkins_build_record_${this_os}
+    if [ -e $local_build_record ];then
+        rm $local_build_record
+    fi
+    scp novasoft@novabuild01.fnal.gov:${remote_dir}/Jenkins_Downloads/tars/build_record_release $local_build_record
+    echo "INFO : Checking build record" >&2
+    if [ -e $local_build_record ];then
+	cat $local_build_record | grep $release 1>&2
+	rm $local_build_record
+    else
+	echo "ERROR: Couldn't get the build record from GPVM node" >&2
+    fi
+
+
+}

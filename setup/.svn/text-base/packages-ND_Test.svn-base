@@ -1,0 +1,91 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : HEAD
+Alignment           : HEAD
+BreakPointFitter    : HEAD
+BremShowerFilter    : HEAD
+CAFAna              : HEAD
+CAFMaker            : HEAD
+CAFReweight         : HEAD
+CalHit              : HEAD
+Calibration         : HEAD
+CalibrationUtils    : HEAD
+CalibrationDataProducts : HEAD
+Calibrator          : HEAD
+ChannelInfo         : HEAD
+ClusterMakerSS      : HEAD
+CMap                : HEAD
+Commissioning       : HEAD
+CosmicExposureInfo  : HEAD
+CosRej              : HEAD
+DAQ2RawDigit        : HEAD
+Database	    : HEAD
+DDTConverters       : HEAD
+Demo		    : HEAD
+DetectorPerformance : HEAD
+DiscreteTracker     : HEAD
+DQSpillFlags        : HEAD
+DSOResultPlotter    : HEAD
+ElasticArms         : HEAD
+Eval	            : HEAD
+EventDisplay        : HEAD
+EventGenerator      : HEAD
+EventSummary        : HEAD
+Filter              : HEAD
+FuzzyKVertex        : HEAD
+g4nova              : HEAD
+Geometry            : HEAD
+GeometryObjects     : HEAD
+HMatrixE            : HEAD
+HoughTransform      : HEAD
+HoughVertex         : HEAD
+IFDBSpillInfo       : HEAD
+LEM                 : HEAD
+MCCheater           : HEAD
+MCCheckOut          : HEAD
+Metadata            : HEAD
+MichelEFilter       : HEAD
+MockDataDAQ         : HEAD
+MuonRemove	    : HEAD
+NDRockMuon          : HEAD
+NovaFTS             : HEAD
+NovaSimMixer        : HEAD
+NueSandbox          : HEAD
+NumuEnergy          : HEAD
+NumuSandbox         : HEAD
+OnlineMonitoring    : HEAD
+OscLib              : HEAD
+PhotonTransport     : HEAD
+Preselection        : HEAD
+Production          : HEAD
+QEEventFinder       : HEAD
+RawData             : HEAD
+ReadoutSim          : HEAD
+RecoBase            : HEAD
+RecoBaseHit         : HEAD
+RecoJMShower        : HEAD
+RecVarPID           : HEAD
+ReMId               : HEAD
+RunHistory	    : HEAD
+ShowerLID           : HEAD
+Simulation          : HEAD
+Slicer              : ND_Test
+SRT_NOVA            : ND_Test
+StandardRecord      : HEAD
+SummaryData         : HEAD
+TimingFit           : HEAD
+TrackFit            : HEAD
+Utilities           : HEAD
+Validation          : HEAD
+VertexDT            : HEAD
+VertexFinder        : HEAD
+ZukCluster          : HEAD
+#
+# setup package 
+#
+setup               : ND_Test

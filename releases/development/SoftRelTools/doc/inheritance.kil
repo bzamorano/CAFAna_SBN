@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc editor="KIllustrator" mime="application/x-killustrator" >
+<head>
+<layout format="a4" orientation="portrait" width="210" height="297" lmargin="0" tmargin="0" rmargin="0" bmargin="0" />
+<grid dx="20" dy="20" align="1" />
+<helplines align="1" >
+</helplines>
+</head>
+<polygon matrix="1 0 0 0 1 0 207 -1 1" strokecolor="0 0 0" strokestyle="1" linewidth="1" fillstyle="1" fillcolor="255 255 255" x="101.5" y="140" width="141" height="42" rounding="0" >
+<point x="241.5" y="140" />
+<point x="241" y="241.5" />
+<point x="101.5" y="181" />
+<point x="101" y="81.5" />
+</polygon>
+<polygon matrix="1 0 0 0 1 0 103.5 -2 1" strokecolor="0 0 0" strokestyle="1" linewidth="1" fillstyle="1" fillcolor="255 255 255" x="101.5" y="140" width="141" height="42" rounding="0" >
+<point x="241.5" y="140" />
+<point x="241" y="241.5" />
+<point x="101.5" y="181" />
+<point x="101" y="81.5" />
+</polygon>
+<polygon matrix="1 0 0 0 1 0 0 0 1" strokecolor="0 0 0" strokestyle="1" linewidth="1" fillstyle="1" fillcolor="255 255 255" x="101.5" y="140" width="141" height="42" rounding="0" >
+<point x="241.5" y="140" />
+<point x="241" y="241.5" />
+<point x="101.5" y="181" />
+<point x="101" y="81.5" />
+</polygon>
+<text matrix="1 0 0 0 1 0 140 242 1" strokecolor="0 0 0" strokestyle="1" linewidth="1" fillstyle="0" align="0" >
+<font face="helvetica" point-size="14" weight="50" >
+Base</font>
+</text>
+<text matrix="1 0 0 0 1 0 264 233.5 1" strokecolor="0 0 0" strokestyle="1" linewidth="1" fillstyle="0" align="0" >
+<font face="helvetica" point-size="14" weight="50" >
+Project<br/>specific</font>
+</text>
+<text matrix="1 0 0 0 1 0 378 233.5 1" strokecolor="0 0 0" strokestyle="1" linewidth="1" fillstyle="0" align="0" >
+<font face="helvetica" point-size="14" weight="50" >
+Site<br/>specific</font>
+</text>
+<polyline matrix="1 0 0 0 1 0 0 20 1" strokecolor="0 0 0" strokestyle="1" linewidth="2" fillstyle="0" arrow1="0" arrow2="2" >
+<point x="140" y="40" />
+<point x="360" y="40" />
+</polyline>
+<text matrix="1 0 0 0 1 0 212 40 1" strokecolor="0 0 0" strokestyle="1" linewidth="1" fillstyle="0" align="0" >
+<font face="helvetica" point-size="14" weight="50" >
+Precedence</font>
+</text>
+</doc>

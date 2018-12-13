@@ -1,0 +1,10 @@
+K 13
+svn:mergeinfo
+V 679
+/branches/R15-11-17-miniprodmec-br/setup/nova-offline-ups-externals-R17-11-14-prod4reco.neutron-respin.a:17416,17419
+/branches/R16-02-11-geniepreview-br/setup/nova-offline-ups-externals-R17-11-14-prod4reco.neutron-respin.a:22064
+/branches/R18-04-20-art2.11-br/setup/nova-offline-ups-externals-R17-11-14-prod4reco.neutron-respin.a:31279-32339
+/branches/R18-08-13-art2.11.03-br/setup/nova-offline-ups-externals-R17-11-14-prod4reco.neutron-respin.a:33254,33265,33274,33281
+/branches/cmake_build/setup/nova-offline-ups-externals-R17-11-14-prod4reco.neutron-respin.a:9129-9387
+/branches/daqmap_2014_06_25/setup/nova-offline-ups-externals-R17-11-14-prod4reco.neutron-respin.a:9790-9910
+END

@@ -1,0 +1,1157 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage{verbatim}
+\usepackage{url}
+\usepackage{fullpage}
+
+\newcommand{\nova}{NO$\nu$A}
+\newcommand{\novas}{\nova \space}
+
+%opening
+\title{\nova Soft Documentation}
+\author{Jan Zirnstein, Kanika Sachdev, Jonathan Davies, Dan Pershey}
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  This document (should) lives on DocDB and is version controlled in the SRT$\_$NOVA package of the svn repository. It's intended use is to gather useful information including, but not limited to, explanation of scripts, cronjobs, SoftRelTools, SAM, OpenScienceGrid and Oasis, svn, ups and other external products, important paths, and who to ask for help when all seems lost. Throughout this document it's assumed that you're working on a \novas GPVM at FNAL (e.g. \verb|novagpvm07.fnal.gov|), unless otherwise specified.
+\end{abstract}
+
+\tableofcontents
+
+
+\section{Quick Introduction}
+\nova Soft is an umbrella term for all the software related to offline processing. This includes Monte Carlo generation, batch processing, and everyday software development. It is distributed at FNAL on the \novas GPVMs for development purposes, on the FermiGrid via CVMFS and to the OpenScienceGrid via a separate CVMFS server (Oasis). 
+
+The development version (the head of the subversion repository) is built nightly in two ways: via cron jobs on novabuild01 and novagpvm09, and using the Jenkins build management system. Details of the two methods for building and the reasons behind them are described later in this document.
+%FIXME
+
+Both the cronjob based and Jenkins based nightly builds follow a similar methodology. The source code and externals all exist locally for fastest build times with 17 parallel streams. The linking order is determined by \verb|SRT_NOVA/scripts/novasoft_build|.
+
+
+\section{SoftRelTools}
+Our software lives in the SoftRelTools (SRT) framework. It's ancient, but mostly works for our purposes. It's been patched plenty of times to provide the functionality we need. The documentation of how to install the framework for \novas can be found here: \url{https://cdcvs.fnal.gov/redmine/projects/novaart/wiki/Installing_a_local_copy_of_NOvASoft_and_the_external_products#Installing-NOvASoft}
+
+The important parts, for our needs, of the framework are its setup directory, which is version controlled in our svn repository, and the releases directory. Since we are currently providing builds of the software for two different Operating Systems (SLF5 and SLF6) the base directory of the software is in two places:
+\begin{verbatim}
+/grid/fermiapp/nova/novaart/novasvn   #SLF5
+/nova/app/home/novasoft/slf6/novasoft #SLF6
+\end{verbatim}
+
+The releases subdirectory contains all releases currently installed on the \novas GPVMs that users can source.
+
+
+\subsection{How setup works (setup\_nova.sh)}
+Here are the important steps of the setup process to help debug where things are going wrong. Let's assume you have this function definition in your \verb|.bash_profile| or \verb|.bashrc|:
+\begin{verbatim}
+function setup_nova {
+  source /grid/fermiapp/nova/novaart/novasvn/setup/setup_nova.sh "$@"
+}
+\end{verbatim}
+
+\subsection{setup\_nova.sh usage}
+\begin{itemize}
+\item \verb|"-r release"| will request a specific release (i.e. \verb|"SYY_MM_DD"| or \verb|"development"| for the most recent nightly build)
+\item \verb|"-b build"| will request a specific build type (this can be \verb|"debug"| or \verb|"maxopt"|)
+\end{itemize}
+
+\subsection{setup\_nova.sh expert usage}
+\begin{itemize}
+\item Under the hood \verb|setup_nova.sh| detects the Operating System and points \verb|SLF5| and \verb|SLF6| machines to use different builds stored in different locations. The defaults are:
+  \begin{itemize}
+  \item \verb|SLF5| software is based at \verb|/grid/fermiapp/nova/novaart/novasvn|
+  \item \verb|SLF6| software is based at \verb|/nova/app/home/novasoft/slf6/novasoft|
+  \end{itemize}
+\item To set \verb|SLF5| machines to use a non-default location to look for software use:
+\begin{itemize}
+  \item \verb|"-5 /path/to/slf5/build"|
+  \end{itemize}
+\item To set \verb|SLF6| machines to use a non-default location to look for software use:
+\begin{itemize}
+  \item \verb|"-6 /path/to/slf6/build"|
+  \end{itemize}
+\end{itemize}
+
+\subsection{Details of what setup\_nova.sh does}
+
+\begin{itemize}
+\item Check whether \nova Soft is already setup in the current session, fail if it is.
+\item Make sure \verb|setup_novasoft_setup.sh| exists, if it does call it and save the output to be sourced later. When this result is sourced, that's when the magic happens.
+\item Export the \verb|EXTERNALS| directory where the ups products and other external products reside
+\item Set the variable \verb|SRT_BASE_RELEASE| which is the release specified with \verb|"-r release"| (defaults to development)
+\item Set \verb|$SRT_PUBLIC_CONTEXT| based on the release specified with the \verb|"-r release"| option.
+  \begin{itemize}
+  \item This variable is used to identify the location of the release from which libraries and fcl files will be used that are not present in a private test release when jobs are run. 
+  \end{itemize}
+\item Setup external products defined in \\ \verb|$SRT_PUBLIC_CONTEXT/setup/nova-offline-ups-externals-$SRT_BASE_RELEASE|
+\item Export variables used for database connections and local paths
+\item Export \verb|$SRT_DIST| so it can be used later
+\item Set the build type (debug or maxopt), \$SRT\_QUAL specified with the -b option.
+  \begin{itemize}
+  \item This in turn is used to set \verb|$SRT_SUBDIR| which is the subfolder to \verb|/lib| and \verb|/tmp| where things will be compiled in each release. The other parts being the build OS and compiler (Linux2.6-GCC) in our case, right now.
+  \end{itemize}
+
+\item Define the \verb|srt_setup| function to be used for setting up a private test release, among other things.
+  \begin{itemize}
+  \item This calls the \verb|srt_environment_nova| script in \verb|SRT_NOVA/scripts| of the relevant release
+  \item It doesn't look like it, but it really does as the \verb|srt_setup| function is redefined in \\ \verb|setup_novasoft.sh|
+  \end{itemize}
+  
+
+
+
+
+\end{itemize}
+
+
+
+
+Since the term externals and ups products have popped up, let's talk about those next.
+
+
+\subsection{Useful extentions to SRT}
+If a SRT script (\verb|SoftRelTools/scripts|) is found to be lacking functionality, you don't have to start from scratch, instead take a peak at the last few lines before the \verb|main| function is called. E.g \verb|newrel|
+\begin{verbatim}
+  prog_name=newrel
+  if [ -f "$SRT_PRIVATE_CONTEXT/SRT_$SRT_PROJECT/special/scripts/$prog_name" ]; then
+  . "$SRT_PRIVATE_CONTEXT/SRT_$SRT_PROJECT/special/scripts/$prog_name"
+  elif [ -f "$SRT_PUBLIC_CONTEXT/SRT_$SRT_PROJECT/special/scripts/$prog_name" ]; then
+  . "$SRT_PUBLIC_CONTEXT/SRT_$SRT_PROJECT/special/scripts/$prog_name"
+  fi
+\end{verbatim}
+
+\$SRT\_PROJECT is set to NOVA during setup, so these lines instruct the script to look for\\ \verb|SRT_NOVA/special/scripts/newrel| and source it if it exists. In this case it actually does because I had to change the \verb|dereference| function to allow symlinks to be used correctly within the SRT framework. I also changed the defaults to allow the creation of the /job subdirectory when a new release is created.
+
+
+\section{UPS}
+
+UPS is a system developed by, and used at, Fermilab to distribute software. UPS is used to provide builds of various dependencies of \novas software including, among others, ART, ROOT, Genie and Geant. The neat thing about UPS is that it allows users to have multiple variants of each dependency, or product, installed and be able to set up and use a specific one (i.e. specific version built for a specific operating system with specific compiler options). It also means that the software maintainer (you!) doesn't have to build by hand the \nova Soft dependencies when new versions are released.\\
+
+UPS stands for Unix Product Support and are tools we use to facilitate product distribution. UPD (Unix Product Distribution) is the companion to UPS and is what we use to download products published to distribution servers. Full documentation of ups and upd can be found here: \url{http://www.fnal.gov/docs/products/ups/}.\\
+
+UPS uses a "product database" to store installed products. This effectively consists of a directory containing sub-directories for each product, along with some files that UPS uses to manage this database.
+
+\subsection{Manually setting up a UPS product database}
+
+We can manually set up our ups instance (or database) by doing 
+
+\begin{verbatim}
+source $EXTERNALS/setup
+\end{verbatim}
+\noindent
+
+This populates a local product database with names, versions, flavors, and qualifiers of products installed that can now be set up. 
+
+\subsection{Listing available UPS products}
+To see what products are available you can check via the ups list command:
+
+\begin{verbatim}
+ups list -aK+
+ups list -aK PRODUCT:VERSION:FLAVOR:QUALIFIERS:CHAIN
+\end{verbatim}
+\noindent
+
+This checks \verb|$PRODUCTS| for ups installations and traverses the installed products to provide the information. The two commands given are equivalent (\verb|+| is equivalent to \verb|PRODUCT:VERSION:FLAVOR:QUALIFIERS:CHAIN|, one can also specify the following parameters \verb|DATABASE| or \verb|DB, DECLARER, DECLARED, MODIFIER, MODIFIED|) Optionally you can be more specific about the product you want to find out about by providing a product, version, and qualifier to the list command. 
+
+\subsection{Listing active UPS products}
+To see a list of products that have been setup using UPS one can use the command:
+\begin{verbatim}
+ups active
+\end{verbatim}
+
+\subsection{Listing available UPD products and installing them}
+
+UPD provides a UPS style distribution system for products. What does that mean? Well, it means that if you don't have a UPS product installed locally you can use UPS style commands to install it. One can use the upd list command to see what products are available for install from the distribution server:
+
+\begin{verbatim}
+upd list -aK+
+\end{verbatim}
+\noindent
+Then to go ahead and install a specific product you can run a command like:
+
+\begin{verbatim}
+upd install <product> <version> -q <qualifiers>
+\end{verbatim}
+
+\subsection{Further UPS and UPD information}
+
+Confusingly both UPS and UPD are distributed as UPS products so before one can use the upd list command, one has to run \verb|setup upd| (ups is setup when you do \verb|source $EXTERNALS/setup|.
+
+See the section about updating IFTools for an extensive example of how to install products via upd.\\
+
+Other helpful sections of the documentation include the ups depend command to debug conflicts between two needed separate versions of the same product. One can define chains of products that are set up. We currently implemented the "current" chain for a few products, so one doesn't have to explicitly specify a version to be setup.\\
+
+For more information regarding UPS and UPD one can find more detailed information here \url{http://www.fnal.gov/docs/products/ups/ReferenceManual/}.
+
+
+\subsection{UPS table files and version folders }
+
+Really this is how UPS knows what you have installed and what to do when you try to set up software.\\
+
+\noindent
+Let's take a look at the structure of a UPS product, ROOT, from \verb|novabuild01.fnal.gov|
+\begin{verbatim}
+  cd /build/nova/externals
+  source ./setup
+
+  ups list -aK+ root v5_34_12
+  root" "v5_34_12" "Linux64bit+2.6-2.5" "e4:prof" ""
+  "root" "v5_34_12" "Linux64bit+2.6-2.5" "debug:e4" ""
+  "root" "v5_34_12" "Linux64bit+2.6-2.5" "e4:nu:prof" ""
+  "root" "v5_34_12" "Linux64bit+2.6-2.5" "debug:e4:nu" ""
+
+  ls -l root
+  total 8
+  drwxr-sr-x  8 novasoft nova 4096 Jun  6  2013 v5_34_05
+  drwxr-sr-x  2 novasoft nova  146 Jun  6  2013 v5_34_05.version
+  drwxr-sr-x  7 novasoft nova  156 Sep 17 12:35 v5_34_09
+  drwxr-sr-x  2 novasoft nova  146 Sep 17 12:35 v5_34_09.version
+  drwxr-sr-x 11 novasoft nova 4096 Dec  5 22:54 v5_34_12
+  drwxr-sr-x  2 novasoft nova  146 Dec  5 22:54 v5_34_12.version
+
+  ls -l root/v5_34_12*
+  root/v5_34_12:
+  total 32
+  -rw-r--r--  1 novasoft nova   230 Nov 27 16:10 autobuild.sh
+  -rwxr-xr-x  1 novasoft nova 10129 Nov 27 16:10 build_root.sh
+  drwxr-sr-x 14 novasoft nova  4096 Dec  3 23:28 Linux64bit+2.6-2.5-e4-debug
+  drwxr-sr-x 14 novasoft nova  4096 Dec  3 23:55 Linux64bit+2.6-2.5-e4-prof
+  drwxr-sr-x 14 novasoft nova  4096 Dec  3 22:50 Linux64bit+2.6-2.5-nu-e4-debug
+  drwxr-sr-x 14 novasoft nova  4096 Dec  3 19:28 Linux64bit+2.6-2.5-nu-e4-prof
+  drwxr-sr-x  2 novasoft nova   100 Nov 27 16:10 patch
+  drwxr-sr-x  2 novasoft nova    25 Nov 27 16:10 scripts
+  drwxr-sr-x  3 novasoft nova    17 Dec  3 19:15 source
+  drwxr-sr-x  2 novasoft nova    40 Dec  5 14:09 tar
+  drwxr-sr-x  2 novasoft nova    23 Nov 27 16:10 ups
+
+  root/v5_34_12.version:
+  total 16
+  -rw-r--r-- 1 novasoft nova 338 Dec  3 23:55 Linux64bit+2.6-2.5_debug_e4
+  -rw-r--r-- 1 novasoft nova 341 Dec  3 23:55 Linux64bit+2.6-2.5_debug_e4_nu
+  -rw-r--r-- 1 novasoft nova 340 Dec  3 23:55 Linux64bit+2.6-2.5_e4_nu_prof
+  -rw-r--r-- 1 novasoft nova 337 Dec  3 23:55 Linux64bit+2.6-2.5_e4_prof
+\end{verbatim}
+
+\noindent
+What does this tell us?
+\begin{itemize}
+\item There is only one flavour of \verb|ROOT v5_34_12| installed 
+  \begin{itemize}
+  \item \verb|Linux64bit+2.6-2.5|
+  \end{itemize}
+\item There are four different builds of this flavour
+\begin{itemize}
+  \item \verb|e4:debug|, \verb|e4:prof|, \verb|nu:e4:debug| and \verb|nu:e4:prof|
+  \begin{itemize}
+    \item \verb|"e4"| refers to a version of GCC used to compile this product (ROOT)
+    \item \verb|"nu"| refers to a build produced for Neutrino experiments at Fermilab
+    \item \verb|"prof"| refers to compiler options and is currently equivalent to \verb|"maxopt"|
+    \item \verb|"debug"| refers to compiler options set to help with debugging software
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\noindent
+Let's take a closer look at \verb|root/v5_34_12.version/Linux64bit+2.6-2.5_debug_e4_nu|, which will give us more information of the specific product instance.
+\begin{verbatim}
+  cat root/v5_34_12.version/Linux64bit+2.6-2.5_debug_e4_nu
+  FILE = version
+  PRODUCT = root
+  VERSION = v5_34_12
+
+  #*************************************************
+  #
+  FLAVOR = Linux64bit+2.6-2.5
+  QUALIFIERS = "debug:e4:nu"
+  DECLARER = greenc
+  DECLARED = 2013-12-04 04.50.57 GMT
+  MODIFIER = greenc
+  MODIFIED = 2013-12-04 04.50.57 GMT
+  PROD_DIR = root/v5_34_12
+  UPS_DIR = ups
+  TABLE_FILE = root.table
+\end{verbatim}
+This is one half of the information UPS looks at to declare the product to its products database. The other half is hinted at in the file and can be found at \verb|root/v5_34_12/ups/root.table|.\\
+
+\noindent
+We will not insert the 186 lines here, but the interested reader can peruse the file on their own and learn about ways to declare dependencies, export environmental variables during setup, and differentiate setup steps depending on flavor and qualifiers. \\
+
+\noindent
+If \verb|ups list| throws a conflict error, more often than not it's due to a conflict between then .version and .table file of the given product, so check there first. Any conflict in a new product bundled with ART should be reported to Lynn Garren (\verb|garren@fnal.gov|), Chris Green (\verb|greenc@fnal.gov|) who are ARTists in charge of distributing new ART versions. Brian Rebel (\verb|brebel@fnal.gov|) can also be contacted as LARsoft will likely run into the same issue. More details about externals bundled with ART is given in the Updating ART section.
+
+\subsection{IFTools}
+There are three packages that \novas currently uses from the IF suite:
+\begin{itemize}
+\item ifdhc
+\item ifdh\_art
+\item ifbeam
+\end{itemize}
+
+\noindent
+These get updated from time to time and are essential for smooth file transfers between dcache, enstore, bluearc, and worker nodes. IFDH stands for Intensity Frontier Data Handling. Our beam is coming from the IFBeamDB which the ifbeam package facilitates in accessing. The Metadata package for example uses ifdh classes in accessing metadata of existing files. \\
+
+\noindent
+New versions are generally announced to \verb|fife-jobsub-announce@fnal.gov|, so consider subscribing to that. When a new version is made available you should install them on \verb|novabuild01.fnal.gov| before changing the corresponding lines in \verb|nova-offline-ups-externals-development|. Follow the following commands for a painless install:
+\begin{verbatim}
+  ssh novasoft@novabuild01.fnal.gov
+  setup_nova_build
+  cd $EXTERNALS
+  setup upd
+  upd install -j ifbeam v1_2_10 -q debug:e4 -H Linux64bit+2.6-2.5 -G "-q debug:e4:nu" 
+  upd install -j ifdh_art v1_2_10 -q debug:e4 -H Linux64bit+2.6-2.5 -G "-q debug:e4:nu" 
+  upd install -j ifdhc v1_2_10 -q debug:e4 -H Linux64bit+2.6-2.5 -G "-q debug:e4:nu" 
+  upd install -j ifbeam v1_2_10 -q e4:prof -H Linux64bit+2.6-2.5 -G "-q e4:nu:prof" 
+  upd install -j ifdh_art v1_2_10 -q e4:prof -H Linux64bit+2.6-2.5 -G "-q e4:nu:prof" 
+  upd install -j ifdhc v1_2_10 -q e4:prof -H Linux64bit+2.6-2.5 -G "-q e4:nu:prof" 
+\end{verbatim}
+
+What follows is a quick description of the flags:
+\begin{itemize}
+\item -j ensures that only the product and none of its dependencies are installed
+\item -q names the qualifier of the product available on the distribution server
+\item -H names the flavor explicitly, if this is skipped ups will try to determine which flavor is most appropriate from the OS, sometimes resulting in errors.
+\item -G lets us rename aspects of the product for the local distribution. In this case we want to add "nu" as a qualifier. If this is skipped there is a dependency conflict of the qualifier of art that is setup explicitly and required implicitly for ifdh\_art
+\end{itemize}
+
+\noindent
+Also install the new version of these products on oasis, remembering that we also need SL 6 versions there, since the jobs can go out to worker nodes with SL 6 as their OS. Simply repeat the above list of install commands with \verb|-H Linux64bit+2.6-2.12| instead of \verb|-H Linux64bit+2.6-2.5|.
+
+\subsection{NuSoft Tools}
+
+These products are distributed as ups products and therefore don't need to be built whenever a release is built. Brian Rebel (\verb|brebel@fnal.gov|) packages them up for us and they're usually available here:\\ \url{http://oink.fnal.gov/distro/packages/nutools/} after a new version has been released. They need to be installed in the \verb|$EXTERNALS| area to be correctly linked at compile- and run-time. If a package depends on one of these packages the following line should be included in the \verb|GNUmakefile| of that package:
+\begin{verbatim}
+  override CPPFLAGS := -I$(NUTOOLS_INC) $(CPPFLAGS)
+\end{verbatim}
+
+The current list of packages is:
+\begin{verbatim}
+  ls -l nutools/v1_01_03/source/
+  total 12
+  drwxr-sr-x 2 novasoft nova 4096 Dec 12 23:06 EventDisplayBase
+  drwxr-sr-x 5 novasoft nova   57 Dec 12 23:03 EventGeneratorBase
+  drwxr-sr-x 2 novasoft nova 4096 Dec 12 23:03 G4Base
+  drwxr-sr-x 2 novasoft nova   59 Dec 12 23:03 MagneticField
+  drwxr-sr-x 2 novasoft nova   70 Dec 12 23:03 NuBeamWeights
+  drwxr-sr-x 3 novasoft nova   85 Dec 12 23:03 NuReweight
+  drwxr-sr-x 2 novasoft nova 4096 Dec 12 23:03 SimulationBase
+\end{verbatim}
+
+\subsection{Other External Products}
+
+We have started maintaining scripts that download all the products necessary for \nova Soft. This is useful for offsite build maintainers. Currently this consists of:
+
+\begin{itemize}
+\item Chris Backhouse (\verb|bckhouse@caltech.edu|), CalTech
+\item Jon Paley (\verb|jpaley@anl.gov|), Argonne National Lab
+\item Kanika Sachdev (\verb|ksachdev@physics.umn.edu|), University of Minnesota
+\end{itemize}
+
+\noindent
+The scripts live in \url{svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn/trunk/SRT_NOVA/scripts/install_scripts}. Each time development (the head of the subversion repository) has its external products changed this software release manager (you) should update the development version of this script. When a new release is created the development version of this script should be copied to create a release specific script.\\
+
+\noindent
+In order to fully populate a UPS externals area from scratch, that contains all the externals needed by \nova Soft, simply do:
+
+\begin{verbatim}
+mkdir -p /path/to/externals
+export EXTERNALS=/path/to/externals
+cd $EXTERNALS
+svn co svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn/trunk/SRT_NOVA/scripts/install_scripts
+$EXTERNALS/install_scripts/install_nova_externals_development 
+\end{verbatim}
+
+
+\noindent
+When there is a new version of ROOT and/or GCC, the NumiBeamDB external product will have to be rebuilt with the new versions. This is currently handled by Robert Hatcher (\verb|rhatcher@fnal.gov|), ask nicely.\\
+
+\noindent
+Jon Paley will update database related packages from time to time, so stay on top of commit messages to the setup package, as well as changes to the redmine wiki page. You might as well add yourself to the watch list of the above mentioned page, so you get emails whenever it changes.
+
+
+\section{Subversion (SVN)}
+
+SVN stands for Subversion and is what we currently use to version control our code for developing the \novas  offline software. We are using version 1.6. As a side-note, this is not a product we distribute as part of \nova Soft. When an off-site distribution is required whoever sets it up needs to make sure svn is installed, preferably v1.6. Complete documentation of svn including an extensive reference guide can be found here:
+\url{http://svnbook.red-bean.com/en/1.6/}\\
+
+\noindent
+There is a collision of terms when talking about a version of a package. Releases are inherent to SoftRelTools while in svn we talk about trunk, tags, and branches. The development release corresponds to a subset of packages present in trunk, with the revision corresponding to what is present when svn update is run during the nightly build process, currently at midnight Fermitime. Which packages are part of the development release, or any release for that matter can be ascertained from the packages-release files in the setup package.\\
+
+
+\noindent
+The tagged releases correspond to directories in the repository's tags subdirectory. The section entitled Tagging Releases will deal with this in more detail, for now back the the actual repository.\\
+
+\noindent
+Our repository is hosted on the CDCVS server at FNAL and if you are a manager of the novaart group on redmine, you can access it from any \novas GPVM like so:
+\begin{verbatim}
+  ssh p-novaart@cdcvs.fnal.gov
+  cd /cvs/projects/novaart/pkgs.svn
+\end{verbatim}
+As the README.txt file states: 
+\begin{verbatim}
+  Do not add, delete, or modify files here unless you know how
+  to avoid corrupting the repository.
+\end{verbatim}
+I will come back, in the Devs Repository section, to what this direct access is useful for. Let's cover some common operations of svn you will have to do. I will assume you're working on a \novas GPVM inside a test release based on development. You can always type \verb|svn command --help| to bring up the relevant help file where all options and different use cases are explained. What follows is a list of commands with the options I most often find myself using.
+\begin{itemize}
+\item svn checkout (co)
+  \begin{itemize}
+  \item Example:
+  \end{itemize}
+  \verb|svn co \|\\
+  \verb|svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn/trunk/Demo \|\\
+  \verb|./Demo|
+  \begin{itemize}
+  \item This will grab the Demo package from the development release and put it in a subfolder of your current directory named Demo. There will be a hidden folder inside, named .svn which will contain information about which repository, and version, this folder belongs to.
+  \item The \verb|addpkg_svn| and \verb|update-release| scripts in \verb|SRT_NOVA/scripts| use this command extensively to add packages to a release.  
+  \end{itemize}
+
+\item svn info
+  \begin{itemize}
+  \item Example:
+  \end{itemize}
+\begin{verbatim}
+  svn info Demo
+  Path: Demo
+  URL: svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn/trunk/Demo
+  Repository Root: svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn
+  Repository UUID: 42286b90-2e16-4323-8552-92d8e493c5d4
+  Revision: 7892
+  Node Kind: directory
+  Schedule: normal
+  Last Changed Author: ksachdev
+  Last Changed Rev: 7595
+  Last Changed Date: 2013-12-11 15:35:36 -0600 (Wed, 11 Dec 2013)
+\end{verbatim}
+\begin{itemize}
+\item Most of this is self explanatory, but it's worth pointing out the URL and Repository Root which tell you that this is a package from the normal repository. The read-only symlink access would look like this: \verb|URL: https://cdcvs.fnal.gov/subversion/novaart.pkgs.svn/trunk/Demo|
+\end{itemize}
+
+\item svn status (st) -u
+  \begin{itemize}
+  \item The option -u is essential in checking your checked out package against the package in the repository.
+  \item The output can be non-intuitive and is best explained here, \url{http://svnbook.red-bean.com/en/1.6/svn.ref.svn.c.status.html}
+  \item In essence it will show you which files you have changed and would therefore be merged on the next commit and whether there were other changes committed to the package since you had checked it out.
+  \end{itemize}
+
+\item svn diff (di) -r HEAD [file]
+  \begin{itemize}
+  \item This will show you line by line difference between your working copy of the file and the latest version of the file in the repository. There have been cases where without the -r HEAD option, svn diff has reported no differences even though svn status showed that there were changes made.
+  \item If you don't include a file the command will recursively apply to all files that are part of a svn repository in your present working directory.
+  \item You should use this command to find dig deeper if svn status has showed you a change in the repository to a file you are also editing in your working copy.
+  \end{itemize}
+
+\item svn update (up)
+  \begin{itemize}
+  \item Self explanatory and straightforward, unless you weren't following directions up to now and managed to create a conflict. This would arise when there are conflicting edits to the working path copy of a file and the file in the repository. I find conflicts are best resolved "by hand" in your favorite text editor and then "resolving" the conflict with the next command.
+  \end{itemize}
+
+\item svn resolve --accept='working' [file]
+
+\item svn commit (ci)
+  \begin{itemize}
+  \item Example: \verb|svn ci Demo -m 'Fixed header includes'|
+  \item This will commit your local changes to the Demo package to the repository. The command should only be run after you've verified that your commit is compatible with the version currently in the repository. As this is a large collaboration it's quite possible that somebody else had checked out the same package and committed their changes while you were working on your local copy. 
+  \end{itemize}
+
+\item svn merge -r rev1:rev2 package
+  \begin{itemize}
+  \item Example: \verb|svn merge -r 8680:8679 setup|
+  \item This would reverse merge changes from revision 8679 to 8680 into the local copy of the setup package. You should have the HEAD version of the setup package checked out for this to work. This is the undo button for a commit, or a range of commits. The example would undo Gavin's change of port number to the setup package, captured in revision 8680. Since the merging happens in the local working copy, you have to then commit your changes to the repository for the bad commit to actually be undone. It's a good idea to check the file you're about to commit to ensure that it's the version you want in the repository.  
+  \end{itemize}
+
+\end{itemize}
+
+\noindent
+I've found the following variable useful in saving me many headaches:
+\begin{verbatim}
+  export CVSROOT_OFF=svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn
+\end{verbatim}
+You will see in the next subsection why that is.
+
+
+
+\section{Tagging Releases}
+A tag consists of a snapshot of the packages in our development release, as well as the appropriate versions of the Online and NuSoft-ART packages. Let's start by introducing some scripts that will make a tag for you.
+
+\subsection{Tagging Prerequisite}
+
+Any NO$\nu$A user can commit to the trunk and branches directory of our repository.  However, one needs special privileges to commit to the tags directory.  To get these permissions, a novaart manager must add you by doing
+
+\begin{verbatim}
+ssh p-novaart@cdcvs.fnal.gov
+cd /cvs/projects/novaart/pkgs.svn/hooks
+and edit the pre-commit file to include new username
+\end{verbatim}
+
+\subsection{(semi) Auto-tagging}
+
+I (Jonathan) wrote some scripts that should semi-automate the tagging process. These scripts are in the subversion repository \url{svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn/trunk/SRT_NOVA/scripts/tagging_releases}.
+
+\subsubsection{Creating the svn files}
+
+The script \verb|create_release_svn_files.sh| will create all the files necessary for a release and commit them to the subversion repository. This is an example of how to use it:
+
+\begin{verbatim}
+ssh novasoft@novabuild01.fnal.gov
+cd /build/nova/novasoft/releases/development/SRT_NOVA/scripts/tagging_releases/
+./create_release_svn_files.sh -r S15-03-31 -n "Tour Eiffel" -t ~/temp/tagging
+\end{verbatim}
+
+\noindent
+The options that can be used are:
+\begin{itemize}
+\item \verb|"-r release"| - where \verb|release| follows the format \verb|SYY_MM_DD|. 
+\begin{itemize}
+  \item For example \verb|"-r S15-03-31"|
+  \end{itemize}
+  
+\item \verb|"-n `tag name'"| where \verb|tag name| is a colloquial name for the tag. We tend to use an interesting event in history that occurred on the day of the tag, using Wikipedia (other online encyclopaedias are available).
+
+\item \verb|"-t /path/to/temp/directory"| we need a temporary directory to do an svn checkout into, then an svn commit from for the internals of the script to work
+
+\item \verb|"-b"| this switch is deprecated. It was used to create first-analysis tags, but that system is now defunct. DON'T USE IT.
+
+\end{itemize}
+ 
+
+\subsection{Manual tagging}
+
+These are the old instruction for tagging a release. They may provide more insight into the process for the interested reader, and could be useful for fixing any errors when running the scripted version described in the previous section.\\
+
+\noindent
+We start by defining the package list and the nova-offline-ups-externals for the release we wish to be creating and commit those to the development release. Then we create a server-side copy of trunk in tags and lastly use update-release to import the release to the area accessible to the VMs. What follows is a step by step instruction on how to tag, assuming you have sourced the development release and your present working directory is an up-to-date version of your checked out setup package:
+\begin{itemize}
+\item \verb|cp packages-development packages-SYY-MM-DD| 
+\item \verb|cp nova-offline-ups-externals-development nova-offline-ups-externals-SYY-MM-DD|
+\item \verb|cp nova-offline-ups-externals-development-prof|\\
+  \verb|nova-offline-ups-externals-SYY-MM-DD-prof|
+\item In \verb|packages-SYY-MM-DD| change all versions from \verb|HEAD| to \verb|SYY-MM-DD| except for SoftRelTools, which stays \verb|HEAD| in all releases.
+\item \verb|svn add packages-SYY-MM-DD nova-offline-ups-externals-SYY-MM-DD|\\ \verb|nova-offline-ups-externals-SYY-MM-DD-prof|
+\item \verb|svn commit -m 'Necessary setup files for SYY-MM-DD'|
+\item \verb|svn cp $CVSROOT_OFF/trunk CVSROOT_OFF/tags/SYY-MM-DD |\\
+  \verb|-m 'Create frozen release corresponding to revision XXXX with tag SYY-MM-DD.'|
+\item \verb|cd $SRT_DIST/setup|
+\item \verb|ksu novasoft|
+\item \verb|svn up|
+\end{itemize}
+
+This completes the tagging for a normal snapshot release.\\
+
+\noindent
+Approximately yearly, we roll out a Control Room release for the online to use.  In a perfect world, for a control room release, you simply would instead use \verb|CRYY-MM-DD| and start with the most recent \verb|packages-CRYY-MM-DD|.  But, given the long time between control room releases, there are necessarily changes to the lists of ups products used in online and offline code.
+
+In Draconian fashion, the offline build depends on the NOvADDT code, specifically through the DDTConverters package.  Therefore, the DDT and offline builds included in the CR release must both be compatible.  Given that, when preparing to tag a new control room release, take care to coordinate with the DDT release manager on ups dependencies included in the DDT and offline code.
+
+To decrease debug cycle time, there is a script to check the compatibility of ups products included in any offline tag, taking a externals list file as the input.  It is strongly encouraged you run this script on a potential CR externals list before triggering a build to speed things along.  The script is in:
+\begin{verbatim}
+SRT_NOVA/scripts/check_ups_dependencies
+\end{verbatim}
+
+Also, be sure to update the install script for the control room release to pick up on any new ups products, or increments of old ones as online experts will need this for using the CR release.
+
+
+\subsection{Backporting Revisions to Tagged Releases}
+
+Tagged releases are supposed to be snapshots of our software and should therefore stay unchanged over time. However, in the first few days after a release is tagged, it is quite likely that bugs or features are identified, that just have to get fixed/implimented in the tag. \\
+
+\noindent
+First, the old version of the affected file has to be removed from the tag, then the fixed/updated version has to be copied over to the tag, and last the tagged release has to be fixed on disc. This last step may involve re-compiling the tag. It is very important to remember that this fix must be put in place in all of the places the software has been distributed to (GPVM nodes, Oasis CVMFS, Fermilab CVMFS) and in all flavours / operating system types. \\
+
+\noindent
+This last point is easy to forget or make an honest mistake with. It is therefore very important to make sure that the updates have been done in totality. I find a checklist useful. I also find it useful to create a file called \verb|back-ports| in the base directory of the release with details of the back port and the various build / install stages / flavours / compiler options in. I do this in each of the locations the software is distributed to try to force the back-port to be applied correctly (although I only started doing this verbose version recently).
+
+
+\subsubsection{Automated back-porting}
+
+This only refers to the subversion aspect, the removing and copying into place the files necessary.  See the section `Jonathan's Extra Tools' for details of the \verb|back-port| bash function that I find useful. \\
+
+\noindent
+You should read the following section even if you run the bash function to do the svn part of things.
+
+\subsubsection{Manual back-porting}
+
+Tagged releases are supposed to be snapshots of our software and should therefore stay unchanged over time. However, in the first few days after a release is tagged, it is quite likely that bugs or features are identified, that just have to get fixed/implimented in the tag. 
+
+First, the old version of the affected file has to be removed from the tag, then the fixed/updated version has to be copied over to the tag, and last the tagged release has to be fixed on disc. The revision to be backported does not have to coincide with the HEAD revision of trunk and the \verb|@rev| syntax can be used.
+
+When this is the case, the revisions mostly affect single files and the backport procedure would be as follows, as an example I've chosen a fcl file from batch processing to be backported to S14-02-05:
+\begin{itemize}
+\item \verb|svn rm $CVSROOT_OFF/tags/S14-02-05/Calibration/pchitslistbatchjob.fcl|\\
+  \verb|-m 'Backport incoming'|
+\item \verb|svn cp $CVSROOT_OFF/trunk/Calibration/pchitslistbatchjob.fcl|\\
+  \verb|$CVSROOT_OFF/tags/S14-02-05/Calibration -m 'Backport'|
+\end{itemize}
+
+Depending on the number or type of packages affected you will either be able fix the release on the spot, or you will have to recompile the entire release. In this case, one fcl file to be backported, you would go into the affected product directory and run \verb|svn update| to pull down the change and copy the new file into the \verb|job| directory of the release:
+\begin{itemize}
+\item \verb|ssh novasoft@novabuild01.fnal.gov|
+\item \verb|cd /grid/fermiapp/nova/novaart/novasvn/releases/S14-02-05/Calibration|
+\item \verb|svn update|
+\item \verb|cp -f pchitslistbatchjob.fcl ../job/|
+\end{itemize}
+
+If the fix requires to be a package to be recompiled, but the package stands alone at the end of any linking chains, you can recompile the package on the spot (in the actual release directory), instead of having to recompile the entire release, remembering to build both debug and maxopt qualifiers. The Metadata package is such a case:
+\begin{itemize}
+\item \verb|ssh novasoft@novabuild01.fnal.gov|
+\item \verb|setup_nova -r S14-02-05|
+\item \verb|make Metadata.clean|
+\item \verb|svn update Metadata|
+\item \verb|make Metadata.all|
+\item \verb|logout|
+\item \verb|ssh novasoft@novabuild01.fnal.gov|
+\item \verb|setup_nova -r S14-02-05 -b maxopt|
+\item \verb|make Metadata.all|
+\end{itemize}
+
+If the fix however requires a package like RecoBase or RawData to be recompiled, your best bet for a consistent built is to recompile the entire release on \verb|novabuild01| after cleaning it out and updating the affected package. Then remove the old tag from the \verb|releases| directory and move the new tag into place.
+
+The procedure of propagating backports to the CVMFS servers follow the same reasoning as above, but the access methods are different, as explained in the CVMFS section of this document.
+
+\subsection{Devs Repository}
+There exists a different repository used for version control of scripts and other things that don't fit in the SoftRelTools and Offline framework. For details about this repository and instructions on its use refer to \url{https://cdcvs.fnal.gov/redmine/projects/novaart/wiki/Devs_SVN_access}. It's supported by the Fermilab Redmine (\url{https://cdcvs.fnal.gov/redmine/projects/novaart/repository/devs}) as it's also hosted on \verb|cdcvs.fnal.gov|. For administrative purposes you follow the instructions for accessing the node from above and then navigate to the repository which is located here: \verb|/cvs/projects/novaart-devs|
+
+As you may have read on the wiki, this repository has two unique pre-commit hooks installed. These will prevent commits to propagate to the repository if a user is trying to commit a library or object code file (extentions .so, .a, and .o) or any file in the ones to be committed exceeds 1 MB in size.
+
+These hooks are located in \verb|/cvs/projects/novaart-devs/hooks/pre-commit| and you should be very careful about changing them as you can easily prevent people committing to the repository while you debug your code.
+
+\section{Building Releases}
+The Jenkins Build system has been deployed at Fermilab. It is an interface to manage builds, which are issued as jobs with configurations to job slots on a pool of dedicated build machines. \novas transitioned from performing builds on a combination of GPVM nodes and a dedicated build machine \verb|novabuild01| during 2015. For the most part this chapter will discuss the Jenkins build system, but in some places give details of how to perform a build by hand on a build machine, which may be of use when debugging problems with the build.
+
+\subsection{Jenkins GUI}
+The Jenkins GUI is accessed via a webpage:
+\begin{verbatim}
+https://buildmaster.fnal.gov/
+\end{verbatim}
+
+There are two modes of access, the first is `anonymous' which allows a user to look at jobs, their output and the tar files produced from builds. The second mode is `user' mode, allowing editing of build configurations and starting builds. The latter is only accessible using certificates imported into a web browser (using the same URL). 
+
+\subsubsection{Getting Access}
+To add a new user to the pool of approved users on Jenkins please open a service desk ticket and state something along the lines of `requesting user access to the Jenkins build management system'.
+
+Once a user has been added they will need to create a certificate for their FNAL username (or principle as it is often referred to). There are some websites detailing how to do this:
+
+\begin{verbatim}
+http://docdb.fnal.gov/ILC-public/DocDB/DocDBInstructions?set=kca
+http://computing.fnal.gov/authentication/kca/getcert-for-mac.html
+\end{verbatim}
+
+\subsection{\novas Build Configurations}
+
+There are a number of build configurations on Jenkins created for and used by \novas. There are two types of build: `nightly' and `release'. These builds come in two operating system variants: `slf5' and `slf6'. Each combination has a `build' configuration, which the user uses to start a build, and an `output' configuration, which is used to collect and package the output of the build. The combinations are listed below:
+
+\begin{verbatim}
+nova_SRT_slf5_nightly_build
+nova_SRT_slf5_nightly_build_output
+nova_SRT_slf5_release_build
+nova_SRT_slf5_release_build_output
+nova_SRT_slf6_nightly_build
+nova_SRT_slf6_nightly_build_output
+nova_SRT_slf6_release_build
+nova_SRT_slf6_release_build_output
+\end{verbatim}
+
+\subsection{Building a Release}
+\subsubsection{Jenkins Build}
+
+Firstly log in to the Jenkins GUI making sure that your user name appears in the top right corner, rather than `anonymous'. If you get the latter your certificate is either expired, you do not yet have your access approved or your certificate has not been imported into your browser correctly.\\
+
+For this example we will consider a release that has been created in the subversion (svn) repository. This release will be S15-05-20. You will need to build this for both slf5 and slf6 as we are currently supporting those. Click on `\verb|nova_SRT_slf5_release_build|', followed by `Build with parameters' and enter `S15-05-20' in the `RELEASE'  field, then finally hit build. Repeat the procedure for slf6.\\
+
+When the builds are finished they will instigate a pair of `\verb|build_output|' jobs. This is done automatically, the user doesn't need to do anything. If the `build' jobs are unsuccesful (i.e. an error was detected in building the release) the `\verb|build_output|' jobs will not be started.\\
+
+If everything goes to plan you will end up with a pair of new `\verb|build_output|' builds, one for each os flavour. You should record these build numbers.
+
+
+\subsubsection{Building on the build machines}
+
+Now the necessary files are in place in the subversion repository we need to build \verb|maxopt| and \verb|debug| versions of the tag for both \verb|SLF5| and \verb|SLF6| operating systems.\\
+
+\noindent
+There are two ways of building a new tag / release. The first is to use the Jenkins build system. Please see the section on Jenkins for more details.\\ %FIXME
+ 
+ \noindent
+ The second is to build the \verb|SLF5| version on novabuild01 and the \verb|SLF6| version on novagpvm09. This script \verb|build_novaart_release.sh| can be used to do this. It automatically detects the machine's operating system, and builds both the \verb|debug| and \verb|maxopt| versions.\\
+ 
+\noindent
+For example for \verb|SLF5|:
+
+\begin{verbatim}
+ssh novasoft@novabuild01.fnal.gov
+cd /build/nova/novasoft/releases/development/SRT_NOVA/scripts/tagging_releases/
+./build_novaart_release.sh S15-05-20
+\end{verbatim}
+
+\noindent
+and for \verb|SLF6|:
+\begin{verbatim}
+ssh novasoft@novagpvm09.fnal.gov
+cd ~/slf6/build/releases/development/SRT_NOVA/scripts/tagging_releases/
+./build_novaart_release.sh S15-05-20
+\end{verbatim} 
+
+
+
+\subsection{Copying a release to GPVM nodes (via the build machine)}
+
+\subsubsection{Copying a release to the build machine}
+
+Before getting into the details the bottom line is that a cronjob automatically downloads all releases (and nightly builds) created by Jenkins to the build machine, so the user does not need to do this step.\\
+
+You have a number of options for obtaining a release from Jenkins. You can navigate to the Jenkins GUI, then to the relevant `\verb|build_output|', then the specific build number and get hold of the tar balls created directly (or via wget). You can also make use of some scripting intended for this purpose. The script that handles this lives in the \novas subversion repository here:
+
+\begin{verbatim}
+SRT_NOVA/scripts/jenkins_builds/get_release_from_jenkins.sh
+\end{verbatim}
+
+
+\begin{itemize}
+\item \verb|"-o <slf5/slf6>"| sets the operating system of the build to \verb|SLF5| or \verb|SLF6| 
+\begin{itemize}
+  \item \verb|"-o slf5"|
+  \end{itemize}
+
+\item \verb|"-r release"| where \verb|release| is the name of the release (\verb|development| or \verb|SYY_MM_DD|)
+\begin{itemize}
+  \item \verb|"-r S15-03-31"|
+  \end{itemize}
+
+\item \verb|"-n <number>"| optional - manually set the Jenkins build number (use the Jenkins webpage to find what it should be) - otherwise the script will guess
+ 
+\item \verb|"-f"| optional - if a tarball exists in the Jenkins download area this will force it to be downloaded again
+
+\item \verb|"-x"| optional - will extract the tarball after download
+\end{itemize}
+
+
+This script is designed to be run in two modes. The first is one off, where the user supplies the release, operating system and build number. It decides where the release should be put (this is NOT the final installation location needed for the GPVM nodes to see the release, this would be dangerous, instead it is a location under the novasoft account directory structure).\\
+
+The second mode is where this script is run as a cron job. There are cron tabs installed on the build machine (and on novagpvm09) under the novasoft username designed to handle the downloading of all releases built on Jenkins (and nightly builds as well). These cron tabs are kept in the subversion repository here:
+
+\begin{verbatim}
+SRT_NOVA/scripts/crontabs/
+\end{verbatim}
+
+\subsubsection{Distributing a release from build machine to the GPVM nodes}
+
+Now the release is ready in the build location we need to put it in place for users to actually, well, use. We have a script located in \url{svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn/trunk/SRT_NOVA/scripts/tagging_releases} called \verb|clean_up_rel_send_to_gpvm_oasis.sh| that does this job. This script detects the machine's operating system, so you need to run it from an \verb|SLF5| and a \verb|SLF6| machine (\verb|novabuild01| and \verb|novagpvm09|).
+
+Here's the usage of \verb|clean_up_rel_send_to_gpvm_oasis.sh|:
+
+\begin{itemize}
+
+\item \verb|"-r release"| - specify a release
+\item \verb|"-o"| - set OS [ slf5 | slf6 ]
+\item \verb|"-f"| - flag to force the re-doing of steps (you might be instructed to do this by the script if it fails)
+
+\end{itemize}
+
+
+
+
+
+\section{Updating ART}
+
+
+When there is a new stable version of ART available, it will be posted to \url{http://oink.fnal.gov/distro/art/}. There will be an html file detailing which externals have changed, and how to go about grabbing the pre-built versions of these. Read the release notes and verify that \nova Soft is compatible. Large changes should be coordinated between developers to cut down on your time and energy spent. Next I'll outline the steps undertaken to update to Art v1\_08\_10 on \verb|novabuild01.fnal.gov|.
+\begin{itemize}
+\item \verb|cd /build/nova/externals|
+\item \verb|wget http://oink.fnal.gov/distro/art/downloadArt-v1_08_10.sh|
+\item \verb|chmod +x downloadArt-v1_08_10.sh|
+\item \verb|./downloadArt-v1_08_10.sh /build/nova/externals nu:e4 debug|
+\item This will take quite a bit, $\sim$30 minutes, to grab the debug tar balls and extract them
+\item Edit the script so that it doesn't pull down duplicates for the prof pass. In this case I commented out the lines dealing with ups/upd and the nu\_extras noarch tar balls. Make sure to save the file.
+\item \verb|./downloadArt-v1_08_10.sh /build/nova/externals nu:e4 prof|
+\item It's safe to delete the left over tar balls at this point.
+\end{itemize}
+
+Check with Brian Rebel (\verb|brebel@fnal.gov|) if a new version of NuTools should accompany this new version of ART. If the version of \verb|ROOT| or \verb|GCC| has changed, Robert Hatcher (\verb|rhatcher@fnal.gov|) will have to rebuild the NumiBeamDB external.
+
+Back on a VM, and under your own principal, update the \verb|nova-offline-ups-externals| files for development with the new version (and qualifier) information and commit the changes. You're now ready to test the build.
+\begin{itemize}
+\item \verb|ssh novasoft@novabuild01.fnal.gov|
+\item \verb|setup_nova_build|
+\item \verb|./SRT_NOVA/scripts/novasoft_build -rel development -clean -p 17|
+\item \verb|make clean|
+\item \verb|./SRT_NOVA/scripts/update-release -rel development|
+\item \verb|logout|
+\item \verb|ssh novasoft@novabuild01.fnal.gov|
+\item \verb|setup_nova_build|
+\end{itemize}
+
+At this point any external product dependency issues would reveal themselves, as you have setup the new external products for the first time. Deal with these before moving on. The section on UPS gives some general tips of how to go about this.
+
+Build the release, making sure to save the log file, assuming you have set up the release:\\
+\verb|nohup ./SRT_NOVA/scripts/novasoft_build -rel development -noclean -p 17 &> build.log &|
+will build in maximum parallel mode in the background, survive any disconnects from your terminal, and save the output. Check the output for any build errors and address them as necessary. 
+
+Once all kinks are ironed out, go ahead and repeat the steps for the CVMFS servers, keeping in mind the external directories are different and you will need to install SLF5 as well as SLF6 versions.
+
+\section{CVMFS}
+
+CERN Virtual Machine File System (CVMFS) is a method for distributing software to remote locations and grid nodes. This system is used by experiments such as ATLAS and CMS because it features a just-in-time file delivery scheme with local caching (meaning copy only the files that you actually use to your local machine when you use them). This is particularly useful since the full \novas base release plus external packages is around 150GB, whereas the typical run time footprint of a job (i.e. the total space taken up by files and libraries used) is around 2GB.
+\noindent
+The \nova release manager is able to make updates (for example adding an extra release build) to a central server, then publish this new software. Remote sites and grid nodes that use CVMFS for software distribution will then be able to see and use the update (i.e. the new software release added in this example).
+
+\subsection{CVMFS Servers}
+
+There are currently two independent CVMFS servers - \textbf{FNAL} (hosted and maintained at Fermilab) and \textbf{Oasis} (not hosted or maintained at Fermilab). The Oasis server was our main CMVFS distribution server until June 2015 when we shifted to using the FNAL CVMFS server for production related jobs. The plan is to phase out the use of the Oasis server. 
+
+\subsection{Brief Usage Instructions}
+
+This is a rough outline of how the CVMFS server workflow is imagined. The \novas release manager is in charge of making changes to the software on the CVMFS servers. When a new release is available it is copied to all of the CVMFS servers being used by \novas (currently FNAL and Oasis, although this is expected to be just FNAL in the near future). The release manager then `publishes' the updated collection of software on the relevant CVMFS servers. Publishing takes a relatively short amount of time (order of minutes, but is dependent upon the size of additional / changed files). When publishing is finished it produces a new `image' of the \novas files stored on the CVMFS server. It is this image that remote sites and grid nodes can `see' and use. There is a significant delay between the publishing finishing and external locations being able to `see' and use the new image. This delay is related to the distribution and buffering model used in CVMFS and is variable in length (can be up to 4 hours) and varies between external locations (as it is dependent upon how that location has implemented / setup CVMFS).
+
+\subsection{Oasis CVMFS Publishing Details}
+
+Log in to the Oasis CVMFS server:
+
+\begin{verbatim}
+gsissh oasis-login.opensciencegrid.org
+\end{verbatim}
+\noindent
+The base directory of the \novas CVMFS `repository' (this is what the `image' is created from), the location of \verb|SLF5| and \verb|SLF6| software, as well as external products are:
+
+\begin{verbatim}
+/net/nas01/Public/ouser.nova/             #base directory of NOVA CVMFS repository
+/net/nas01/Public/ouser.nova/novasvn/     #SLF5 software location
+/net/nas01/Public/ouser.nova/novasvnslf6/ #SLF6 software location
+/net/nas01/Public/ouser.nova/externals/   #external products location
+\end{verbatim}
+\noindent
+To copy a new release directly from Jenkins there is a useful bash function:
+\begin{verbatim}
+nova_cvmfs_copy_release_from_jenkins $release $os $buildnum
+\end{verbatim}
+Where \verb|release| = \verb|SYY-MM-DD|, \verb|os| = \verb|slf5| or \verb|slf6| and \verb|buildnum| = Jenkins build output number for this \verb|release| / \verb|os| combination.
+\noindent
+In order to find the correct build number, either go to the Jenkins build master page, navigate to the \novas tab, find the release build output job for the \verb|os| in question, then click through the build numbers until you identify the correct one (it will have produced tar balls containing the release in question).
+\noindent
+The other option is to us the function"
+\begin{verbatim}
+nova_cvmfs_get_jenkins_build_number $release $os
+\end{verbatim}
+\noindent
+This essentially copies across a file from \verb|novabuild01| that is populated by \verb|get_jenkins_release.sh| when a new release is downloaded (and since that is run as a cronjob every 5 minutes it will have a record of all new releases very soon after they are available) and \verb|grep|s for the release.\\
+
+Now publish the updated `repository' to create a new `image'
+
+\begin{verbatim}
+osg-oasis-update
+\end{verbatim}
+
+\subsection{FNAL CVMFS Publishing Details}
+An important note - this server MUST be put into a `transaction' before anything is added, removed or altered in the \novas `repository' (meaning the location on the server in which we maintain our files / builds).
+\noindent
+Log in to the FNAL CVMFS server:
+
+\begin{verbatim}
+ssh -l cvmfsnova oasiscfs.fnal.gov
+\end{verbatim}
+\noindent
+The base directory of the \novas CVMFS `repository' (this is what the `image' is created from), the location of \verb|SLF5| and \verb|SLF6| software, as well as external products are:
+
+\begin{verbatim}
+/cvmfs/nova.opensciencegrid.org/                        #base directory 
+/cvmfs/nova.opensciencegrid.org/novasoft/slf5/novasoft/ #SLF5
+/cvmfs/nova.opensciencegrid.org/novasoft/slf6/novasoft/ #SLF6
+/cvmfs/nova.opensciencegrid.org/externals               #external products
+\end{verbatim}
+\noindent
+First put the server into `transaction':
+\begin{verbatim}
+nova_cvmfs_transaction
+\end{verbatim}
+\noindent
+Then make changes to the repository. For example copy across a new release:
+\begin{verbatim}
+nova_cvmfs_copy_release_from_jenkins $release $os $buildnum
+\end{verbatim}
+\noindent
+Find the correct build number
+\begin{verbatim}
+nova_cvmfs_get_jenkins_build_number $release $os
+\end{verbatim}
+\noindent
+Finally publish the new look `repository' to create a new `image':
+\begin{verbatim}
+nova_cvmfs_publish
+\end{verbatim}
+
+
+\subsection{Oasis CVMFS login}
+Oasis is the gateway server of the Open Science Grid where our CVMFS distribution of the \nova Soft is housed. Secure access is provided by a proxy certificate.
+
+\subsubsection{Getting You Own Certificate}
+To be able to log on to the oasis server, you will require a p12 certificate issued by OSG.org. To apply for one, complete a certificate request on \url{https://oim.grid.iu.edu/oim/home}. list your VO as Fermilab and Andrew Norman (anroman@fnal.gov) as your sponsor or VO Manager. State in the comments section that you are requesting a certificate to access the oasis server, and that you need to do that to update software required for NOvA's offsite processing needs.
+
+Once the vertificate is issued, you should receive an email notification with a link from where the certificate may be downloaded. Put this certificate in the \verb|~/.globus| directory on \verb|novabuild01.fnal.gov|. Rename is to usercert.p12 and change its permission to 400 (\verb|chmod 400 ~/.globus/usercert.p12|). Now you should be able to use voms with your certificate.
+
+\subsubsection{Logging in}
+
+Firstly a valid certificate must be created:
+
+\begin{verbatim}
+voms-proxy-init -rfc -hours 72
+\end{verbatim}
+
+
+The user should now be able to log in using the gsi suite of tools:
+\begin{verbatim}
+gsissh oasis-login.opensciencegrid.org
+\end{verbatim}
+
+Note that a user can't just \verb|scp| content to the Oasis server. Instead they must use \verb|gsiscp| which has very similat functionality, but uses certificates for authentication.
+
+
+\subsection{FNAL CVMFS login}
+You simply have to add a new users' FNAL login to the \verb|.k5login| on the FNAL CVMFS server. For example, adding Jonathan Davies (user \verb|jpdavies@FNAL.GOV|):
+\begin{verbatim}
+ssh -l cvmfsnova oasiscfs02.fnal.gov
+echo jpdavies@FNAL.GOV >> ~/.k5login
+\end{verbatim}
+
+
+
+\subsection{Testing from a GPVM node}
+
+
+Setup function defined for both servers:
+\begin{verbatim}
+  function setup_nova {
+    source $CVMFS_DISTRO_BASE/novasvn/srt/srt.sh
+    export EXTERNALS=$CVMFS_DISTRO_BASE/externals
+    source $SRT_DIST/setup/setup_novasoft_cvmfs.sh "$@"
+    cd $SRT_PUBLIC_CONTEXT
+    echo "Working directory: $PWD"}
+\end{verbatim}
+
+
+
+\section{Doxygen}
+Doxygen (\url{http://www.stack.nl/~dimitri/doxygen/}) is distributed under the GNU GPL and is what we use to generate, and navigate, the documentation of our source code \url{http://nusoft.fnal.gov/nova/novasoft/doxygen/html/index.html}. It also includes source code from NuTools, GEANT, and ART. Keep reading to find out how to include other directories as well.
+
+\subsection{How it works}
+There is a cronjob that runs, on \verb|novagpvm05| under \verb|novasoft|, at 2:15am every day to generate the webpage. The script is \verb|SRT_NOVA/scripts/update_nova_doxygen|, which sets up the environment to use certain variables and then runs the doxygen binary:\\ \verb|/grid/fermiapp/nova/novaart/doxygen/doxygen-1.7.5.1/bin/doxygen| over the configuration file:\\
+\verb|/grid/fermiapp/nova/novaart/doxygen/novadox|, which is committed to the repository and located in: \verb|SRT_NOVA/scripts|. Any changes to the configuration file in the doxygen folder should be propagated to this version controlled file and committed to the repository.
+
+A few important section are highlighted below. The file is well commented and easy to skim.
+\begin{center}
+  \begin{tabular}{|l|c|}
+    \hline
+    Line(s) & Topic \\
+    \hline
+    29 & PROJECT\_NAME = NOvA \\
+    122-138 & Pathname processing \\
+    658-665 & Input directories \\
+    683 & Which files to include \\
+    697 & Which folders to exclude \\
+    869-1218 & HTML settings \\
+    1227-1317 & LaTex settings \\
+    \hline
+  \end{tabular} 
+\end{center}
+
+The front page is formatted with a script that lives in the Utilities package called \verb|doxymain.h| and could use some work.
+
+After the generation script has finished running, the old html code is deleted from the webserver and the new one copied into place. The webserver location is accessible from any FNAL machine that has the \verb|if-nas-0.fnal.gov:/nusoft/app| area mounted on it and is:\\ \verb|/nusoft/app/web/htdoc/nova/novasoft/doxygen|
+
+
+\section{Responsibilities}
+What follows is a list of responsibilities the Offline Software (\nova Soft) coordinator has undertaken.
+\begin{itemize}
+\item Provide an environment conducive to developing Offline Software code
+\item Tag releases periodically to provide a stable environment in which features can be tested and validated
+\item Tag releases for Control Room usage (Online Monitoring and Event Display)
+\item Tag releases for file production purposes
+\item Keep abreast of changes of the underlying framework (new version of ART)
+\item Keep abreast of changes of other underlying products, including:
+  \begin{itemize}
+  \item Online Products
+  \item DDT Products
+  \item NuSoft Products
+  \item IFDH products
+  \item IFBEAM product
+  \item JobSub Tools   
+  \end{itemize}
+\item Coordinate large scale changes of the software among developers (how services are handled, how the database is contacted)
+\item Keep the CVMFS servers up to date with the latest tags and external products
+\item Review usage of \verb|novagpvm| machines
+\end{itemize}
+
+
+\section{Outstanding Issues}
+\begin{itemize}
+\item Flip flop build
+\item Improve validation of build
+\item SLF6 compile issues
+\item Split data products from modules and services
+\item Push development releases to CVMFS servers automatically when build was successful and test job completed without errors
+\item CMake instead of GMake system
+\end{itemize}
+
+
+\section{Jonathan's Extra Tools}
+
+I (Jonathan) found that some tasks were unnecessarily laborious, so I wrote some functions to do things. Feel free to nick them, or not (put them in your \verb|.bashrc|, \verb|.bash_profile| or in a file then source that file.
+
+
+\begin{verbatim}
+#Set svn repository locations                                                                                        
+export CVSROOT_OFF=svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn
+export CVSROOT_OFF_HTTP=http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn
+export CVSROOT_OFF_HTTPS=https://cdcvs.fnal.gov/subversion/novaart.pkgs.svn
+
+#Do svn info on all the directories contained within <dir>
+function svn-info(){
+
+    if [ "$1" == "" ]
+        then
+        echo "usage: svn-info <dir>" >&2
+        return 1
+    fi
+    base_dir=`readlink -f $1`
+    original_dir=`pwd`
+
+    for dir in ${base_dir}/*
+      do
+      if [ -d $dir ] && [ -e $dir/.svn ];then
+          cd $dir
+          LINES=`svn info | wc -l`
+          if [ $LINES -gt 0 ];then
+              echo "Directory $dir"
+              svn info
+          fi
+          cd $base_dir
+      fi
+    done
+    cd $base_dir
+    cd $original_dir
+    return 0
+}
+
+#Do svn status on all the directories contained within <dir>
+function svn-status(){
+
+    if [ "$1" == "" ]
+        then
+        echo "usage: svn-status <dir>" >&2
+        return 1
+    fi
+    base_dir=`readlink -f $1`
+    original_dir=`pwd`
+
+    for dir in ${base_dir}/*
+      do
+      if [ -d $dir ] && [ -e $dir/.svn ];then
+          cd $dir
+          LINES=`svn status | wc -l`
+          if [ $LINES -gt 0 ];then
+              echo "Directory $dir"
+              svn status
+          fi
+          cd $base_dir
+      fi
+    done
+    cd $base_dir
+    cd $original_dir
+    return 0
+}
+
+#Switch a local svn directory from HTTP to svn+ssh and visa-versa
+#You can't commit from the HTTP version, so I find this useful to enable a commit from an HTTP checkout
+function svn-switch(){
+
+    if [ "$1" == "" ]
+        then
+        echo "usage: svn_switch <dir>" >&2
+        return 1
+    fi
+    dir=$1
+    SOURCE=`svn info $dir | grep "URL:"`
+    SOURCE=${SOURCE#URL: *}
+
+    if [[ $SOURCE == *${CVSROOT_OFF}* ]]
+        then
+        THIS_REPO=$CVSROOT_OFF
+        DIR=${SOURCE#svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn}
+        cd $dir;svn switch --relocate ${THIS_REPO}${DIR} ${CVSROOT_OFF_HTTP}${DIR}; cd -
+    elif [[ $SOURCE == *${CVSROOT_OFF_HTTP}* ]]
+        then
+        THIS_REPO=$CVSROOT_OFF_HTTP
+        DIR=${SOURCE#http://cdcvs.fnal.gov/subversion/novaart.pkgs.svn}
+        cd $dir; svn switch --relocate ${THIS_REPO}${DIR} ${CVSROOT_OFF}${DIR}; cd -
+    else
+        echo "Failed to identify svn source URL" >&2
+        return 1
+    fi
+    return 0;
+}
+
+#Use UPS to show a full dependency tree for a particular release (i.e. all the products that would be setup)
+function ups-depend(){
+
+    if [ "$1" == "" ] || [ -z $UPS_DIR ] ;then
+        echo "Usage: ups-depend <release>" >&2
+        echo "You must set up UPS first" >&2
+        return 1
+    fi
+
+    local release=$1
+    local externals_file=/grid/fermiapp/nova/novaart/novasvn/setup/nova-offline-ups-externals-$release
+    if [ ! -e  $externals_file ];then
+        echo "release $release externals file not found" >&2
+        echo "externals_file $externals_file" >&2
+        return 1
+    else
+
+        while read line
+        do
+          ups depend $line
+        done < $externals_file
+    fi
+
+
+
+    return 0
+
+}
+
+#Speed up back-porting
+function back-port(){
+
+    if [ "$1" == "" ] || [ "$2" == "" ] || [ "$3" == "" ] || [ "$4" == "" ]
+	then
+        echo "Usage: back-port <source> <destination> <file> <message>"
+	echo "This command will just echo a line that you should run"
+
+        return 1;
+    fi
+    source_release=$1
+    dest_release=$2
+    file=$3
+    message=$4
+
+#    echo source_release $source_release                                                                             
+#    echo dest_release $dest_release                                                                                 
+#    echo file $file                                                                                                 
+
+    echo "svn rm $CVSROOT_OFF/$dest_release/$file -m \"Backport incoming\";"
+    echo "svn cp $CVSROOT_OFF/$source_release/$file $CVSROOT_OFF/$dest_release/$file  -m \"$message\""
+
+    unset message
+    unset file
+    unset index
+    unset arg
+    unset source_release
+    unset dest_release
+
+    return 0
+
+}
+\end{verbatim}
+
+
+
+\end{document}

@@ -1,0 +1,44 @@
+condb		 v2_0b
+nutools          v1_21_11    -q+prof:+e9
+genie_phyopt	 v2_12_0     -q+dkcharmtau
+genie_xsec	 v2_12_0     -q+DefaultPlusMECWithNC
+genie_fluxopt    v17_03_14a  -q+nova
+ppfx             v01_09_b    -q+prof:+e9:+r5
+ifdh_art         v2_01_00    -q+prof:+e9:+s28:+nu
+psycopg2	 v2_5_p2_7
+totalview	 v8_15_0
+novaddt          v12_00_00   -q+e9:+prof:+s28
+fife_utils
+gdb		 v7_8
+valgrind	 v3_11_0
+eid		 v01.00
+lemlittle	 v01.03
+ncid             v01.02
+qepid		 v01.01
+remid		 v01.03
+rvp		 v01.00
+ucana		 v01.07
+nuecosrej        v01.01
+nuededx          v01.01
+nuone            v01.02
+monopoleid       v01.00
+lid		 v01.03
+cvn    		 v01.04
+cvnprong         v01.00
+cvnreg           v01.01
+FCHelperAna2017  v01.02
+calibfixnd       v01.00
+xsecccpi0inc     v01.01
+xsecncpi0        v01.04
+calibcsvs	 v12.06
+bpf              v02.01
+gibuu_libs       v00.01
+NovaGridUtils
+novaproduction
+library_shim
+fann             v2_2_0f     -q:e9:+prof
+caffe            v1_0        -q+e9:+prof
+ccache           v03.03.03
+pyyaml           v3_12
+xgboost          v0.60
+wsnumu           v01.00

@@ -1,0 +1,219 @@
+#!/bin/bash
+
+if [ -z "$EXTERNALS" ]; then
+    echo 'Please set the $EXTERNALS environmental variable before running this script.'
+    echo 'If you are using this script as a first time import of externals make youreself a directory and set the $EXTERNALS variable.'
+    exit 1
+fi
+
+# An offsite maintainer might have a different local username than the FNAL kerberos principal
+# Can change this variable to allow kerberized scp
+script_user=`whoami`
+novavmhost='novagpvm04.fnal.gov'
+fnalvm="$script_user@$novavmhost"
+
+cd ${EXTERNALS}
+mkdir tars
+cd tars
+
+# get the pull script
+wget http://scisoft.fnal.gov/scisoft/bundles/tools/pullProducts
+chmod +x pullProducts
+
+for os in slf6;
+do
+  for build in debug prof
+    do
+    ./pullProducts ${EXTERNALS} ${os} nu-v1_21_01 s28-e9 ${build}
+  done
+done
+
+# pull novadaq tars
+remote_location=http://scisoft.fnal.gov/scisoft/packages/novadaq/v10_01_00
+for os in slf6
+do
+  for build in debug prof
+  do
+    cd ${EXTERNALS}/tars
+    tarball=novadaq-10.01.00-${os}-x86_64-e9-${build}.tar.bz2
+    if [ ! -e $tarball ];then
+      wget ${remote_location}/${tarball}
+      cd ${EXTERNALS}
+      tar xf tars/${tarball}
+    fi
+  done
+done
+
+# pull novadaqdeps
+remote_location=http://scisoft.fnal.gov/scisoft/packages/novadaqdeps/v02_04_02
+cd ${EXTERNALS}/tars
+tarball=novadaqdeps-02.04.02-noarch.tar.bz2
+if [ ! -e $tarball ];then
+  wget ${remote_location}/${tarball}
+  cd ${EXTERNALS}
+  tar xf tars/${tarball}
+fi
+
+# pull novaddt tars 
+remote_location=http://scisoft.fnal.gov/scisoft/packages/novaddt/v04_00_09
+for os in slf6
+do
+  for build in debug prof
+  do
+    cd ${EXTERNALS}/tars
+    tarball=novaddt-04.00.09-${os}-x86_64-e9-s28-${build}.tar.bz2
+    if [ ! -e $tarball ];then
+      wget ${remote_location}/${tarball}
+      cd ${EXTERNALS}
+      tar xf tars/${tarball}
+    fi
+  done
+done
+
+# pull novaddtdeps
+remote_location=http://scisoft.fnal.gov/scisoft/packages/novaddtdeps/v02_00_07
+cd ${EXTERNALS}/tars
+tarball=novaddtdeps-02.00.07-noarch.tar.bz2
+if [ ! -e $tarball ];then
+    wget ${remote_location}/${tarball}
+    cd ${EXTERNALS}
+    tar xf tars/${tarball}
+fi
+
+# pull Valgrind
+for os in slf6
+do
+  remote_location=http://scisoft.fnal.gov/scisoft/packages/valgrind/v3_11_0
+  tarball=valgrind-3.11.0-${os}-x86_64.tar.bz2
+  cd ${EXTERNALS}/tars
+  if [ ! -e $tarball ];then
+    wget ${remote_location}/${tarball}
+    cd ${EXTERNALS}
+    tar xf tars/${tarball}
+  fi
+done
+
+
+
+# pull Caffe
+
+for os in slf6;
+do
+  for build in debug prof
+  do
+      cd ${EXTERNALS}/tars
+      ./pullProducts ${EXTERNALS} ${os} caffe-v1_00_02 e9 ${build}
+  done
+done
+
+# pull fann tars
+remote_location=http://scisoft.fnal.gov/scisoft/packages/fann/v2_2_0f
+for os in slf6
+do
+  for build in debug prof
+  do
+    cd ${EXTERNALS}/tars
+    tarball=fann-2.2.0f-${os}-x86_64-e9-${build}.tar.bz2
+    if [ ! -e $tarball ];then
+      wget ${remote_location}/${tarball}
+      cd ${EXTERNALS}
+      tar xf tars/${tarball}
+    fi
+  done
+done
+
+# pull cppcheck v1_63
+if [ ! -e ${EXTERNALS}/cppcheck/v1_63 ];then
+
+    cd ${EXTERNALS}/tars
+    tarball=cppcheck-v1_63.tar.gz
+    wget http://nusoft.fnal.gov/nova/users/jpdavies/$tarball
+    cd ${EXTERNALS}
+    tar -xf tars/${tarball}
+
+fi
+
+# pull psycopg2 v2_5_p2_7
+if [ ! -e ${EXTERNALS}/psycopg2/v2_5_p2_7 ];then
+
+    cd ${EXTERNALS}/tars
+    tarball=psycopg2_v2_5_p2_7.tar.bz2
+    wget http://nusoft.fnal.gov/nova/users/jpdavies/$tarball
+    cd ${EXTERNALS}
+    tar -xf tars/${tarball}
+
+fi
+
+cd $EXTERNALS
+
+# First time install should first download upd product
+# Used to be part of the ups install, probably an oversight in the newest version.
+if [ ! -d "upd" ]; then
+  cd ${EXTERNALS}/tars
+  remote_location=http://scisoft.fnal.gov/scisoft/packages/upd/v5_0_1
+  tarball=upd-5.0.1-noarch.tar.bz2
+  if [ ! -e $tarball ];then
+    wget ${remote_location}/${tarball}
+    cd ${EXTERNALS}
+    tar xf tars/${tarball}
+  fi
+
+  cd ${EXTERNALS}/tars
+  remote_location=http://scisoft.fnal.gov/scisoft/packages/upd/v5_0_1
+  tarball=upd-5.0.1-source.tar.bz2
+  if [ ! -e $tarball ];then
+    wget ${remote_location}/${tarball}
+    cd ${EXTERNALS}
+    tar xf tars/${tarball}
+  fi
+
+  cd $EXTERNALS
+
+  tar xf tars/upd-5.0.1-source.tar.bz2
+fi
+
+
+
+source $EXTERNALS/setup
+setup upd
+
+echo "Installing products via UPD"
+
+upd install lid		                       v01.03  #Bumped to v01.03 on 2016/02/10
+upd install eid		                       v01.00
+upd install hmatrix	                       v01.00
+upd install lemlittle	                       v01.03  #Bumped to v01.03 on 2015/05/18
+upd install qepid	                       v01.01
+upd install remid	                       v01.02
+upd install ucana	                       v01.03
+upd install rvp                                v01.00
+upd install calibcsvs                          v09.03
+upd install -G "-c" sam_web_client             v2_0
+upd install -G "-c" fife_utils                 v2_8
+upd install         jobsub_client              v1_2
+upd install condb                              v2_0b
+upd install -G "-c" NovaGridUtils              v01.74
+upd install -G "-c" novaproduction             v01.21
+upd install -G "-c" library_shim               v03.02
+upd install         FANN v2.2.0f -f Linux64bit+2.6-2.5
+upd install         FANN v2.2.0f -f Linux64bit+2.6-2.12
+upd install         bpf                        v01.00
+
+
+#jobsub_client seems to use a non-standard way to require pycurl, hence the upd install does not pull
+#pycurl in as dependency
+#manually install them
+upd install -G "-c" pycurl v7_15_5 -H Linux64bit+2.6-2.5
+upd install -G "-c" pycurl v7_16_4 -H Linux64bit+2.6-2.12
+
+
+#JPD - We need to make sure that the versions of products we try to declare as current are in fact declared as current
+#source ${EXTERNALS}/setup #No need to do this, we already setup in the UPD stage
+
+echo "Setting \"current\" versions of products in local UPS database"
+ups declare -c  sam_web_client              v2_0
+ups declare -c  fife_utils                  v2_8
+ups declare -c  jobsub_client               v1_2
+ups declare -c  NovaGridUtils               v01.74
+ups declare -c  novaproduction              v01.21
+ups declare -c  library_shim                v03.02

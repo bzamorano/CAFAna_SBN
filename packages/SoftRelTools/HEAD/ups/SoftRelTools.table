@@ -1,0 +1,22 @@
+File       = Table
+Product    = SoftRelTools
+Flavor     = ANY
+Qualifiers = ""
+
+Action     = SETUP
+proddir()
+setupenv()
+pathprepend(PATH, ${UPS_PROD_DIR}/scripts)
+addalias(srt_setup,'${UPS_SOURCE} `srt_environment -X --${UPS_SHELL} %s`')
+execute(srt_setup, UPS_ENV)
+# srt_setup will not see specializations the first time it is run.
+# Running it a second time ensures specializations are taken into account.
+execute(srt_setup, UPS_ENV)
+
+
+Action     = UNSETUP
+execute(${UPS_SOURCE} `srt_environment -X --${UPS_SHELL} --unsetup` , UPS_ENV)
+unalias(srt_setup)
+pathremove(PATH, ${UPS_PROD_DIR}/scripts)
+unsetupenv()
+unproddir()

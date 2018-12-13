@@ -1,0 +1,97 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : FA15-01-12
+Alignment           : FA15-01-12
+BNBInfo		    : FA15-01-12
+BreakPointFitter    : FA15-01-12
+BremShowerFilter    : FA15-01-12
+CAFAna              : FA15-01-12
+CAFMaker            : FA15-01-12
+CAFReweight         : FA15-01-12
+CalHit              : FA15-01-12
+Calibration         : FA15-01-12
+CalibrationUtils    : FA15-01-12
+CalibrationDataProducts : FA15-01-12
+Calibrator          : FA15-01-12
+CellToCell          : FA15-01-12
+ChannelInfo         : FA15-01-12
+ClusterMakerSS      : FA15-01-12
+CMap                : FA15-01-12
+Commissioning       : FA15-01-12
+CosmicExposureInfo  : FA15-01-12
+CosRej              : FA15-01-12
+DAQ2RawDigit        : FA15-01-12
+Database	    : FA15-01-12
+DDTConverters       : FA15-01-12
+Demo		    : FA15-01-12
+DetectorPerformance : FA15-01-12
+DiscreteTracker     : FA15-01-12
+DQSpillFlags        : FA15-01-12
+DSOResultPlotter    : FA15-01-12
+ElasticArms         : FA15-01-12
+Eval	            : FA15-01-12
+EventDisplay        : FA15-01-12
+EventGenerator      : FA15-01-12
+EventSummary        : FA15-01-12
+FEBFlashFilter      : FA15-01-12
+Filter              : FA15-01-12
+FLUGGValidation     : FA15-01-12
+FuzzyKVertex        : FA15-01-12
+g4nova              : FA15-01-12
+Geometry            : FA15-01-12
+GeometryObjects     : FA15-01-12
+HMatrixE            : FA15-01-12
+HoughTransform      : FA15-01-12
+IFDBSpillInfo       : FA15-01-12
+#KalmanFilter3D      : FA15-01-12
+LEM                 : FA15-01-12
+MCCheater           : FA15-01-12
+MCCheckOut          : FA15-01-12
+Metadata            : FA15-01-12
+MichelEFilter       : FA15-01-12
+MockDataDAQ         : FA15-01-12
+MultiProngNeutrinoSearch : FA15-01-12
+MuonRemove	    : FA15-01-12
+NCAna               : FA15-01-12
+NovaFTS             : FA15-01-12
+NovaSimMixer        : FA15-01-12
+NueSandbox          : FA15-01-12
+NuMuBDTSelector     : FA15-01-12
+NumuEnergy          : FA15-01-12
+NumuSandbox         : FA15-01-12
+OnlineMonitoring    : FA15-01-12
+OscLib              : FA15-01-12
+PhotonTransport     : FA15-01-12
+Preselection        : FA15-01-12
+Production          : FA15-01-12
+QEEventFinder       : FA15-01-12
+RawData             : FA15-01-12
+ReadoutSim          : FA15-01-12
+RecoBase            : FA15-01-12
+RecoBaseHit         : FA15-01-12
+RecoJMShower        : FA15-01-12
+RecVarPID           : FA15-01-12
+ReMId               : FA15-01-12
+RunHistory	    : FA15-01-12
+ShowerAna           : FA15-01-12
+ShowerLID           : FA15-01-12
+Simulation          : FA15-01-12
+Slicer              : FA15-01-12
+SRT_NOVA            : FA15-01-12
+StandardRecord      : FA15-01-12
+SummaryData         : FA15-01-12
+TimingFit           : FA15-01-12
+TrackFit            : FA15-01-12
+Utilities           : FA15-01-12
+Validation          : FA15-01-12
+VertexFinder        : FA15-01-12
+ZukCluster          : FA15-01-12
+#
+# setup package
+#
+setup               : FA15-01-12

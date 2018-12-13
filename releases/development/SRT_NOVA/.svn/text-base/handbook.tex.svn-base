@@ -1,0 +1,227 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[usenames]{color}
+%\usepackage[utf8]{inputenc}
+%\usepackage[english]{babel}
+\usepackage{ mathrsfs }
+\usepackage{cmap}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{afterpage}
+\usepackage{colortbl}
+\usepackage[table,x11names,dvipsnames,table]{xcolor}
+\usepackage{colortbl}
+\usepackage{url}
+
+\setcounter{tocdepth}{2}
+\title{NOvA Release Manager Handbook for Beginners}
+\author{Liudmila Kolupaeva}
+\date{February 2018}
+\usepackage{float}
+\pagestyle{plain}
+\begin{document}
+\maketitle
+\begin{abstract}
+I hope this document will be helpful for the newly come release managers, but I strongly encourage you to read the main documentation. Some part of it was made while Tomas  training; and another part is just my own notes, that were taken while conversations with our software experts during my service. \\
+Please, feel free to add any useful information that you think should be here.
+\end{abstract}
+\tableofcontents 
+
+\section*{Accounts and certificates}
+\addcontentsline{toc}{section}{Accounts and certificates}
+These items are necessary for the works:\\
+\begin{itemize}
+\item  To access Jenkins from offsite, you need to be connected to Fermilab via vpn (for example CISCO’s AnyConnect ).  You also need a CILogon certificate, which you should import into your browser (there are straightforward instructions at \url{https://web.fnal.gov/collaboration/DUNE/SitePages/Get%20a%20CI%20Logon%20Certificate.aspx}.)  
+\item Add new manager kerberos principal to the  \verb|~novasoft/.k5login| at \\ novasoft@novabuild01.fnal.gov machine.
+The cvmfsnova@oasiscfs.fnal.gov machine instruction is in the box after entering, same for cvmfsnovadev (people who are already in the list: dwd, nostom66, lkolupae, ahimmel, anorman, bzamoran, dpershey, gsdavies, ksachdev, jwolcott, bckhouse, karlwarb).
+\item Open Jenkins ticket in \url{https://fermi.service-now.com/nav_to.do?uri=service_offering.do?sys_id=9021b8ef6f0a6200000131012e3ee4a1%26sysparm_view=ess}
+ to get permissions to run the builds
+\item Include new release manager to the \verb|/cvs/projects/novaart/pkgs.svn/hooks/pre-commit| at p-novaart@cdcvs.fnal.gov to give permissions to commit to the tags/
+\item Open a ticket to ask permissions for creation the upd/ups products and adding them to the upd base
+\end{itemize}
+\section*{Snapshots, releases, branches}
+\addcontentsline{toc}{section}{Snapshots, releases, branches}
+
+\subsection*{By-weekly snapshot}
+\addcontentsline{toc}{subsection}{By-weekly snapshot}
+
+\quad Starting with the build machine and special dir for all tag cutting stuff: \\
+\ \\
+\verb|ssh novasoft@novabuild01.fnal.gov|\\
+\verb|cd /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/tagging_releases|\\
+
+Use \verb|create_release_svn_files.sh| script with arguments:\\
+\ \\
+\verb|./create_release_svn_files.sh -r Syy-mm-dd -t tempLocation -n "Cool name"|\\
+e.g.:\\
+\verb|./create_release_svn_files.sh -r S17-05-31 -t ~/temp/tagging|\\
+ \verb| -n "Madame Chien-Shiung Wu"|\\
+
+Go to the Jenkins site, use project \verb|nova_SRT_slf6_release_build|, option ``Build with parameters'', arguments:\\
+\ \\
+\verb|Release: Syy-mm-dd| (e.g. S17-05-31)\\
+\verb|Branch: False| ( that's tag :) )\\
+ \verb|MTHREADED: True|\\
+ 
+It takes about 1 hour, relax.
+
+When the build is completed,  you need to copy the release to the gpvm and cvmfs. \\
+To copy release on gpvm, on the same novabuild01 machine:\\
+\ \\
+\verb|cd /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/jenkins_builds|\\
+\verb|./get_release_from_jenkins.sh -o slf6 -r Syy-mm-dd -n num -fx|\\
+e.g.:\\
+\verb|./get_release_from_jenkins.sh -o slf6 -r S17-03-16 -n 214 -fx|\\
+\ \\
+Take the build output number in the Jenkins project.\\
+For publishing on gpvm: \\
+\ \\
+\verb|cd /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/tagging_releases|\\
+\verb|./clean_up_rel_send_to_gpvm.sh -r Syy-mm-dd -o slf6|\\
+e.g.:
+\verb|./clean_up_rel_send_to_gpvm.sh -r S17-03-16 -o slf6|\\
+\ \\
+To copy release to the cvmfs:\\
+ \verb|ssh cvmfsnova@oasiscfs.fnal.gov|\\
+ Open the transaction:
+\verb|nova_cvmfs_transaction|\\
+Run function copying from Jenkins:\\
+\verb|nova_cvmfs_copy_release_from_jenkins Syy-mm-dd slf6 num|\\
+e.g.:\\
+\verb|nova_cvmfs_copy_release_from_jenkins S17-03-16 slf6 214|\\
+And publish:
+\verb|nova_cvmfs_publish|\\
+
+Well done! Don't forget to write the letter to the users and a note on the wiki page.
+
+\subsection*{Branch}
+\addcontentsline{toc}{subsection}{Branch}
+
+Start on the same build machine (novabuild01.fnal.gov)\\
+\ \\
+\verb|cd /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/tagging_releases|\\
+\ \\
+Use \verb|create_newBranch_svn_files.sh| script.\\
+This is quite flexible script, it is used for creating the branch from the trunk/ and tags in branches as well, the only difference is in the \verb|-c| argument. Actually, you can modify it in the way you want, e.g. to copy branch to branch, tag to branch etc. It will automatically care about all setup script stuff.\\
+Back to the branch creation: if you don't use \verb|-c| argument it will be a branch.\\
+For example:\\
+\ \\
+\verb|./create_newBranch_svn_files.sh -r R17-11-14-prod4reco-br -n ``Treasure Island''|\\
+\verb| -t ~/temp/tagging/|\\
+\ \\
+For making a branch you don't need to build anything on Jenkins and copy to the gpvm/cvmfs.
+
+\subsection*{Tag in Branch}
+\addcontentsline{toc}{subsection}{Tag in Branch}
+Follow the instructions for ordinary trunk snapshot, but to cut the tag use\\
+\verb|create_newBranch_svn_files.sh| with  \verb|-c| argument with source branch name.\\
+For example:\\
+\ \\
+\verb|./create_newBranch_svn_files.sh -r R17-03-01-prod3reco.f -n ``FDR'' |\\
+\verb|-t ~/temp/tagging -c R17-03-01-prod3reco-br|\\
+\ \\
+All further steps (build and copy to gpvm and cvmfs) are the same as in the first section.
+
+
+\subsubsection*{What if the commit is in the trunk, but not in the branch}
+\addcontentsline{toc}{subsubsection}{If the commit is in the trunk, but not in the branch}
+Follow the instruction here:\\
+\url{https://cdcvs.fnal.gov/redmine/projects/novaart/wiki/Merge_from_the_Trunk}\\
+and work with the latest release in branch.\\
+One more option is switching between svn projects. If you need to commit into CAFMaker from some branch for example, take arbitrary release (for example development), go to the package (CAFMaker) and do:\\
+\verb|svn switch svn+ssh://p-novaart@cdcvs.fnal.gov/cvs/projects/novaart/pkgs.svn/|\\
+\verb|branches/R17-03-01-prod3reco-br/CAFMaker|\\
+
+
+\subsection*{Control Room tag}
+\addcontentsline{toc}{subsection}{Control Room tag}
+
+Sometimes CR experts ask release manager to make a CR tag. They provide new CR software versions  (for example new DDT and DAQ), all other parts are as in the ordinary trunk/ snapshot.
+
+New versions of these UPS products wait you on scisoft. You will need novaddt, novaddtdeps, novadaq, novadaqdeps. Download and install them with wget and url from the scisoft. Copy them to the externals (\verb|$EXTERNALS|) for gpvm. You can check them in the ups base, use:\\
+ \verb|ups list -aK+ novaddt version| \\
+ For setting it as a current version do:\\
+  \verb|setup novaddt version -q qualifier|\\
+  For installation the products on cvmfs do the same procedure, but the externals area on cvmfs is  /cvmfs/nova.opensciencegrid.org/externals.\\
+ You can check the soft consistency between new products and development by using the script \verb|check_ups_dependencies|, which is in \verb|SRT_NOVA/scripts/|. The usage is the next:\\
+  \verb|/check_ups_dependencies nova-offline-ups-externals-development (-prof)|\\
+But you need to replace the versions in setup script by the new novaddt et al. versions.\\
+If there is any inconsistency there will be like  \verb|error/conflict| in the output.\\
+Change the novaddt version in trunk and cut the tag with the name \verb|CR-xx-xx| but don't build it.\\
+Don't forget to create the file \verb|trunk/SRT_NOVA/scripts/install_scripts/install_nova_externals_CRxx-xx-xx|\\
+With all new product versions. Ask CR experts for the list of products needed. 
+You need to reduce  \verb|trunk/setup/nova-offline-ups-externals-CRxx-xx-xx| as well to the list of CR necessary products and the same for the file \verb|packages-CR-xx-xx|.\\
+Modify the trunk files and files inside the tag. Then build CRxx-xx-xx on Jenkins with reduced number of products, it won't take much time. No need to copy tag on cvmfs and gpvm, just be sure that there are no issues with build, in case of trouble update the setup files, packages for example.\\
+Cut the S snapshot at the same point  as CR, this tag should contain all products from development, make \verb|trunk/SRT_NOVA/scripts/install_scripts/install_nova_externals_Sxx-xx-xx| for this tag too.
+Build and distribute the Sxx-xx-xx on gpvm and cvmfs.
+ 
+
+
+\subsection*{Development}
+\addcontentsline{toc}{subsection}{Development}
+In case of development issues, find out the fault commit, fix the issue or contact the people who did it. Then run build on Jenkins in project \verb|nova_SRT_slf6_nightly_build|.\\
+There is the only parameter there:\\
+multi-threading  - true\\
+Copy from Jenkins and copy to the gpvm as ordinary snapshot, but \verb|-r development| and parameter \verb|-f| for replacing the current development.\\
+\ \\
+Every night development is distributed on cvmfs as well. It uses the crontab job which runs the \verb|crontab_run.sh|, makes the log file in \verb|devlogs/| and emails the log to the people in the list (release managers). The main function \\ \verb|nova_cvmfs_copy_development_from_jenkins()| is in the \verb|.bashrc|, it uses the input number for this day development from \verb|development_next_build_number|.
+
+
+\section*{UPS creation, downloading the software}
+\addcontentsline{toc}{section}{UPS creation, downloading the software}
+Useful:\\
+List available ups: \verb|ups list -aK+ product version| \\
+Setup any ups: \verb|setup product version -q qualifier|\\
+Setup from upd base: first of all  \verb|setup upd| then like for ups case \\
+Remove ups: \verb|upd delproduct productName version -f NULL|
+Delete the files in dir by hands.
+
+\subsection*{UPS:  NGU/novaproduction, PID library, Creating custom products }
+\addcontentsline{toc}{subsection}{UPS:  NGU/novaproduction, PID library, Creating custom products}
+The only thing I can say here - use amazing Gavin's guide, here:\\
+\url{https://cdcvs.fnal.gov/redmine/projects/novaart/wiki/Creating_UPS_products}
+
+\subsection*{Downloading from scisoft}
+\addcontentsline{toc}{subsection}{Downloading from scisoft}
+All availableproducts are on the site
+\url{http://scisoft.fnal.gov/scisoft/packages/}\\
+Login to gpvm and cvmfs, install with upd if it is possible or with wget with link to the product, unzip and put in the right place.
+Setup as ordinary ups product.
+
+\subsection*{Soft with manuscript}
+\addcontentsline{toc}{subsection}{Soft with manuscript}
+If the product has a manuscript it is placed on scisoft (\url{https://scisoft.fnal.gov/scisoft/bundles/})\\
+You should use \verb|pullProducts| script, topdir -  \verb|$EXTERNALS|\\, it's in the \verb|$EXTERNALS/temp|\\ for gpvm and in  \verb|/cvmfs/nova.opensciencegrid.org/externals| from cvmfs.
+
+
+\section*{Troubleshooting}
+\addcontentsline{toc}{section}{Troubleshooting}
+
+While \verb|create_release_svn_files.sh|:\\
+Possible issues:\\
+\verb|Warning: post-commit hook failed (exit code 1) with output:|\\
+ \verb| % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current|\\
+ \verb|                                Dload  Upload   Total   Spent    Left  Speed|\\
+\verb|100  8156    0     0  100  8156      0  74659 --:--:-- --:--:-- --:--:-- 1592k|\\
+\verb| curl: (22) NSS: client certificate not found (nickname not specified)|\\
+Solution  - unknown, but it is harmless
+\ \\
+\ \\
+While \verb|get_release_from_jenkins.sh| among the other output lines: \\
+   \verb|tar: CR17-07-15/lib/Linux2.6-GCC-debug/libRecoValidationTutorial_module.so: Cannot utime: No such file or directory|\\
+\verb|tar: Exiting with failure status due to previous errors|\\
+Just rerun the script, sometimes the same output is on cvmfs, be very careful with oasis machine, always carefully study the output, all changes will be impossible to change after publishing.\\
+For the same script:\\
+\verb|SETUP : Lock file "/nova/app/home/novasoft/.get_release_from_jenkins_lock_file_slf6" exists|\\
+Delete this file and run again\\
+\ \\
+Once I had a lack of space on gpvm and I needed to chack the usage of all releases and delete the unused onces. The script for this purpose is 
+\verb| /nova/app/home/novasoft/slf6/novasoft/releases/development/setup/datagram/check_release_usage.sh -r release|\\
+Example output: \verb|FA14-10-03 6 18| -- release, period (months), usage total\\
+\ \\
+In case of broken Doxygen:\\
+rerun the crontab job on  novagpvm09 login as novasoft user.\\
+
+
+\end{document}

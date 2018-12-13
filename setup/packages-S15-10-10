@@ -1,0 +1,95 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+ANG                 : S15-10-10
+AirShower           : S15-10-10
+Alignment           : S15-10-10
+BreakPointFitter    : S15-10-10
+BremShowerFilter    : S15-10-10
+CAFAna              : S15-10-10
+CAFMaker            : S15-10-10
+CAFReweight         : S15-10-10
+CalHit              : S15-10-10
+Calibration         : S15-10-10
+CalibrationUtils    : S15-10-10
+CalibrationDataProducts : S15-10-10
+Calibrator          : S15-10-10
+ChannelInfo         : S15-10-10
+ClusterMakerSS      : S15-10-10
+CMap                : S15-10-10
+Commissioning       : S15-10-10
+CosmicExposureInfo  : S15-10-10
+CosRej              : S15-10-10
+DAQ2RawDigit        : S15-10-10
+Database	    : S15-10-10
+DDTConverters       : S15-10-10
+Demo		    : S15-10-10
+DetectorPerformance : S15-10-10
+DiscreteTracker     : S15-10-10
+DiskUsage           : S15-10-10
+DQSpillFlags        : S15-10-10
+DSOResultPlotter    : S15-10-10
+ElasticArms         : S15-10-10
+Eval	            : S15-10-10
+EventDisplay        : S15-10-10
+EventGenerator      : S15-10-10
+EventSummary        : S15-10-10
+Filter              : S15-10-10
+FuzzyKVertex        : S15-10-10
+g4nova              : S15-10-10
+Geometry            : S15-10-10
+GeometryObjects     : S15-10-10
+HMatrixE            : S15-10-10
+HoughTransform      : S15-10-10
+HoughVertex         : S15-10-10
+IFDBSpillInfo       : S15-10-10
+LEM                 : S15-10-10
+MCCheater           : S15-10-10
+MCCheckOut          : S15-10-10
+Metadata            : S15-10-10
+MEFinder            : S15-10-10
+MichelEFilter       : S15-10-10
+MockDataDAQ         : S15-10-10
+MuonRemove	    : S15-10-10
+NDRockMuon          : S15-10-10
+NovaFTS             : S15-10-10
+NovaSimMixer        : S15-10-10
+NueSandbox          : S15-10-10
+NumuEnergy          : S15-10-10
+NumuSandbox         : S15-10-10
+OnlineMonitoring    : S15-10-10
+OscLib              : S15-10-10
+PhotonTransport     : S15-10-10
+Preselection        : S15-10-10
+Production          : S15-10-10
+QEEventFinder       : S15-10-10
+RawData             : S15-10-10
+ReadoutSim          : S15-10-10
+RecoBase            : S15-10-10
+RecoBaseHit         : S15-10-10
+RecoJMShower        : S15-10-10
+RecVarPID           : S15-10-10
+ReMId               : S15-10-10
+RunHistory	    : S15-10-10
+ShowerE             : S15-10-10
+ShowerLID           : S15-10-10
+Simulation          : S15-10-10
+Slicer              : S15-10-10
+SRT_NOVA            : S15-10-10
+StandardRecord      : S15-10-10
+SummaryData         : S15-10-10
+TimingFit           : S15-10-10
+TrackFit            : S15-10-10
+Utilities           : S15-10-10
+Validation          : S15-10-10
+VertexDT            : S15-10-10
+VertexFinder        : S15-10-10
+ZukCluster          : S15-10-10
+#
+# setup package
+#
+setup               : S15-10-10

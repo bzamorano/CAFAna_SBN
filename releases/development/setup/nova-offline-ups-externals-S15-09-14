@@ -1,0 +1,24 @@
+condb		 v2_0b
+genie_xsec	 v2_8_6a     -q+default
+genie_phyopt	 v2_8_6      -q+dkcharmtau
+ifdh_art	 v1_12_01    -q+debug:+e7:+s14:+nu
+nutools		 v1_14_01    -q+debug:+e7
+psycopg2	 v2_5_p2_7
+totalview	 v8_9_0a
+novaddt		 v03_04_03   -q+e7:+debug
+fife_utils       v2_5
+sam_web_client   v1_9
+gdb		 v7_8
+valgrind	 v3_10_1
+eid		 v01.00
+hmatrix		 v01.00
+lemlittle	 v01.03
+qepid		 v01.01
+remid		 v01.02
+rvp		 v01.00
+ucana		 v01.03
+lid		 v01.01
+calibcsvs	 v07.01
+bpf              v01.00
+NovaGridUtils
+FANN             v2.2.0

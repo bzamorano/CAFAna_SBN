@@ -1,0 +1,47 @@
+#1 
+Create the packages-X, nova-offline-ups-externals-X and nova-offline-ups-externals-X-prof
+#1b 
+Change HEAD to SYY-MM-DD/FAYY-MM-DD in the packages file
+#1c
+Commit these files to svn
+
+#2
+svn cp the trunk to snapshot
+
+#3
+Update release for SYY-MM-DD/FAYY-MM-DD on slf5/slf6 machines
+
+#4
+Build the new release SYY-MM-DD/FA-YY-MM-DD
+
+#5
+Clean up releases - tmp/* and lib/*/*.o
+
+#6
+Create tar ball
+
+#7
+Copy builds to GPVM nodes and tarballs to Oasis (CVMFS)
+
+
+SCRIPTS
+==================
+
+create_release_svn_files.sh -- do steps #1 and #2
+++++++++++++++++++
+#Only called once
+
+
+update_release_on_build_machines.sh -- do step #3
+++++++++++++++++++
+#Called once on an slf5 machine and once on an slf6 machine
+
+
+build_novaart_release.sh -- do step #4
+++++++++++++++++++
+#Called once on an slf5 machine and once on an slf6 machine
+
+
+clean_up_rel_send_to_gpvm_oasis.sh -- do steps #5, #6 and #7
+++++++++++++++++++
+#Called once on an slf5 machine and once on an slf6 machine

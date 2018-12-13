@@ -1,0 +1,111 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : S14-04-14
+Alignment           : S14-04-14
+BNBInfo		    : S14-04-14
+BreakPointFitter    : S14-04-14
+CAFAna              : S14-04-14
+CAFMaker            : S14-04-14
+CAFReweight         : S14-04-14
+CalHit              : S14-04-14
+Calibration         : S14-04-14
+CalibrationDataProducts : S14-04-14
+Calibrator          : S14-04-14
+CellToCell          : S14-04-14
+ChannelInfo         : S14-04-14
+ClusterMakerSS      : S14-04-14
+CMap                : S14-04-14
+Commissioning       : S14-04-14
+CosmicExposureInfo  : S14-04-14
+CosRej              : S14-04-14
+DAQ2RawDigit        : S14-04-14
+Database	    : S14-04-14
+DDTConverters       : S14-04-14
+debug_tools         : S14-04-14
+Demo		    : S14-04-14
+DetectorPerformance : S14-04-14
+DiscreteTracker     : S14-04-14
+ElasticArms         : S14-04-14
+Eval	            : S14-04-14
+EventDisplay        : S14-04-14
+EventGenerator      : S14-04-14
+EventSummary        : S14-04-14
+FEBFlashFilter      : S14-04-14
+Filter              : S14-04-14
+FLUGGValidation     : S14-04-14
+FuzzyKVertex        : S14-04-14
+g4nova              : S14-04-14
+Geometry            : S14-04-14
+GeometryObjects     : S14-04-14
+HMatrixE            : S14-04-14
+HoughTransform      : S14-04-14
+KalmanFilter3D      : S14-04-14
+LIDBuilder          : S14-04-14
+LEM                 : S14-04-14
+MCCheater           : S14-04-14
+MCCheckOut          : S14-04-14
+Metadata            : S14-04-14
+MichelEFilter       : S14-04-14
+MockDataDAQ         : S14-04-14
+MultiProngNeutrinoSearch : S14-04-14
+MuonRemove	    : S14-04-14
+NCAna               : S14-04-14
+NovaBeamMat         : S14-04-14
+NovaSimMixer        : S14-04-14
+NueSandbox          : S14-04-14
+NuMISpillInfo       : S14-04-14
+NuMuBDTSelector     : S14-04-14
+NumuEnergy          : S14-04-14
+NumuSandbox         : S14-04-14
+OnlineMonitoring    : S14-04-14
+OscLib              : S14-04-14
+PhotonTransport     : S14-04-14
+Preselection        : S14-04-14
+QEEventFinder       : S14-04-14
+RawData             : S14-04-14
+ReadoutSim          : S14-04-14
+RecoBase            : S14-04-14
+RecoJMShower        : S14-04-14
+RecVarPID           : S14-04-14
+ReMId               : S14-04-14
+RunHistory	    : S14-04-14
+ShowerAna           : S14-04-14
+ShowerLID           : S14-04-14
+Simulation          : S14-04-14
+Slicer              : S14-04-14
+SRT_NOVA            : S14-04-14
+StandardRecord      : S14-04-14
+SummaryData         : S14-04-14
+TimingFit           : S14-04-14
+TrackFit            : S14-04-14
+Utilities           : S14-04-14
+Validation          : S14-04-14
+VertexFinder        : S14-04-14
+ZukCluster          : S14-04-14
+#
+# NOvA Online packages go here
+#
+DatabaseUtils	    : off2014-02-05
+DAQChannelMap       : off2014-02-05
+DAQDataFormats      : off2014-02-05
+DAQQualityCheck     : off2014-02-05
+EventDispatcher_CommandSet : off2014-02-05
+NovaDatabase        : off2014-02-05
+NovaDAQConventions  : off2014-02-05
+NovaDAQUtilities    : off2014-02-05
+NovaTimingUtilities : off2014-02-05
+PackageVersion      : off2014-02-05
+RawFileParser       : off2014-02-05
+#
+# NOvA DDT packages go here
+#
+DDTBaseDataProducts : ddt2013-10-02
+#
+# setup package 
+#
+setup               : S14-04-14

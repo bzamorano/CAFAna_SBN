@@ -1,0 +1,91 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools        : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : ND-Development
+Alignment           : ND-Development
+BreakPointFitter    : ND-Development
+BremShowerFilter    : ND-Development
+CAFAna              : ND-Development
+CAFMaker            : ND-Development
+CAFReweight         : ND-Development
+CalHit              : ND-Development
+Calibration         : ND-Development
+CalibrationUtils    : ND-Development
+CalibrationDataProducts : ND-Development
+Calibrator          : ND-Development
+ChannelInfo         : ND-Development
+ClusterMakerSS      : ND-Development
+CMap                : ND-Development
+Commissioning       : ND-Development
+CosmicExposureInfo  : ND-Development
+CosRej              : ND-Development
+DAQ2RawDigit        : ND-Development
+Database	    : ND-Development
+DDTConverters       : ND-Development
+Demo		    : ND-Development
+DetectorPerformance : ND-Development
+DiscreteTracker     : ND-Development
+DQSpillFlags        : ND-Development
+DSOResultPlotter    : ND-Development
+ElasticArms         : ND-Development
+Eval	            : ND-Development
+EventDisplay        : ND-Development
+EventGenerator      : ND-Development
+EventSummary        : ND-Development
+Filter              : ND-Development
+FuzzyKVertex        : ND-Development
+g4nova              : ND-Development
+Geometry            : ND-Development
+GeometryObjects     : ND-Development
+HMatrixE            : ND-Development
+HoughTransform      : ND-Development
+HoughVertex         : ND-Development
+IFDBSpillInfo       : ND-Development
+LEM                 : ND-Development
+MCCheater           : ND-Development
+MCCheckOut          : ND-Development
+Metadata            : ND-Development
+MichelEFilter       : ND-Development
+MockDataDAQ         : ND-Development
+MuonRemove	    : ND-Development
+NDRockMuon          : ND-Development
+NovaFTS             : ND-Development
+NovaSimMixer        : ND-Development
+NueSandbox          : ND-Development
+NumuEnergy          : ND-Development
+NumuSandbox         : ND-Development
+OnlineMonitoring    : ND-Development
+OscLib              : ND-Development
+PhotonTransport     : ND-Development
+Preselection        : ND-Development
+Production          : ND-Development
+QEEventFinder       : ND-Development
+RawData             : ND-Development
+ReadoutSim          : ND-Development
+RecoBase            : ND-Development
+RecoBaseHit         : ND-Development
+RecoJMShower        : ND-Development
+RecVarPID           : ND-Development
+ReMId               : ND-Development
+RunHistory	    : ND-Development
+ShowerLID           : ND-Development
+Simulation          : ND-Development
+Slicer              : ND-Development
+SRT_NOVA            : ND-Development
+StandardRecord      : ND-Development
+SummaryData         : ND-Development
+TimingFit           : ND-Development
+TrackFit            : ND-Development
+Utilities           : ND-Development
+Validation          : ND-Development
+VertexDT            : ND-Development
+VertexFinder        : ND-Development
+ZukCluster          : ND-Development
+#
+# setup package 
+#
+setup               : ND-Development

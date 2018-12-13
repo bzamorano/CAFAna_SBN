@@ -1,0 +1,925 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\topmargin -1in
+\textwidth 6.5in
+\textheight 9.5 in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+\baselineskip 14pt
+\makeindex
+\def\see#1#2{{\em see\/} #1}
+\begin{document}
+\begin{flushright}
+\vspace*{0.5in}
+CDF Note: CDF/DOC/COMP\_UPG/PUBLIC/3891 \\
+\index{CDF}
+D0 Note: 3118f \\
+\index{D0}
+Computing Division Note: GU0013 \\
+\end{flushright}
+\vspace{0.5in}
+\begin{center}
+{\LARGE SoftRelTools User's Guide/Tutorial}\\
+\vspace{.5in}
+{\large Version 2.0 DRAFT}\\
+{\large \today }\\
+%\vspace{.5in}
+%{\large Last edited by Margaret Votava}\\
+%{\large \em Fermilab Computing Division}\\
+%\vspace{.5in}
+%{\large for:\\
+%Dave Adams, Jim Amundson, Jim Bellinger, Walter Brown, Glenn Cooper, 
+%Flavia Donno-Raffaelli, Lynn Garren, 
+%Herb Greenlee, Robert Harris, Alan Jonckheere, Robert Kennedy, Arthur Kreymer, 
+%Qizhong Li, Don Petravick, Ruth Pordes, Lars Rasmussen, 
+%Elizabeth Sexton-Kennedy, Scott Snyder and Gordon Watts.}
+%\vspace{.5in}
+\end{center}
+\begin{abstract}
+This is the user's guide/tutorial for the Fermilab version of Software Release Tools, 
+a UNIX based software management system for large, collaborative projects
+that is used by several experiments at Fermilab.
+The system provides software version control with CVS\index{CVS} 
+configured in a client-server\index{client-server} mode, based of
+the code originally 
+developed by the BaBar collaboration. 
+The system handles the 
+version control, management, building, and distribution of code written in 
+Fortran, C and C++. A distinguishing feature of the system is its
+\index{C++}
+ability to allow rapid asynchronous development of 
+package versions, 
+which can be easily integrated into complete consistent
+releases\index{releases} of the entire offline software.  This 
+has reduced the time it takes for new and modified code to be made available to 
+users. 
+\end{abstract}
+
+\clearpage
+\tableofcontents
+\listoffigures
+\listoftables
+
+%=====================================================
+%
+% Introduction
+%
+%======================================================
+
+\clearpage
+\section{Introduction}
+
+This document is the User's Guide for SoftRelTools (SRT). It is meant
+to give an overview of the SRT environment and commands
+from a code developers point
+of view. Code librarians \index{librarian!documentation} should refer to the SRT Reference Manual for
+more detailed explanation of the SRT configuration parameters and commands. 
+
+SRT is very flexible in the style in which it allows developers to operate. 
+This flexibility presents a difficulty in writing a general purpose "how to"
+User's Guide because each librarian has imposed a cycle that is most 
+appropriate for that particular release and a naming convention that
+best suits the cycle. Users should refer to the specific instructions 
+for a given release for the naming conventions and the development cycle. 
+
+Release specific instructions can be found at:
+\begin{itemize}
+\item CDF Run 2
+\item D0 Run 2
+\item SDSS
+\item ZOOM
+\item BTeV <http://www-btev.fnal.gov/internal\_documents/code/code\_management.html>
+\item Minos <http://www-numi.fnal.gov:8875/fnal\_minos/computing/soft\_use.html>
+\end{itemize}
+
+\subsection{What is SRT} \index{SRT!definition}
+
+Software systems at Fermilab, such as the offline analysis code for a Run II experiment, 
+have grown into large coding efforts involving hundreds of thousands of lines of code 
+developed and maintained by scores of programmers worldwide. These efforts 
+present real challenges in coordinating the builds of known sets of code into
+a cohesive entity can be delivered to developers who want to work on smaller
+pieces of code and to end users who want to use stable, working versions. 
+
+SRT is a toolset for managing these large software projects, {\em releases},
+\index{release!definition}
+that consists of smaller units, {\em packages}, 
+\index{package!definition} which can be developed in parallel
+by a diverse programming community. It allows individual developers to 
+work on their package independently of the ongoing work in other packages,
+and to update the whole project when they are satisfied with their 
+modifications. In this way, the developer 
+\index{developer!definition} is responsible for the management
+of his individual package, while the release librarian 
+\index{librarian!definition} is responsible for 
+management of the all the packages as a whole.
+This document is geared for developers. 
+
+SRT at Fermilab is based on a version developed at SLAC for BaBar
+\index{BaBar}, but has undergone a major rewrite here at Fermilab. 
+Underneath, it uses CVS \index{CVS}
+for software version control. 
+The average user should have a basic understanding of overview of CVS commands. 
+See the CVS Appendix ~\ref{app_cvs} for more detail. SRT uses gmake 
+\index{gmake} for
+building/compiling packages and specifying dependencies. 
+In general, users need not understand the details of the makefiles, but 
+may when adding new packages to the release structure or if
+more advanced funtionality is needed. See the Makefile Appendix for more
+detail ~\ref{app_make}. 
+
+\subsection{Other Reference Material}
+
+For sleepless nights:
+\begin{itemize}
+\item SRT Reference Manual
+\item CVS Documentation <http://www.fnal.gov/docs/products/cvs>
+\item gmake User's Guide <http://www.fnal.gov/docs/products/gtools/make.1.html>
+\item BaBar SRT document
+\item CVSH <http://www.fnal.gov/cd/FUE/cvsh/>
+\end{itemize}
+
+%=====================================================
+%
+% Directory Structure
+%
+%======================================================
+
+\section{Software Release Structure}
+The software release structure provides a flexible and easy to use
+framework for both releasing and developing code.  Code is typically grouped
+into {\em packages}; however, it is essential to have a {\em release} of all 
+code in 
+all packages. The structure must support simultaneously both
+releases\index{releases} of stable versions of the 
+packages\index{packages}, and asynchronous development of 
+the individual packages themselves.  This is in contrast to a structure which
+is oriented solely along the lines of a release, where package versions
+are only stamped with the release number. The SRT software release
+structure, which supports both
+asynchronous development of packages\index{packages!asynchronous development} 
+and grouping packages\index{packages} into releases,
+is shown in Fig.~\ref{fig_directory}. 
+
+The environmental variable {\ttfamily \$SRT\_DIST} is used as a root to add flexibility.  
+Below it are found separate subtrees for packages\index{packages} and releases\index{releases}. 
+Within the
+package subtree, each package can contain one or more different {\em versions}.
+This allows the package librarians to develop packages 
+asynchronously\index{packages!asynchronous development},
+and assign the package a version number when the package is ready for use
+by others.  Within the release subtree, there is a subdirectory for each
+existing release.  A release directory consists of soft links to a set of 
+\index{soft links}
+consistent package versions, plus the libraries and binaries created from
+the release for various machine architectures.  Again, the release manager
+can use this to create releases\index{releases} as required.  Links within the release
+\index{soft links}
+directory can be used to provide default names for particular releases, for
+example ``current'' for the release recommended for general use at the present
+time.
+
+Notice that the soft links between releases\index{releases!soft links} and 
+packages\index{packages!soft links} are
+\index{soft links}
+to the source code only; the libraries and binaries are native to the release.
+This is necessary because in C++ a change to a header file used by package A can
+\index{C++}
+affect the result in package B which uses package A, even if package B does 
+not use the part of the header file that is changed or added.  In C++
+\index{compile}
+\index{C++}
+if you modify a header file you have to recompile all the code that depends on 
+\index{dependencies!and C++} 
+that header file. The only way to insure consistent results when
+changing a header file is to rebuild both libraries.  
+
+\begin{figure}[tbh]
+%\centerline{\epsfig{figure=run_2_directory.eps,width=4.5in}}
+\begin{center}
+\includegraphics[width=4.5in]{run_2_directory.eps}
+\end{center}
+\caption[Official Release Directory Structure]{ 
+Diagram of the directory structure.  This example includes two
+packages: 
+``pkgA'' and ``pkgB''\index{packages!definition}\index{packages!figure}. 
+The curved lines correspond to soft links\index{soft links} between 
+releases\index{releases!definition}\index{releases!figure} and packages.}
+\label{fig_directory}
+\end{figure}
+
+\subsection{Package and Release Versions and Labels}
+\index{version!of package}
+\index{version!numbering convention}
+The package and release numbering system is designed to allow multiple versions
+of packages\index{package!numbering} and many releases\index{release!numbering} 
+of code to be available to the collaboration.
+
+The convention for package version numbers is Vxx-yy-zz where
+xx is the major version field, yy the minor field, and zz is a bug fix
+field incremented for small changes. This version number is also the 
+CVS\index{CVS!tag or version} tag of 
+that version. The first version is then V00-00-00.
+The code manager will install this tag on the initial version of
+the code in the repository, and either librarians or the code manager can tag 
+subsequent versions using the CVS\index{CVS!commands!rtag} command rtag.
+
+The convention for releases\index{releases!numbering} is x.y.z, where x is the 
+major release number\index{release!major},
+y the minor release\index{release!major}, and z is a bug fix 
+number\index{release!bug-fix}. Thus 1.0.0 would be a major
+release that is rigorously tested,  1.1.0 would be a minor release based on 
+1.0.0 and would require less testing, and 1.1.3 would be a bug fix or fast 
+release based on 1.1.0 and might have almost no testing.  The ``production''
+release would generally be a symbolic link to a major release, like 1.0.0.
+\index{soft links}
+The ``current'' release could be a minor release, like 1.1.0. The ``test'' release 
+could be bug fix release, such as 1.1.3.  There could be many major, minor,
+and bug fix releases\index{release!bug-fix}, and only a few of them might have symbolic links pointing
+\index{soft links}
+to them with names like ``production'', ``current'', ``test'',
+``fast-tracking'', etc.
+This labelling system allows many different releases, and the level of
+validation\index{release!validation} is apparent from the number.
+
+\subsection{Development Releases}
+\label{sec_development}
+
+\index{development} 
+In addition to frozen releases with specific versions, SRT structure
+also supports a more dynamic development environment. A development release is 
+not required, but it is a very useful option for integration, bug detection,
+and access to the most recent available code. Most often, 
+developers are making changes on different packages in parallel. At
+various stages during this development, they will want to share there
+work with others. Making a frozen release for each of these stages
+would consume a lot of disk space in addition to being a code librarian's
+nightmare. 
+
+In Fig.~\ref{fig_development_release} we show the structure of a development
+release, which is nearly identical to a frozen release.  The difference is that
+the soft links all point to the ``development'' version of the package in the
+packages area.  The development version of the package was checked out of
+CVS when the package was first added to development, and periodically the 
+development version is updated via a {\ttfamily cvs update} command. The 
+{\ttfamily cvs update} command is a convenient way of distributing 
+development, sending only the code that has changed from the repository to the 
+development release.  Since we use client-server cvs, all nodes in the system 
+are equal, and the process of getting development on a central system is no 
+different than the process of getting development anywhere.  Note that no
+development actually takes place in the development package area. Developers
+are required to develop code in their test releases (see ~\ref{sec_examples}) and check
+that code back in to the repository, so that the code can propogate to all
+development nodes everywhere. 
+
+\begin{figure}[tbh]
+\centerline{\includegraphics[width=4.5in]{development_release.eps}}
+\caption[Development Release Directory Structure]{ 
+Same as Fig.~\ref{fig_directory} except the release called development
+contains soft links to the development version of each package, which is 
+checked out from CVS and updated from the main repository. There is nothing
+hard-wired about the tag "development", and each environment may have a 
+different term. Please check the specific instructions from your code 
+librarian.}
+\label{fig_development_release}
+\end{figure}
+
+\index{development!update} 
+At some interval on each development node 
+{\ttfamily cvs update} \index{CVS!update} is done for each package in the release, and 
+then the release is rebuilt with the command {\ttfamily gmake}. \index{gmake} At
+CDF this happens every morning. Developers
+can then use the development release to link against.  
+
+Although naive users may want to use a frozen release for stability, 
+in a rapidly developing software environment, developers need to use 
+the development release to insure that their additions really work with
+the most recent software.  
+
+\subsection{Distribution}
+??? What's the status of this???
+Initial distribution of the offical release structure to a remote machine will 
+eventually be done via UPD once we have fully integrated it into our system.
+
+\subsection{External Packages}
+
+Up until now, we referred to a release that is self-contained, ie, all the
+software needed to build the software lives in a SRT structure. In practice,
+that is rarely true and software packaged in alternate ways needs to be
+accessed. These are called external packages. In most Fermi applications,
+these packages are accessed via UPS ~\ref{app_ups}.
+%=====================================================
+%
+% The crux of the tutorial
+%
+%======================================================
+
+\section{Using the Software Release Structure}
+\label{sec_examples}
+
+This section will describe the overall procedures needed to develop
+in an SRT environment.  In short, a user wants to develop a certain
+package. He needs to define a context, or base release, in which this 
+package will be compiled and linked. He must then define a "test" release
+in some working area, then copy the package to be modified
+into this working area, and finally set symbolic links for header files
+and libraries to the other packages in the base release - see Figure ~\ref{fig_testrel}.  
+
+The user is afforded many options to globally describe his development 
+environment. One of which is a {\em super} test release. 
+Look at Figure ~\ref{fig_testrel}. The default SRT behavior is to define
+the path for header files to include both directories in the test 
+release as well as the base release. If a user deleted a header file from 
+package B in the test release, the make files would still find it in the
+base release. This can lead to some confusion. SRT supports the concept
+of a {\em super} test release which will only look for include files in the
+test release. \index{release!super!definition} It does this by creating a directory called 
+"super" in the
+test release and putting links to each pacagke's header files therein. 
+
+
+The SoftRelTools commands themselves are defined in more
+detail in Section ~\ref{sec_commands}. 
+Once again, you should
+refer to your code librarian's instructions for the naming conventions and
+practices unique to your specific configuration. 
+
+Basically the steps are:
+
+\begin{itemize}
+
+\item select a base release with the srt\_setup command, necessary before any SRT 
+commands can be executed. 
+Section~\ref{sec_setup}
+
+\item 
+construct a test release using {\ttfamily newrel} \index{newrel} 
+for development.
+Section~\ref{sec_testrel}
+
+\item 
+populate a test release using 
+{\ttfamily addpkg}.\index{addpkg}  and {\ttfamily lnkpkg}.\index{lnkpkg}
+Section~\ref{sec_poprel}                                
+
+\item 
+compile and test packages. Section~\ref{sec_debug}
+
+\item make the new package version official 
+using {\ttfamily newver}\index{newver}. Section~\ref{sec_newver}
+Section~\ref{sec_newrel} describes making a new
+production release, including the new package version, using {\ttfamily newrel}.
+
+\end{itemize}
+
+\subsection{Selecting a Base Release}
+\label{sec_setup}
+
+All developed work is root off a some base release. Before any
+other command can be executed, the user needs to indentify in which
+base release to work and his SRT environment. 
+
+Because it is flexible and each distribution has opted for different
+features, setting up the environment is the most confusing part of using 
+SRT. The user needs to work out of a test release. If he doesn't already have
+one, he needs to create one with the SRT "newrel" command. This only needs
+to be done once, and the user can work from the this area indefinitely. 
+Additionally, the user needs to run srt\_setup in each shell that his wishes
+to develop in, ie, each time he logs in or creates an xterm. There is a bit
+of a chicken and egg problem here in that some srt\_setup switches require that
+a test release already have been created (e.g., -A), but you can't create the 
+test
+release until srt\_setup has been run. The solution is to execute srt\_setup
+twice. 
+
+Note that the user can have more than one test release and switch between 
+them, but this is not recommended for the novice SRT user. An additional note
+is that if you have if you have done an srt\_setup -A and switch test 
+releases, you need to run srt\_setup again. 
+
+SRT is very loosely coupled with UPS. It has no requirements on UPS itself,
+but is modelled after it. Certain environment variables must be defined, 
+e.g., ??? SRT\_DIST in a global file and then srt\_setup run. Code librarians
+have wrapped this distribution specific scripts. 
+Again, check with your code librarian for your specific instructons. 
+
+Some examples are below: 
+\index{CDF}
+\index{CDF!setup}
+\index{D0}
+\index{D0!setup}
+\index{BTeV}
+\index{BTeV!setup}
+
+\begin{enumerate}
+\item {\ttfamily source /d0library/d0local.login }\\
+{\ttfamily setup D0RunII [<base-release>]}\\
+\index{D0}
+This will setup the D0 Run II software.  
+\item {\ttfamily source $\sim$cdfsoft/cdf2.cshrc}\\
+{\ttfamily setup cdfsoft2 [<base-release>]}\\
+This will setup the CDF Run II software. \\
+\item {\ttfamily source $\sim$btev/setup.cshrc} [<base-release>]\\
+This will setup the BTeV software.  The default base-release is "current".
+Change releases with\\
+{\ttfamily chgver <base-release>} \\
+\end{enumerate}
+
+where the files \texttt{d0local.login} and 
+\texttt{cdf2.cshrc} define the UPS databases for D0 and CDF in Run II:
+\index{UPS!databases}
+\index{CDF}
+\index{CDF!UPS databases}
+\index{D0}
+\index{D0!UPS databases}
+the appropriate file can either be sourced 
+interactively or in the users \texttt{.login} file.  
+
+
+How does it know SRT\_DIST???
+The setup commands define the  SoftRelTools enviromental variables 
+\texttt{SRT\_DIST}, \texttt{SRT\_BASE\_RELEASE}, and \texttt{SRT\_ARCH}. 
+\texttt{SRT\_DIST} is the
+main directory, \texttt{SRT\_BASE\_RELEASE} is the release 
+identifying name
+or number in the \texttt{\$SRT\_DIST/releases} directory, and \texttt{SRT\_ARCH}
+specifies the UNIX operating system type and version number.
+\texttt{<base-release>} is an optional
+argument specifying the release, and if absent will default to the current
+release. Note that \texttt{SRT\_BASE\_RELEASE} is not
+a pathname.  For example, the \texttt{SRT\_BASE\_RELEASE} release would be found at
+\texttt{\$SRT\_DIST/releases/\$SRT\_BASE\_RELEASE}, so \texttt{SRT\_BASE\_RELEASE} could be a name 
+like ``current'' or
+a number like ``1.0.4''.  In addition, if using in a UPS environment, it 
+defines a convenient 
+\index{UPS!project variable}
+environmental variable (\texttt{<project>\_DIR}, which is 
+\texttt{CDFSOFT2\_DIR}, \texttt{D0RUNII\_DIR}, etc.) which 
+points at the area \texttt{\$SRT\_DIST/releases/\$SRT\_BASE\_RELEASE}. 
+Libraries and include 
+files from packages\index{packages} will be taken from the \texttt{<project>\_DIR} area, 
+when linking and compiling, unless another area is specified 
+by a test release (see section~\ref{sec_debug}). 
+
+\subsection{Creating a test release}
+\label{sec_testrel}
+
+As previously stated, the user needs to create a working area in which
+to make his changes. This is called a test release and is created with
+the SRT command newrel.  This command need only be executed once per
+test release directory. 
+
+
+For example:
+\begin{itemize}
+\item {\ttfamily cd <wherever>}\\
+      For example, in Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel},
+the user typed {\ttfamily \verb|cd ~foo|}.
+\item {\ttfamily newrel -t <base-release> <new-release>} \\
+\index{newrel!general use by developers}
+     The "-t" switch is required and tells newrel that this is a developer's
+working area and NOT a new official release to be created in \$SRT\_DIST. 
+<base-release> is the official release to work off from. In many cases,
+this is development. <new-release> is the arbitrary string that you
+define to be your working directory. 
+For example, in Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel},
+the developer typed {\ttfamily newrel -t current test}.
+
+This created the {\ttfamily test} directory and populated it with the main 
+GNUmakefile and empty sub-directories include, lib, and bin, etc.  
+It did not
+create the {\ttfamily pkgA} or {\ttfamily pkgB} directories.
+The release number 
+\texttt{<base-release>} is written to a file \texttt{.current}, used by 
+\texttt{GNUmakefile} to determine which production release to use.
+\item {\ttfamily cd <new-release>} \\
+For example, in Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel},
+the user typed {\ttfamily cd test}.
+\item {\ttfamily srt\_super\_init } \\
+	This is an optional command that should be executed if the user
+wants super test functionality. 
+\end{itemize}
+
+
+\subsection{Populating a Test Release}
+\label{sec_poprel}
+
+Once the test release is created, the user needs to populate it 
+with the particular packages he wishes to modify via the addpkg command. 
+Let's say that header files in a second package depend on the package the
+user wants to modify. The user will want to build the libraries in 
+the second package, but not modify the code. He can add the second package
+to the test release via the lnkpkg command. 
+
+When adding packages to the test release, an important consideration 
+is which particular version to add. See Appendix ~\ref{app_cvs} for
+more details on cvs versioning. By default, 
+it will check out of CVS\index{CVS!tag or version} the 
+version of \texttt{<package>} that was used
+to make the \texttt{<base-release>}.  
+It is a version that is guaranteed to work with 
+\texttt{<base-release>}; however, it may not be the head version of the 
+package. Developers will always want to use the head
+version when using the development release. 
+The developer should be aware that the head version is not guaranteed to 
+work with the \texttt{<base-release>}.
+The user can optionally
+specify to check out either the head version or a specific tagged
+version on the addpkg command line. One must be careful when
+committing changes to a version that is not the head or branched
+versions may be created, see Appendix ~\ref{app_cvs}. 
+
+For Example:
+
+\begin{itemize}
+\item {\ttfamily cd <testrel>}\\
+      For example, in Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel},
+the user typed {\ttfamily \verb|cd ~foo|}.
+\item {\ttfamily addpkg [-h] <package> [<tag>]}\\
+\index{addpkg!general use by developers}
+This checks out the package from CVS\index{CVS!commands!checkout} to create the package sub-directory
+and its contents. 
+For example, in Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel},
+the user typed {\ttfamily addpkg pkgB}.
+\index{addpkg}
+The -h option is almost always used and indicates to check out the head 
+\index{addpkg!-h option}
+version is CVS. If this option is NOT used, then the developer may want
+to consider using the command 
+\texttt{cvs update -A}\index{CVS!commands!update} 
+before commiting the package back into the
+repository or else CVS\index{CVS!branch confusion} thinks you are trying to 
+commit to a new branch and
+complains.
+\footnote{ 
+Developers need to be aware that 
+\texttt{cvs update -A}\index{CVS!commands!update} updates your area to
+the head of CVS\index{CVS!head}, bringing in any changes that have been made 
+to the head 
+while you were working on the package.  CVS\index{CVS!informational codes} 
+prints a code telling you which files were modified (M) by you, which files 
+need
+updating (U) in your area, and which files both need updating and there are
+conflicts (C) between your changes and others which 
+CVS\index{CVS!conflicts} asks you to resolve.
+If there were conflicts CVS\index{CVS!conflicts!backups} creates a backup of 
+the file prefixed by \#.
+If this is too intimidating for you, 
+first do a \texttt{cvs -n update -A}\index{CVS!commands!update} which will 
+merely print the informational code, and will not change a single file in your 
+area.}
+\footnote{
+If you are adding new files to a package\index{packages!add files}, you should do a 
+\texttt{cvs update -A}\index{CVS!commands!update} before doing a 
+\texttt{cvs add}\index{CVS!commands!add}, or the files will be 
+added to a branch off of the version checked out, not to the head.  If you 
+mistakenly added the files to a branch, you should 
+\texttt{cvs remove}\index{CVS!commands!remove} them, 
+\texttt{cvs commit}\index{CVS!commands!commit} the remove, and do a 
+\texttt{cvs update -A}\index{CVS!commands!update} before adding 
+them again. To do a \texttt{cvs commit} you will need privileges: contact
+your release manager.}
+
+
+If \texttt{<tag>} is present, {\ttfamily addpkg} does a 
+{\ttfamily cvs checkout -r<tag> package}.  
+\index{CVS!commands!checkout}
+\index{CVS!tag or version}
+\index{addpkg!tag or version argument} In
+Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel}, the user typed 
+{\ttfamily addpkg pkgB} \index{addpkg}
+to create the sub-directory {\ttfamily pkgB} and fill
+{\ttfamily pkgB} with sub-directories and code from CVS. {\ttfamily addpkg} 
+\index{CVS}\index{addpkg!creates soft links}
+also creates a soft link between the test release include area and the newly 
+created package include area.  For example, in 
+Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel}, {\ttfamily addpkg}
+\index{addpkg!soft links}
+created a symbolic link \verb|~foo/test/include/pkgB/| which points to
+\verb|~foo/test/pkgB/include/|. 
+
+
+\item {\ttfamily lnkpkg <package>}\\
+This commands adds a package to your test release, but for compiling
+and linking purposes only. The developer will not modify the code
+in this package. 
+You can figure out which packages you need
+to link to by running the SoftRelTools script \texttt{depend} 
+\index{packages!interdependencies}
+\index{depend}
+\index{dependencies!depend script}
+(see Section ~\ref{com_depend}).      
+In Fig.~\ref{fig_testrel} there is a package, {\ttfamily pkgA}, which 
+depends on include files in {\ttfamily pkgB} that user Foo will modify.  
+However, Foo does not need to modify any of the code in {\ttfamily pkgA}, 
+Foo only wants to modify {\ttfamily pkgB}.  To allow Foo to rebuild the 
+libraries for {\ttfamily pkgA} without checking out the code for {\ttfamily
+pkgA}, we have created symbolic links between the test release and the
+official packages\index{packages!soft links} area.  The symbolic link \verb|~foo/test/pkgA/| points to 
+\$SRT\_DIST/packages/pkgA/1.1/, and the symbolic link 
+\verb|~foo/test/include/pkgA/| points to \$SRT\_DIST/packages/pkgA/1.1/include/.  
+
+You can figure out which packages you need
+to link to by running the SoftRelTools script \texttt{depend} 
+\index{packages!interdependencies}
+\index{depend}
+\index{dependencies!depend script}
+(see Section ~\ref{com_depend}).      
+
+\item{\ttfamily newpkg <package>}\\
+How does one create a new package?
+
+\end{itemize}
+
+Once the user has a test release created in his development area, he
+can use the following commands in ~\ref{sec_debug}  to make modifications. 
+
+\subsection{Compiling and linking for developers or users}
+\label{sec_debug}
+\index{linking}
+\index{linking!for developers|(}
+
+This method of compiling and linking is fully supported.
+This is the procedure a developer will follow to work on one or more packages
+as a unit.  End users who want to modify one or more packages for their own
+purposes can also use this technique. The simplest example of the directory
+structure is shown in Fig.~\ref{fig_dev_simple} and a more complex example is 
+shown in Fig.~\ref{fig_testrel}.  In these figures Foo is developing code
+for package {\ttfamily pkgB}.
+\begin{itemize}
+
+\item {\ttfamily cd <new-release>} \\
+For example, in Figs.~\ref{fig_dev_simple} and ~\ref{fig_testrel},
+the user typed {\ttfamily cd test}.
+
+\index{gmake!for developers}
+\index{gmake!in test release}
+\item {\ttfamily gmake}\\
+\index{gmake}
+This will invoke GNU make to build the libraries (lib target) and 
+executables (bin target) for each package in your test release. 
+The individual package makefiles\index{packages!GNUmakefile} are discussed in
+Appendix~\ref{app_package_make}. 
+\index{gmake}
+\end{itemize}
+
+\begin{sloppypar}
+For example in Fig.~\ref{fig_dev_simple}, on a machine running IRIX, \texttt{gmake} 
+created the test release library for pkgB, \verb|~foo/test/lib/IRIX/libpkgB.a|, 
+and the test release executable for pkgB, \verb|~foo/test/bin/IRIX/testB.exe|. When
+constructing libpkgB.a, all include files not in pkgB were taken from 
+\texttt{\$SRT\_DIST/releases/\$SRT\_BASE\_RELEASE/include/*}, and when constructing 
+\verb|testB.exe| all libraries other
+than libpkgB.a were taken from 
+\texttt{\$SRT\_DIST/releases/\$SRT\_BASE\_RELEASE/lib/\$SRT\_ARCH}.  Similarly, in
+Fig.~\ref{fig_testrel}, \texttt{gmake} created the test release library for
+\index{gmake}
+both pkgA and pkgB, and the test release executable for pgkB.  Once again,
+all include files not in pgkA or pkgB were taken from 
+\texttt{\$SRT\_DIST/releases/\$SRT\_BASE\_RELEASE/include/*}, and when constructing 
+\texttt{testB.exe} all libraries other
+than \texttt{libpkgB.a} and \texttt{libpkgA.a} were taken from 
+\texttt{\$SRT\_DIST/releases/\$SRT\_BASE\_RELEASE/lib/\$SRT\_ARCH}.
+\end{sloppypar}
+
+However unless the user has specificied a "super" test environment via 
+both the srt\_setup and srt\_super\_init commands, gmake will look for header files and 
+\index{gmake!and header files}
+libraries in the \texttt{<base-release>}, found in the \texttt{.current} file, 
+regardless of how the user has modified the environment via the setup command.
+Thus the \texttt{SRT\_BASE\_RELEASE} variable is redefined by gmake
+\index{gmake!SRT\_BASE\_RELEASE redefined}
+\index{gmake}
+based on the contents of the \texttt{.current} file, and this redefinition only last
+for the duration of the \texttt{gmake} command.
+
+In addition to established packages, the above steps can also be used to create 
+your own package\index{packages!new}, or work area, and link it in with your test release.  If you 
+are creating a new package called \texttt{work}, in place of \texttt{addpkg} 
+\index{addpkg!new package}
+you will want to do a \texttt{mkdir work}, and copy your source files to the 
+\texttt{work} subdirectory.  In addition you will need to have 
+a \texttt{GNUmakefile} similar to one that appears in the top directory of any 
+of the packages.  In that GNUmakefile you will need to specify the library
+name (where the object files go), and add this library to the list of libraries
+looked for in any link. If you are linking an executable associated
+with this work package, you will want to specify them in this GNUmakefile,
+and give the link command.  For example, assume you have two files, \texttt{test2.F}
+containing a program \texttt{test2}, and \texttt{test.F} containing a 
+subroutine \texttt{test} which is called by \texttt{test2}.
+You should make a library \texttt{libwork.a} to contain the compiled subroutine 
+\index{compile}
+\texttt{test}, and link it to the main program \texttt{test2}, by 
+\index{linking}
+adding the following lines to the package makefile specified in 
+Appendix ~\ref{app_package_make}:
+\begin{quote}
+\ttfamily
+LIB = libwork.a  \\
+LIBFFILES  = \$(filter-out test2.F, \$(wildcard *.F))  \\
+override LOADLIBES += -lwork                         \\ 
+BINS = test2.exe                                     \\
+\$(bindir)test2.exe: test2.F \$(LIBS)                \\
+\hspace*{0.3in} echo linking test2 ; \$(FC) \$(FCFLAGS) \$(CPPFLAGS) \$(LDFLAGS) \verb+\+ \\
+\hspace*{0.3in} -o \$@ \$< \$(LOADLIBES) \$(LDOUT);\\
+\index{linking!command in makefile}
+\end{quote} 
+\index{CPP}
+Here the first line specifies the the library as \texttt{libwork.a}. The 
+second
+line indicates that all Fortran files except \texttt{test2.F} (the main 
+program) will go in
+this library. Note that \texttt{test.F} is never mentioned explicitly, it is
+simply picked up from the area and compiled because it has the suffix
+\index{compile}
+\texttt{.F}. The third line adds \texttt{libwork.a} to the list of libraries 
+to be loaded.
+The executable name \texttt{test2.exe} is specified in the fourth line.  The 
+fifth line says
+that the executable \texttt{test2.exe} depends on the main program file 
+\texttt{test2.F} and the 
+libraries.  The sixth and seventh line give the rule to make the executable
+\texttt{test2.exe} (these lines are begun with a tab).  Developers can add 
+similar lines to their GNUmakefile, to 
+construct executables from their own packages.  If in doubt, copy from 
+a GNUmakefile in an established package. When the new 
+packages\index{packages!new} are fully
+tested, they can be migrated to the release.
+\index{linking!for developers|)}
+
+\subsection{To put a new version of a package in the production area}
+\label{sec_newver}
+
+The developer changes a package and communicates those changes to the
+package librarian. The librarian then commits the changes to the 
+CVS\index{CVS}
+repository. When the package librarian decides that it's time to make a 
+new official version of the package, the librarian tags the consistent set of 
+files that form the package with a unique CVS tag via the command 
+{\ttfamily cvs rtag <version> <package>}\index{CVS!commands!rtag}. 
+Once the version of the package has been tagged 
+in the CVS\index{CVS} repository, then:
+\begin{itemize}
+\item {\ttfamily cd \$SRT\_DIST/packages/<package name>}
+\item {\ttfamily newver -p <cvs tag name>}\\
+\index{newver}
+This creates the new version of the package\index{packages!new version}  in the official packages tree.  
+The \texttt{<cvs tag name>} is the package version number, and has the format
+\texttt{Vxx-xx-xx}, where \texttt{x} is between 0 and 9. The 
+area you are in, {\ttfamily \$SRT\_DIST/packages/<package name>}, provides the
+name of the package for the {\ttfamily newver} command.  The ``-p'' option 
+is currently required, and indicates this is a production version, so the 
+files will be write-protected and have their timestamps updated.
+\texttt{newver} also declares this version of the product to the ups
+database\index{UPS!databases}\index{UPS!declare}. 
+\end{itemize}
+
+\subsection{The develoment cycle before a new production release}
+\label{sec_dev_cycle}
+The previous two sections illustrate how the development cycle can take 
+place before a new production release is created.  First, as discussed in
+section~\ref{sec_debug}, developer Foo checks out and works on \texttt{pkgB}
+in a test release. When \texttt{pkgB} works to Foo's satisfaction, Foo returns
+the package\index{packages!development cycle}  to the \texttt{pkgB} libarian and requests that a new version of
+the package be created.  Second, as discussed in section~\ref{sec_newver}, the
+package\index{packages!librarian}  librarian commits the package back into CVS\index{CVS!tag or version}, tags it with a new 
+version number, and creates a new version of the package in the official area
+using \texttt{newver}.  This does not produce any object libraries, or a new
+\index{newver}
+release, which is the topic of the next section.  Third, Foo comunicates to
+other developers that a new version of the package is available for testing
+in the official area.  To get the new version of the package and test it, 
+another developer need only follow the procedure in section~\ref{sec_debug},
+checking out the specific version of the package that the librarian created
+with Foo's changes.  To do this they would create a test release in their area
+using \texttt{newrel -t <base-release> <new-release>}, 
+\index{newrel!in development cycle} and then do a 
+\texttt{lnkpkg pkgb <tag>} 
+\index{lnkpkg!in development cycle}, 
+or a \texttt{addpkg pkgB <tag>}
+\index{addpkg!in development cycle}, 
+\index{addpkg!tag or version argument}, 
+where tag is the 
+version number.  If there is 
+a special \texttt{<base-release>} that Foo wants used in conjunction with 
+\texttt{pkgB}, then Foo is obligated to inform the other developers.  Once 
+enough people have used the new version of \texttt{pkgB}, and are happy with
+it, the release manager should seriously consider making an official release
+with it, so that developers will not need to produce object libraries
+themselves in their test release.  This is the topic of the next section.
+
+\subsection{To make a new production release with the package version 
+just created}
+\label{sec_newrel}
+\index{newrel!production}
+After one or more packages\index{packages}  have been updated, somebody decides that a release
+incorporating the changes is required.
+\begin{itemize}
+\item {\ttfamily cd \$SRT\_DIST/releases}
+\item {\ttfamily newrel -p <old release> <new release>}\\
+The old release provides the list of packages\index{packages!old release} to include, and the initial 
+libraries and executables. {\ttfamily newrel} will prompt for the version of
+each package\index{packages!version}  required. 
+\item {\ttfamily cd <new release>}
+\item {\ttfamily ups declare -r <directory> -z <ups-database> -f <flavor> <project> <release>}
+Here we declare the release to UPS, which establishes a UPS database entry for
+the release. 
+The arguments of \texttt{ups declare}\index{UPS!declare!release} we use are \texttt{<directory>}, the 
+directory on disk where the release resides, \texttt{<ups-database>}, the
+disk location of the ups database, \texttt{<flavor>}, the UNIX operating system 
+type of the release's binaries (IRIX, AIX, etc.), \texttt{<project>}, the 
+project name (cdfsoft2, D0RunII, etc.), and \texttt{<release>}, the release 
+number.
+\index{gmake!for production release}
+\item {\ttfamily gmake}\\
+\index{gmake}
+These should be repeated for every supported architecture.  Errors that occur
+at this stage may result in changes to one or more packages and the creation
+of a new release, but should not be corrected by changing the source in this
+release. After the release is made a soft link characterizing the release as
+\texttt{current} or \texttt{development} may optionally be created in the
+area \texttt{\$SRT\_DIST/releases} pointing to the release number.  If so, the
+release manager needs to also declare~\index{UPS!declare} the release to UPS 
+as \texttt{current} or \texttt{development} for consistency.
+\end{itemize}
+
+\begin{figure}[bht!]
+%\epsfysize=8in
+%\epsffile[36 120 576 756]{run_2_dev_simple.ps}
+%\centerline{\epsfig{figure=run_2_dev_simple.eps,width=5in}}
+\centerline{\includegraphics[width=5in]{run_2_dev_simple.eps}}
+\caption[Simple Test Release Directory Structure]{ 
+Diagram of a simple test release directory structure, and how it relates to the
+official release directory structure.  Here the package ``pkgB'' is being
+developed\index{packages!development of}, but since nothing else depends on pkgB, all other include files
+\index{dependencies!simple test release} 
+and libraries are taken from the current official release.}
+\label{fig_dev_simple}
+\end{figure}
+\clearpage 
+
+\vspace*{1.0in}
+\begin{figure}[bht!]
+%\epsfysize=8in
+%\epsffile[36 54 581 756]{run_2_development.ps}
+%\centerline{\epsfig{figure=run_2_development.eps,width=5in}}
+\centerline{\includegraphics[width=5in]{run_2_development.eps}}
+\caption[Complex Test Release Directory Structure]{ 
+Diagram of a complex test release directory structure, and how it relates to the
+official release directory structure.  Here the package ``pkgB'' is being
+developed\index{packages!development of} , and ``pkgA'' depends on the contents of ```pkgB''. The curved lines 
+\index{dependencies!complex test release} 
+correspond to soft links.}
+\index{soft links}
+\label{fig_testrel}
+\end{figure}
+\clearpage 
+
+
+%================================================================================
+% All the man pages 
+%================================================================================
+\input{commands}
+
+
+%================================================================================
+% All the appendices
+%================================================================================
+\input{appendix}
+
+%Index Cross References
+\index{dependency files|see {.d files}} 
+\index{deleting|see {removing}}
+\index{get ! package|see {addpkg}}
+\index{get ! test release|see {newrel}}
+\index{information!about release|see {statusrel}}
+\index{information!about repository|see {lscvs}}
+\index{link ! symbolic|see {soft links}}
+\index{link ! soft|see {soft links}}
+\index{packages!installing production|see {newver}}
+\index{packages!removing production|see {rmver}}
+\index{packages!creating release|see {newrel}}
+\index{packages!interdependencies|see {depend}}
+\index{packages!soft links|see {lnkpkg}}
+\index{packages!getting|see {addpkg}}
+\index{packages!removing release|see {rmrel}}
+\index{release!listing contents|see {statusrel}}
+\index{release!creating|see {newrel}}
+\index{release!removing see {rmrel}}
+\index{removing!releases|see {rmrel}}
+\index{removing!packages|see {rmver}}
+\index{new ! production package|see {newver}}
+\index{soft links!creating|see {lnkpkg}}
+\index{compile!UPS |see {UPS}}
+\index{UPS!dependencies|see {dependencies|UPS}}
+\index{server|see {client-server}}
+\index{linking!executable filename|see {EXENAME}}
+\index{linking!.opt filename|see {OPTFILE}}
+\index{make|see {gmake}}
+\index{preprocessor|see {CPP}}
+\index{version!control|see {CVS}}
+
+\clearpage
+\addcontentsline{toc}{section}{Index}
+\input{users_guide.ind}
+\end{document}

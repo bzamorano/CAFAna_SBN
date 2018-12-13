@@ -1,0 +1,11 @@
+K 13
+svn:mergeinfo
+V 698
+/branches/R15-11-17-miniprodmec-br/setup/nova-offline-ups-externals-R17-03-01-prod3reco.r-prof:17416,17419
+/branches/R16-02-11-geniepreview-br/setup/nova-offline-ups-externals-R17-03-01-prod3reco.r-prof:22064
+/branches/R18-04-20-art2.11-br/setup/nova-offline-ups-externals-R17-03-01-prod3reco.r-prof:31279-32339
+/branches/R18-08-13-art2.11.03-br/setup/nova-offline-ups-externals-R17-03-01-prod3reco.r-prof:33254,33265,33274,33281
+/branches/cmake_build/setup/nova-offline-ups-externals-R17-03-01-prod3reco.r-prof:9129-9387
+/branches/daqmap_2014_06_25/setup/nova-offline-ups-externals-R17-03-01-prod3reco.r-prof:9790-9910
+/trunk/setup/nova-offline-ups-externals-R17-03-01-prod3reco.r-prof:24806,25931
+END

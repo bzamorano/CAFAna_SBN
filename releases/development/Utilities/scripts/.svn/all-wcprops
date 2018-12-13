@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/subversion/novaart.pkgs.svn/!svn/ver/32952/trunk/Utilities/scripts
+END
+gpvm_novasoft_mrb.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/subversion/novaart.pkgs.svn/!svn/ver/32952/trunk/Utilities/scripts/gpvm_novasoft_mrb.sh
+END
+create_manifest.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/novaart.pkgs.svn/!svn/ver/24780/trunk/Utilities/scripts/create_manifest.sh
+END
+galleryMaker.py
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/subversion/novaart.pkgs.svn/!svn/ver/16187/trunk/Utilities/scripts/galleryMaker.py
+END
+build_novasoft_cmake_jenkins.sh
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/subversion/novaart.pkgs.svn/!svn/ver/16670/trunk/Utilities/scripts/build_novasoft_cmake_jenkins.sh
+END
+executeGalleryMaker.sh
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/subversion/novaart.pkgs.svn/!svn/ver/11977/trunk/Utilities/scripts/executeGalleryMaker.sh
+END
+install_novasoft_mrb.sh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/subversion/novaart.pkgs.svn/!svn/ver/30850/trunk/Utilities/scripts/install_novasoft_mrb.sh
+END

@@ -1,0 +1,119 @@
+#!/bin/bash
+
+if [ -z "$EXTERNALS" ]; then
+    echo "Must source nova setup before executing the script."
+    echo 'Actually just need to know about $EXTERNALS environmental variable.'
+    echo 'If you are using this script as a first time import of externals make youreself a directory and set the $EXTERNALS variable.'
+    exit 1
+fi
+
+# An offsite maintainer might have a different local username than the FNAL kerberos principal
+# Can change this variable to allow kerberized scp
+script_user=`whoami`
+novavmhost='novagpvm04.fnal.gov'
+fnalvm="$script_user@$novavmhost"
+
+cd ${EXTERNALS}
+mkdir tars
+cd tars
+
+# get the pull script
+wget http://scisoft.fnal.gov/scisoft/projects/art/v1_12_02/pullProducts-v1_12_02
+chmod +x pullProducts-v1_12_02
+./pullProducts-v1_12_02 ${EXTERNALS} slf6 nu s5-e6 debug
+./pullProducts-v1_12_02 ${EXTERNALS} slf6 nu s5-e6 prof
+./pullProducts-v1_12_02 ${EXTERNALS} slf5 nu s5-e6 debug
+./pullProducts-v1_12_02 ${EXTERNALS} slf5 nu s5-e6 prof
+
+# pull nutools
+wget http://scisoft.fnal.gov/scisoft/packages/nutools/v1_06_04/nutools-1.06.04-slf5-x86_64-e6-debug.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/nutools/v1_06_04/nutools-1.06.04-slf5-x86_64-e6-prof.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/nutools/v1_06_04/nutools-1.06.04-slf6-x86_64-e6-debug.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/nutools/v1_06_04/nutools-1.06.04-slf6-x86_64-e6-prof.tar.bz2
+
+
+
+# pull novadaq tars
+wget http://scisoft.fnal.gov/scisoft/packages/novadaq/v03_00_02/novadaq-03.00.02-slf5-x86_64-e6-debug.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/novadaq/v03_00_02/novadaq-03.00.02-slf5-x86_64-e6-prof.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/novadaq/v03_00_02/novadaq-03.00.02-slf6-x86_64-e6-debug.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/novadaq/v03_00_02/novadaq-03.00.02-slf6-x86_64-e6-prof.tar.bz2
+
+
+# pull novaddt tars 
+wget http://scisoft.fnal.gov/scisoft/packages/novaddt/v03_00_02/novaddt-03.00.02-slf5-x86_64-e6-debug.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/novaddt/v03_00_02/novaddt-03.00.02-slf5-x86_64-e6-prof.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/novaddt/v03_00_02/novaddt-03.00.02-slf6-x86_64-e6-debug.tar.bz2
+
+wget http://scisoft.fnal.gov/scisoft/packages/novaddt/v03_00_02/novaddt-03.00.02-slf6-x86_64-e6-prof.tar.bz2
+
+
+# pull Valgrind
+scp ${fnalvm}:/nusoft/app/externals/valgrind/valgrind_v3_6_1.tar.bz2 ./
+
+
+cd $EXTERNALS
+tar xf tars/novadaq-03.00.02-slf5-x86_64-e6-debug.tar.bz2
+tar xf tars/novadaq-03.00.02-slf5-x86_64-e6-prof.tar.bz2
+tar xf tars/novadaq-03.00.02-slf6-x86_64-e6-debug.tar.bz2
+tar xf tars/novadaq-03.00.02-slf6-x86_64-e6-prof.tar.bz2
+
+
+tar xf tars/novaddt-03.00.02-slf5-x86_64-e6-debug.tar.bz2
+tar xf tars/novaddt-03.00.02-slf5-x86_64-e6-prof.tar.bz2
+tar xf tars/novaddt-03.00.02-slf6-x86_64-e6-debug.tar.bz2
+tar xf tars/novaddt-03.00.02-slf6-x86_64-e6-prof.tar.bz2
+
+
+tar -xjf tars/nutools-1.06.04-slf5-x86_64-e6-debug.tar.bz2
+tar -xjf tars/nutools-1.06.04-slf5-x86_64-e6-prof.tar.bz2 
+tar -xjf tars/nutools-1.06.04-slf6-x86_64-e6-debug.tar.bz2
+tar -xjf tars/nutools-1.06.04-slf6-x86_64-e6-prof.tar.bz2
+
+tar xf tars/valgrind_v3_6_1.tar.bz2
+
+cd $EXTERNALS
+
+# First time install should first download upd product
+# Used to be part of the ups install, probably an oversight in the newest version.
+if [ ! -d "upd" ]; then
+  cd tars
+
+  wget http://scisoft.fnal.gov/scisoft/packages/upd/v5_0_1/upd-5.0.1-noarch.tar.bz2
+  wget http://scisoft.fnal.gov/scisoft/packages/upd/v5_0_1/upd-5.0.1-source.tar.bz2
+
+  cd $EXTERNALS
+  tar xf tars/upd-5.0.1-noarch.tar.bz2
+  tar xf tars/upd-5.0.1-source.tar.bz2
+fi
+
+source $EXTERNALS/setup
+setup upd
+
+upd install lid			v01.00
+upd install eid			v01.00
+upd install hmatrix		v01.00
+upd install lemlittle		v01.02
+upd install qepid		v01.00
+upd install remid		v01.00
+upd install ucana		v01.02
+upd install rvp                 v01.00
+upd install calibcsvs           v01.01
+upd install sam_web_client	v1_8
+upd install jobsub_tools	v1_3_1_1_3
+upd install condb               v2_0b
+upd install jobsub_client       v1_0_4
+
+#jobsub_client seems to use a non-standard way to require pycurl, hence the upd install does not pull
+#pycurl in as dependency
+#manually install them
+upd install -G "-c" pycurl v7_15_5 -H Linux64bit+2.6-2.5
+upd install -G "-c" pycurl v7_16_4 -H Linux64bit+2.6-2.12

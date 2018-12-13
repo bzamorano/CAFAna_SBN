@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R16-02-11-fiberbrightness-br
+Alignment           : R16-02-11-fiberbrightness-br
+AnalysisSkimmer     : R16-02-11-fiberbrightness-br
+BreakPointFitter    : R16-02-11-fiberbrightness-br
+BremShowerFilter    : R16-02-11-fiberbrightness-br
+CAFAna              : R16-02-11-fiberbrightness-br
+CAFMaker            : R16-02-11-fiberbrightness-br
+CAFReweight         : R16-02-11-fiberbrightness-br
+CalHit              : R16-02-11-fiberbrightness-br
+Calibration         : R16-02-11-fiberbrightness-br
+CalibrationUtils    : R16-02-11-fiberbrightness-br
+CalibrationDataProducts : R16-02-11-fiberbrightness-br
+Calibrator          : R16-02-11-fiberbrightness-br
+ChannelInfo         : R16-02-11-fiberbrightness-br
+CMap                : R16-02-11-fiberbrightness-br
+Commissioning       : R16-02-11-fiberbrightness-br
+CosmicExposureInfo  : R16-02-11-fiberbrightness-br
+CosRej              : R16-02-11-fiberbrightness-br
+CVN                 : R16-02-11-fiberbrightness-br
+DAQ2RawDigit        : R16-02-11-fiberbrightness-br
+Database	    : R16-02-11-fiberbrightness-br
+DataQuality         : R16-02-11-fiberbrightness-br
+DDTConverters       : R16-02-11-fiberbrightness-br
+Demo		    : R16-02-11-fiberbrightness-br
+DetectorPerformance : R16-02-11-fiberbrightness-br
+DiscreteTracker     : R16-02-11-fiberbrightness-br
+DiskUsage           : R16-02-11-fiberbrightness-br
+DQSpillFlags        : R16-02-11-fiberbrightness-br
+DSOResultPlotter    : R16-02-11-fiberbrightness-br
+ElasticArms         : R16-02-11-fiberbrightness-br
+Eval	            : R16-02-11-fiberbrightness-br
+EventDisplay        : R16-02-11-fiberbrightness-br
+EventGenerator      : R16-02-11-fiberbrightness-br
+EventSummary        : R16-02-11-fiberbrightness-br
+Filter              : R16-02-11-fiberbrightness-br
+FuzzyKVertex        : R16-02-11-fiberbrightness-br
+g4nova              : R16-02-11-fiberbrightness-br
+Geometry            : R16-02-11-fiberbrightness-br
+GeometryObjects     : R16-02-11-fiberbrightness-br
+HMatrixE            : R16-02-11-fiberbrightness-br
+HoughTransform      : R16-02-11-fiberbrightness-br
+HoughVertex         : R16-02-11-fiberbrightness-br
+IFDBSpillInfo       : R16-02-11-fiberbrightness-br
+LEM                 : R16-02-11-fiberbrightness-br
+MCCheater           : R16-02-11-fiberbrightness-br
+MCCheckOut          : R16-02-11-fiberbrightness-br
+Metadata            : R16-02-11-fiberbrightness-br
+MEFinder            : R16-02-11-fiberbrightness-br
+MichelEFilter       : R16-02-11-fiberbrightness-br
+MockDataDAQ         : R16-02-11-fiberbrightness-br
+MuonRemove	    : R16-02-11-fiberbrightness-br
+NDRockMuon          : R16-02-11-fiberbrightness-br
+NovaFTS             : R16-02-11-fiberbrightness-br
+NovaSimMixer        : R16-02-11-fiberbrightness-br
+NueSandbox          : R16-02-11-fiberbrightness-br
+NumuEnergy          : R16-02-11-fiberbrightness-br
+NumuSandbox         : R16-02-11-fiberbrightness-br
+OnlineMonitoring    : R16-02-11-fiberbrightness-br
+OscLib              : R16-02-11-fiberbrightness-br
+PhotonTransport     : R16-02-11-fiberbrightness-br
+Preselection        : R16-02-11-fiberbrightness-br
+Production          : R16-02-11-fiberbrightness-br
+QEEventFinder       : R16-02-11-fiberbrightness-br
+RawData             : R16-02-11-fiberbrightness-br
+ReadoutSim          : R16-02-11-fiberbrightness-br
+RecoBase            : R16-02-11-fiberbrightness-br
+RecoBaseHit         : R16-02-11-fiberbrightness-br
+RecoJMShower        : R16-02-11-fiberbrightness-br
+RecVarPID           : R16-02-11-fiberbrightness-br
+ReMId               : R16-02-11-fiberbrightness-br
+RunHistory	    : R16-02-11-fiberbrightness-br
+ShowerE             : R16-02-11-fiberbrightness-br
+ShowerLID           : R16-02-11-fiberbrightness-br
+Simulation          : R16-02-11-fiberbrightness-br
+Slicer              : R16-02-11-fiberbrightness-br
+SRT_NOVA            : R16-02-11-fiberbrightness-br
+StandardRecord      : R16-02-11-fiberbrightness-br
+SummaryData         : R16-02-11-fiberbrightness-br
+TimingFit           : R16-02-11-fiberbrightness-br
+TrackFit            : R16-02-11-fiberbrightness-br
+Utilities           : R16-02-11-fiberbrightness-br
+Validation          : R16-02-11-fiberbrightness-br
+VertexDT            : R16-02-11-fiberbrightness-br
+VertexFinder        : R16-02-11-fiberbrightness-br
+ZukCluster          : R16-02-11-fiberbrightness-br
+#
+# setup package
+#
+setup               : R16-02-11-fiberbrightness-br

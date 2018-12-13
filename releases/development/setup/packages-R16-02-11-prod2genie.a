@@ -1,0 +1,96 @@
+#
+# Packages external to NOvA. Order matters: keep SoftRelTools first.
+#
+SoftRelTools : HEAD
+#
+# NOvA Offline packages go here
+#
+AirShower           : R16-02-11-prod2genie.a
+Alignment           : R16-02-11-prod2genie.a
+AnalysisSkimmer     : R16-02-11-prod2genie.a
+BreakPointFitter    : R16-02-11-prod2genie.a
+BremShowerFilter    : R16-02-11-prod2genie.a
+CAFAna              : R16-02-11-prod2genie.a
+CAFMaker            : R16-02-11-prod2genie.a
+CAFReweight         : R16-02-11-prod2genie.a
+CalHit              : R16-02-11-prod2genie.a
+Calibration         : R16-02-11-prod2genie.a
+CalibrationUtils    : R16-02-11-prod2genie.a
+CalibrationDataProducts : R16-02-11-prod2genie.a
+Calibrator          : R16-02-11-prod2genie.a
+ChannelInfo         : R16-02-11-prod2genie.a
+CMap                : R16-02-11-prod2genie.a
+Commissioning       : R16-02-11-prod2genie.a
+CosmicExposureInfo  : R16-02-11-prod2genie.a
+CosRej              : R16-02-11-prod2genie.a
+CVN                 : R16-02-11-prod2genie.a
+DAQ2RawDigit        : R16-02-11-prod2genie.a
+Database	    : R16-02-11-prod2genie.a
+DataQuality         : R16-02-11-prod2genie.a
+DDTConverters       : R16-02-11-prod2genie.a
+Demo		    : R16-02-11-prod2genie.a
+DetectorPerformance : R16-02-11-prod2genie.a
+DiscreteTracker     : R16-02-11-prod2genie.a
+DiskUsage           : R16-02-11-prod2genie.a
+DQSpillFlags        : R16-02-11-prod2genie.a
+DSOResultPlotter    : R16-02-11-prod2genie.a
+ElasticArms         : R16-02-11-prod2genie.a
+Eval	            : R16-02-11-prod2genie.a
+EventDisplay        : R16-02-11-prod2genie.a
+EventGenerator      : R16-02-11-prod2genie.a
+EventSummary        : R16-02-11-prod2genie.a
+Filter              : R16-02-11-prod2genie.a
+FuzzyKVertex        : R16-02-11-prod2genie.a
+g4nova              : R16-02-11-prod2genie.a
+Geometry            : R16-02-11-prod2genie.a
+GeometryObjects     : R16-02-11-prod2genie.a
+HMatrixE            : R16-02-11-prod2genie.a
+HoughTransform      : R16-02-11-prod2genie.a
+HoughVertex         : R16-02-11-prod2genie.a
+IFDBSpillInfo       : R16-02-11-prod2genie.a
+LEM                 : R16-02-11-prod2genie.a
+MCCheater           : R16-02-11-prod2genie.a
+MCCheckOut          : R16-02-11-prod2genie.a
+Metadata            : R16-02-11-prod2genie.a
+MEFinder            : R16-02-11-prod2genie.a
+MichelEFilter       : R16-02-11-prod2genie.a
+MockDataDAQ         : R16-02-11-prod2genie.a
+MuonRemove	    : R16-02-11-prod2genie.a
+NDRockMuon          : R16-02-11-prod2genie.a
+NovaFTS             : R16-02-11-prod2genie.a
+NovaSimMixer        : R16-02-11-prod2genie.a
+NueSandbox          : R16-02-11-prod2genie.a
+NumuEnergy          : R16-02-11-prod2genie.a
+NumuSandbox         : R16-02-11-prod2genie.a
+OnlineMonitoring    : R16-02-11-prod2genie.a
+OscLib              : R16-02-11-prod2genie.a
+PhotonTransport     : R16-02-11-prod2genie.a
+Preselection        : R16-02-11-prod2genie.a
+Production          : R16-02-11-prod2genie.a
+QEEventFinder       : R16-02-11-prod2genie.a
+RawData             : R16-02-11-prod2genie.a
+ReadoutSim          : R16-02-11-prod2genie.a
+RecoBase            : R16-02-11-prod2genie.a
+RecoBaseHit         : R16-02-11-prod2genie.a
+RecoJMShower        : R16-02-11-prod2genie.a
+RecVarPID           : R16-02-11-prod2genie.a
+ReMId               : R16-02-11-prod2genie.a
+RunHistory	    : R16-02-11-prod2genie.a
+ShowerE             : R16-02-11-prod2genie.a
+ShowerLID           : R16-02-11-prod2genie.a
+Simulation          : R16-02-11-prod2genie.a
+Slicer              : R16-02-11-prod2genie.a
+SRT_NOVA            : R16-02-11-prod2genie.a
+StandardRecord      : R16-02-11-prod2genie.a
+SummaryData         : R16-02-11-prod2genie.a
+TimingFit           : R16-02-11-prod2genie.a
+TrackFit            : R16-02-11-prod2genie.a
+Utilities           : R16-02-11-prod2genie.a
+Validation          : R16-02-11-prod2genie.a
+VertexDT            : R16-02-11-prod2genie.a
+VertexFinder        : R16-02-11-prod2genie.a
+ZukCluster          : R16-02-11-prod2genie.a
+#
+# setup package
+#
+setup               : R16-02-11-prod2genie.a
