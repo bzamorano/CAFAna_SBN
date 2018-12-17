@@ -273,7 +273,7 @@ namespace ana
     TFile* f = fFileSource->GetNextFile();
     if(!f) return 0; // out of files
 
-    fPOT = 1.e16;
+    fPOT = 1.e20;
     return f;
 
     //TTree* trPot;
