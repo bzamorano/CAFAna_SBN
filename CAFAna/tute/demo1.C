@@ -13,7 +13,7 @@
 // New includes for this macro
 #include "CAFAna/Prediction/PredictionNoExtrap.h"
 #include "CAFAna/Analysis/Calcs.h"
-#include "OscLib/func/OscCalculatorPMNSOpt.h"
+#include "OscLib/func/OscCalculatorSterile.h"
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
@@ -40,11 +40,11 @@ void demo1()
                           return fE;
                         });
 
-  const Binning binsEnergy = Binning::Simple(20, 0, 5);
-  const HistAxis axEnergy("Reco energy (GeV)", binsEnergy, kRecoEnergy);
+  const Binning binsEnergy = Binning::Simple(50, 0, 5);
+  const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
 
-  // Fake POT: this means "no-scale" by construction
-  const double pot = 1.e16;
+  // Fake POT: we need to sort this out in the files first
+  const double pot = 6.e20;
 
   const Cut kSelectionCut({},
                        [](const caf::StandardRecord* sr)
@@ -72,8 +72,11 @@ void demo1()
   const Spectrum sUnosc = pred.PredictUnoscillated();
   // Or oscillated, in this case using reasonable parameters from
   // Analysis/Calcs.h
-  osc::IOscCalculatorAdjustable* calc = DefaultOscCalc();
-  calc->SetL(810); // NOvA
+  osc::OscCalculatorSterile* calc = DefaultSterileCalc(4);
+  calc->SetL(0.11); // SBND only, temporary
+  calc->SetAngle(2, 4, 0.6);
+  calc->SetDm(4, 1); // Some dummy values
+
   const Spectrum sOsc = pred.Predict(calc);
 
   // And we can break things down by flavour

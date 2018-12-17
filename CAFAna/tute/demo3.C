@@ -8,46 +8,95 @@
 #include "CAFAna/Cuts/TruthCuts.h"
 #include "CAFAna/Prediction/PredictionNoExtrap.h"
 #include "CAFAna/Analysis/Calcs.h"
-#include "OscLib/func/OscCalculatorPMNSOpt.h"
+#include "OscLib/func/OscCalculatorSterile.h"
 #include "StandardRecord/StandardRecord.h"
 #include "TCanvas.h"
 #include "TH1.h"
 #include "CAFAna/Experiment/SingleSampleExperiment.h"
-#include "CAFAna/Vars/FitVars.h"
+#include "CAFAna/Vars/FitVarsSterile.h"
 
 // New includes
 #include "CAFAna/Analysis/Surface.h"
 #include "CAFAna/Experiment/MultiExperiment.h"
 
+// Random numbers to fake an efficiency and resolution
+#include "TRandom3.h"
+TRandom3 r(0);
+
+#include "TMarker.h"
+
 using namespace ana;
 
 void demo3()
 {
-  // Repeat most of demo2.C
-  const std::string fname = "/pnfs/dune/persistent/TaskForce_AnaTree/far/train/v3.2/nu.mcc10.1_def.root";
-  SpectrumLoader loader(fname);
-  auto* loaderBeam  = loader.LoaderForRunPOT(20000001);
-  auto* loaderNue   = loader.LoaderForRunPOT(20000002);
-  auto* loaderNuTau = loader.LoaderForRunPOT(20000003);
-  auto* loaderNC    = loader.LoaderForRunPOT(0);
-  const Var kRecoEnergy = SIMPLEVAR(dune.Ev_reco_numu);
-  const Binning binsEnergy = Binning::Simple(40, 0, 10);
-  const HistAxis axEnergy("Reco energy (GeV)", binsEnergy, kRecoEnergy);
-  const double pot = 3.5 * 1.47e21 * 40/1.13;
-  const Cut kPassesMVA = SIMPLEVAR(dune.mvanumu) > 0;
-  PredictionNoExtrap pred(*loaderBeam, *loaderNue, *loaderNuTau, *loaderNC, axEnergy, kPassesMVA);
-  loader.Go();
-  osc::IOscCalculatorAdjustable* calc = DefaultOscCalc();
-  const Spectrum data = pred.Predict(calc).MockData(pot);
+    // See demo0.C for explanation of these repeated parts
+
+  const std::string fnameBeam = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_nu_ExampleAnalysis_ExampleSelection.root";
+  const std::string fnameSwap = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_oscnue_ExampleAnalysis_ExampleSelection.root";
+
+  // Source of events
+  SpectrumLoader loaderBeam(fnameBeam);
+  SpectrumLoader loaderSwap(fnameSwap);
+
+  const Var kRecoEnergy({}, // ToDo: smear with some resolution
+                        [](const caf::StandardRecord* sr)
+                        {
+                          double fE = sr->sbn.truth.neutrino[0].energy;
+                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          return fE;
+                        });
+
+  const Binning binsEnergy = Binning::Simple(50, 0, 5);
+  const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
+
+  // Fake POT: we need to sort this out in the files first
+  const double pot = 6.e20;
+
+  const Cut kSelectionCut({},
+                       [](const caf::StandardRecord* sr)
+                       {
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 90% eff for CC, 15% for NC
+                         if(isCC) return p < 0.9;
+                         else return p < 0.15;
+                       });
+
+  PredictionNoExtrap pred(loaderBeam, loaderSwap, kNullLoader,
+                          axEnergy, kSelectionCut);
+
+
+  loaderBeam.Go();
+  loaderSwap.Go();
+
+  // Calculator
+  osc::OscCalculatorSterile* calc = DefaultSterileCalc(4);
+  calc->SetL(0.11); // SBND only, temporary
+  calc->SetAngle(2, 4, 0.6);
+  calc->SetDm(4, 1); // Some dummy values
+
+  TMarker* trueValues = new TMarker(pow(TMath::Sin(calc->GetAngle(2,4)),2), calc->GetDm(4), kFullCircle);
+  trueValues->SetMarkerColor(kRed);
+
+  // To make a fit we need to have a "data" spectrum to compare to our MC
+  // Prediction object
+  const Spectrum data = pred.Predict(calc).FakeData(pot);
+
   SingleSampleExperiment expt(&pred, data);
 
   // A Surface evaluates the experiment's chisq across a grid
   Surface surf(&expt, calc,
-               &kFitSinSqTheta23, 30, 0.425, 0.575,
-               &kFitDmSq32Scaled, 30, 2.35, 2.55);
+               &kFitSinSqTheta24Sterile, 50, 0, 1,
+               &kFitDmSq41Sterile, 60, 0.8, 2.3);
 
+
+  TCanvas* c1 = new TCanvas("c1");
+  c1->SetLeftMargin(0.12);
+  c1->SetBottomMargin(0.15);
   //surf.Draw();
   surf.DrawBestFit(kBlue);
+  trueValues->Draw();
+
 
   // In a full Feldman-Cousins analysis you need to provide a critical value
   // surface to be able to draw a contour. But we provide these helper
@@ -58,30 +107,6 @@ void demo3()
   surf.DrawContour(crit1sig, 7, kBlue);
   surf.DrawContour(crit2sig, kSolid, kBlue);
 
+  c1->SaveAs("demo3_plot1.pdf");
 
-  // Let's try to add in the effect of 3.5yrs of RHC data too
-  const std::string fnameRHC = "/pnfs/dune/persistent/TaskForce_AnaTree/far/train/v3.2/anu.mcc10.1_def.root";
-  SpectrumLoader loaderRHC(fnameRHC);
-  // Annoyingly the magic numbers are different for RHC
-  auto* loaderBeamRHC  = loaderRHC.LoaderForRunPOT(20000004);
-  auto* loaderNueRHC   = loaderRHC.LoaderForRunPOT(20000005);
-  auto* loaderNuTauRHC = loaderRHC.LoaderForRunPOT(20000006);
-  auto* loaderNCRHC    = loaderRHC.LoaderForRunPOT(0);
-  PredictionNoExtrap predRHC(*loaderBeamRHC, *loaderNueRHC, *loaderNuTauRHC, *loaderNCRHC, axEnergy, kPassesMVA);
-  loaderRHC.Go();
-  calc = DefaultOscCalc(); // Remember to reset, since fits modified it
-  const Spectrum dataRHC = predRHC.Predict(calc).MockData(pot);
-  SingleSampleExperiment exptRHC(&predRHC, dataRHC);
-
-  // A MultiExperiment gets its chisq just by adding together its component
-  // parts. Use to implement joint fits
-  MultiExperiment exptMulti({&expt, &exptRHC});
-
-  Surface surfMulti(&exptMulti, calc,
-                    &kFitSinSqTheta23, 30, 0.425, 0.575,
-                    &kFitDmSq32Scaled, 30, 2.35, 2.55);
-
-  surfMulti.DrawBestFit(kRed);
-  surfMulti.DrawContour(crit1sig, 7, kRed);
-  surfMulti.DrawContour(crit2sig, kSolid, kRed);
 }

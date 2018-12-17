@@ -8,7 +8,7 @@
 #include "CAFAna/Cuts/TruthCuts.h"
 #include "CAFAna/Prediction/PredictionNoExtrap.h"
 #include "CAFAna/Analysis/Calcs.h"
-#include "OscLib/func/OscCalculatorPMNSOpt.h"
+#include "OscLib/func/OscCalculatorSterile.h"
 #include "StandardRecord/StandardRecord.h"
 #include "TCanvas.h"
 #include "TH1.h"
@@ -16,30 +16,62 @@
 // New includes required
 #include "CAFAna/Experiment/SingleSampleExperiment.h"
 #include "CAFAna/Analysis/Fit.h"
-#include "CAFAna/Vars/FitVars.h"
+#include "CAFAna/Vars/FitVarsSterile.h"
+
+// Random numbers to fake an efficiency and resolution
+#include "TRandom3.h"
+TRandom3 r(0);
 
 using namespace ana;
 
 void demo2()
 {
-  // Repeat all of demo1.C to get us our Prediction object
-  const std::string fname = "/pnfs/dune/persistent/TaskForce_AnaTree/far/train/v3.2/nu.mcc10.1_def.root";
-  SpectrumLoader loader(fname);
-  auto* loaderBeam  = loader.LoaderForRunPOT(20000001);
-  auto* loaderNue   = loader.LoaderForRunPOT(20000002);
-  auto* loaderNuTau = loader.LoaderForRunPOT(20000003);
-  auto* loaderNC    = loader.LoaderForRunPOT(0);
-  const Var kRecoEnergy = SIMPLEVAR(dune.Ev_reco_numu);
-  const Binning binsEnergy = Binning::Simple(40, 0, 10);
-  const HistAxis axEnergy("Reco energy (GeV)", binsEnergy, kRecoEnergy);
-  const double pot = 3.5 * 1.47e21 * 40/1.13;
-  const Cut kPassesMVA = SIMPLEVAR(dune.mvanumu) > 0;
-  PredictionNoExtrap pred(*loaderBeam, *loaderNue, *loaderNuTau, *loaderNC, axEnergy, kPassesMVA);
-  loader.Go();
 
-  // We make the oscillation calculator "adjustable" so the fitter can
-  // manipulate it.
-  osc::IOscCalculatorAdjustable* calc = DefaultOscCalc();
+    // See demo0.C for explanation of these repeated parts
+
+  const std::string fnameBeam = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_nu_ExampleAnalysis_ExampleSelection.root";
+  const std::string fnameSwap = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_oscnue_ExampleAnalysis_ExampleSelection.root";
+
+  // Source of events
+  SpectrumLoader loaderBeam(fnameBeam);
+  SpectrumLoader loaderSwap(fnameSwap);
+
+  const Var kRecoEnergy({}, // ToDo: smear with some resolution
+                        [](const caf::StandardRecord* sr)
+                        {
+                          double fE = sr->sbn.truth.neutrino[0].energy;
+                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          return fE;
+                        });
+
+  const Binning binsEnergy = Binning::Simple(50, 0, 5);
+  const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
+
+  // Fake POT: we need to sort this out in the files first
+  const double pot = 6.e20;
+
+  const Cut kSelectionCut({},
+                       [](const caf::StandardRecord* sr)
+                       {
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 90% eff for CC, 15% for NC
+                         if(isCC) return p < 0.9;
+                         else return p < 0.15;
+                       });
+
+  PredictionNoExtrap pred(loaderBeam, loaderSwap, kNullLoader,
+                          axEnergy, kSelectionCut);
+
+
+  loaderBeam.Go();
+  loaderSwap.Go();
+
+  // Calculator
+  osc::OscCalculatorSterile* calc = DefaultSterileCalc(4);
+  calc->SetL(0.11); // SBND only, temporary
+  calc->SetAngle(2, 4, 0.6);
+  calc->SetDm(4, 1); // Some dummy values
 
   // To make a fit we need to have a "data" spectrum to compare to our MC
   // Prediction object
@@ -50,20 +82,20 @@ void demo2()
   SingleSampleExperiment expt(&pred, data);
 
   std::cout << "At nominal parameters chisq = " << expt.ChiSq(calc) << std::endl;
-  calc->SetTh23(asin(sqrt(0.45)));
-  std::cout << "At non-maximal params chisq = " << expt.ChiSq(calc) << std::endl;
+  calc->SetAngle(2, 4, 0);
+  std::cout << "At 3-flavour only chisq = " << expt.ChiSq(calc) << std::endl;
 
   // A fitter finds the minimum chisq using MINUIT by varying the list of
   // parameters given. These are FitVars from Vars/FitVars.h. They can contain
   // snippets of code to convert from the underlying angles etc to whatever
   // function you want to fit.
-  Fitter fit(&expt, {&kFitDmSq32Scaled, &kFitSinSqTheta23});
+  Fitter fit(&expt, {&kFitDmSq41Sterile, &kFitSinSqTheta24Sterile});
   const double best_chisq = fit.Fit(calc);
 
   // The osc calculator is updated in-place with the best oscillation
   // parameters
   std::cout << "Best chisq is " << best_chisq << " with "
-            << "dmsq = " << calc->GetDmsq32()
-            << " and sinsq = " << kFitSinSqTheta23.GetValue(calc)
+            << "dmsq41 = " << calc->GetDm(4)
+            << " and sinsqth24 = " << kFitSinSqTheta24Sterile.GetValue(calc)
             << std::endl;
 }

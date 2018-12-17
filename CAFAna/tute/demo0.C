@@ -36,7 +36,7 @@ void demo0()
   const Var kTruthY = SIMPLEVAR(sbn.truth.neutrino[0].inelasticityY);
 
   // Define a spectrum, ie a histogram with associated POT information
-  const Binning binsEnergy = Binning::Simple(20, 0, 5);
+  const Binning binsEnergy = Binning::Simple(50, 0, 5);
   const HistAxis axEnergy("True energy (GeV)", binsEnergy, kTruthEnergy);
   // kIsNumuCC here is a "Cut". Same as a Var but returning a boolean. In this
   // case, we're only keeping events that are truly numu CC interactions.
