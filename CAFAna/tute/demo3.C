@@ -12,12 +12,11 @@
 #include "StandardRecord/StandardRecord.h"
 #include "TCanvas.h"
 #include "TH1.h"
-#include "CAFAna/Experiment/SingleSampleExperiment.h"
 #include "CAFAna/Vars/FitVarsSterile.h"
 
 // New includes
 #include "CAFAna/Analysis/Surface.h"
-#include "CAFAna/Experiment/MultiExperiment.h"
+#include "CAFAna/Experiment/SingleSampleExperiment.h"
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
@@ -90,7 +89,7 @@ void demo3()
 
 
   TCanvas* c1 = new TCanvas("c1");
-  //c1->SetLogy();
+  c1->SetLogy();
   c1->SetLeftMargin(0.12);
   c1->SetBottomMargin(0.15);
   //surf.Draw();
@@ -108,5 +107,36 @@ void demo3()
   surf.DrawContour(crit2sig, kSolid, kBlue);
 
   c1->SaveAs("demo3_plot1.pdf");
+
+  // We can now fit including profiling over the (relevant) unknown 
+  // oscillation parameters. We can also include constraints for those.
+
+  // Experimental constraints (NuFit 4.0)
+  GaussianConstraint th23Constraint(&kFitTheta23InDegreesSterile, 49.7, 1.1);
+  GaussianConstraint dmsq32Constraint(&kFitDmSq32Sterile, 2.53e-3, 0.03e-3);
+  MultiExperiment multiExpt({&th23Constraint,&dmsq32Constraint,&expt});
+
+  std::vector< const IFitVar * > kProfiledVars = {&kFitTheta23InDegreesSterile, 
+                                                  &kFitDmSq32Sterile,
+                                                  &kFitDelta14InPiUnitsSterile,
+                                                  &kFitDelta24InPiUnitsSterile};
+
+  // A Surface evaluates the experiment's chisq across a grid
+  Surface surf2(&multiExpt, calc,
+               &kFitSinSq2Theta24Sterile, 50, 0, 1,
+               &kFitDmSq41Sterile, 75, 0.5, 3,
+               kProfiledVars,{});
+
+  c1.Clear(); // just in case
+  surf2.DrawBestFit(kBlue);
+  trueValues->Draw();
+
+  TH2* crit1sig2 = Gaussian68Percent2D(surf2);
+  TH2* crit2sig2 = Gaussian2Sigma2D(surf2);
+
+  surf2.DrawContour(crit1sig2, 7, kBlue);
+  surf2.DrawContour(crit2sig2, kSolid, kBlue);
+
+  c1->SaveAs("demo3_plot2.pdf");
 
 }
