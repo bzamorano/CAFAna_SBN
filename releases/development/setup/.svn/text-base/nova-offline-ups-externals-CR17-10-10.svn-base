@@ -1,8 +1,0 @@
-condb		 v2_0b
-nutools          v1_21_11    -q+debug:+e9
-genie_phyopt	 v2_12_0     -q+dkcharmtau
-genie_xsec	 v2_12_0     -q+DefaultPlusMECWithNC
-ifdh_art         v2_01_00    -q+debug:+e9:+s28:+nu
-psycopg2	 v2_5_p2_7
-novaddt          v12_00_00   -q+debug:+e9:+s28
-gdb		 v7_8

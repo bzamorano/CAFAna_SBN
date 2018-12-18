@@ -1,9 +1,0 @@
-K 13
-svn:mergeinfo
-V 486
-/branches/R15-11-17-miniprodmec-br/setup/nova-offline-ups-externals-R17-11-14-prod4mre.b:17416,17419
-/branches/R16-02-11-geniepreview-br/setup/nova-offline-ups-externals-R17-11-14-prod4mre.b:22064
-/branches/R18-08-13-art2.11.03-br/setup/nova-offline-ups-externals-R17-11-14-prod4mre.b:33254,33265,33274,33281
-/branches/cmake_build/setup/nova-offline-ups-externals-R17-11-14-prod4mre.b:9129-9387
-/branches/daqmap_2014_06_25/setup/nova-offline-ups-externals-R17-11-14-prod4mre.b:9790-9910
-END

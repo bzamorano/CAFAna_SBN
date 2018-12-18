@@ -1,9 +1,0 @@
-condb		 v2_0b
-genie_xsec	 v2_10_2     -q+defaultplusccmec
-genie_phyopt	 v2_10_2     -q+dkcharmtau
-ifdh_art	 v1_14_06    -q+debug:+e9:+s28:+nu
-nutools          v1_21_01    -q+debug:+e9
-psycopg2	 v2_5_p2_7
-totalview	 v8_9_0a
-novaddt          v04_00_09   -q+e9:+s28:+debug
-gdb		 v7_8

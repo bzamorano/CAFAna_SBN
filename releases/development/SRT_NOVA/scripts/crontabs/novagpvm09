@@ -1,7 +1,0 @@
-#######################
-
-### Update Doxygen
-00 5 * * * /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/update_nova_doxygen >> /nova/app/home/novasoft/nightly_build/logs/doxygen_nightly_update.log 2>&1
-
-### cppcheck - populates nusoft.fnal.gov/nova/cppcheck/
-30 4 * * * /nova/app/home/novasoft/nightly_build/SRT_NOVA/scripts/run_cppcheck.sh >> /nova/app/home/novasoft/nightly_build/logs/cppcheck.log 2>&1
