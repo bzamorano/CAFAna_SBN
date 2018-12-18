@@ -178,6 +178,18 @@ namespace ana
     osc::DowncastToSterile(osc)->SetAngle(1, 4, asin(sqrt(Clamp(val))));
   }
 
+  //----------------------------------------------------------------------
+  double FitSinSq2Theta14Sterile::GetValue(const osc::IOscCalculatorAdjustable* osc) const
+  {
+    return util::sqr(sin(2*osc::DowncastToSterile(osc)->GetAngle(1,4)));
+  }
+
+  //----------------------------------------------------------------------
+  void FitSinSq2Theta14Sterile::SetValue(osc::IOscCalculatorAdjustable* osc, double val) const
+  {
+    osc::DowncastToSterile(osc)->SetAngle(1,4, asin(sqrt(Clamp(val)))/2);
+  }
+
   //---------------------------------------------------------------------------                   
   double FitTheta24Sterile::GetValue(const osc::IOscCalculatorAdjustable* osc) const
   {
@@ -202,6 +214,18 @@ namespace ana
     osc::DowncastToSterile(osc)->SetAngle(2, 4, asin(sqrt(Clamp(val))));
   }
 
+  //----------------------------------------------------------------------
+  double FitSinSq2Theta24Sterile::GetValue(const osc::IOscCalculatorAdjustable* osc) const
+  {
+    return util::sqr(sin(2*osc::DowncastToSterile(osc)->GetAngle(2,4)));
+  }
+
+  //----------------------------------------------------------------------
+  void FitSinSq2Theta24Sterile::SetValue(osc::IOscCalculatorAdjustable* osc, double val) const
+  {
+    osc::DowncastToSterile(osc)->SetAngle(2,4, asin(sqrt(Clamp(val)))/2);
+  }
+
   //---------------------------------------------------------------------------                   
   double FitTheta34Sterile::GetValue(const osc::IOscCalculatorAdjustable* osc) const
   {
@@ -224,6 +248,18 @@ namespace ana
   void FitSinSqTheta34Sterile::SetValue(osc::IOscCalculatorAdjustable* osc, double val) const
   {
     osc::DowncastToSterile(osc)->SetAngle(3, 4, asin(sqrt(Clamp(val))));
+  }
+
+  //----------------------------------------------------------------------
+  double FitSinSq2Theta34Sterile::GetValue(const osc::IOscCalculatorAdjustable* osc) const
+  {
+    return util::sqr(sin(2*osc::DowncastToSterile(osc)->GetAngle(3,4)));
+  }
+
+  //----------------------------------------------------------------------
+  void FitSinSq2Theta34Sterile::SetValue(osc::IOscCalculatorAdjustable* osc, double val) const
+  {
+    osc::DowncastToSterile(osc)->SetAngle(3,4, asin(sqrt(Clamp(val)))/2);
   }
 
   //---------------------------------------------------------------------------                   

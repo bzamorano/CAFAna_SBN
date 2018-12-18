@@ -203,6 +203,25 @@ namespace ana
   /// \f$ \sin^2\theta_{14} \f$
   const FitSinSqTheta14Sterile kFitSinSqTheta14Sterile = FitSinSqTheta14Sterile();
 
+
+ //----------------------------------------------------------------------
+
+  /// \f$ \sin^22\theta_{14} \f$
+  class FitSinSq2Theta14Sterile: public IConstrainedFitVar
+  {
+  public:
+    virtual double GetValue(const osc::IOscCalculatorAdjustable* osc) const;
+    virtual void SetValue(osc::IOscCalculatorAdjustable* osc, double val) const;
+    virtual std::string ShortName() const {return "ss2th14";}
+    virtual std::string LatexName() const {return "sin^{2}2#theta_{14}";}
+
+    virtual double LowLimit() const {return 0;}
+    virtual double HighLimit() const {return 1;}
+  };
+
+  /// \f$ \sin^22\theta_{14} \f$
+  const FitSinSq2Theta14Sterile kFitSinSq2Theta14Sterile = FitSinSq2Theta14Sterile();
+
   //----------------------------------------------------------------------
 
   /// \f$ \theta_{24} \f$
@@ -241,6 +260,24 @@ namespace ana
 
   //----------------------------------------------------------------------
 
+  /// \f$ \sin^22\theta_{24} \f$
+  class FitSinSq2Theta24Sterile: public IConstrainedFitVar
+  {
+  public:
+    virtual double GetValue(const osc::IOscCalculatorAdjustable* osc) const;
+    virtual void SetValue(osc::IOscCalculatorAdjustable* osc, double val) const;
+    virtual std::string ShortName() const {return "ss2th24";}
+    virtual std::string LatexName() const {return "sin^{2}2#theta_{24}";}
+
+    virtual double LowLimit() const {return 0;}
+    virtual double HighLimit() const {return 1;}
+  };
+
+  /// \f$ \sin^22\theta_{24} \f$
+  const FitSinSq2Theta24Sterile kFitSinSq2Theta24Sterile = FitSinSq2Theta24Sterile();
+
+  //----------------------------------------------------------------------
+
   /// \f$ \theta_{34} \f$
   class FitTheta34Sterile: public IConstrainedFitVar
   {
@@ -274,6 +311,24 @@ namespace ana
 
   /// \f$ \sin^2\theta_{34} \f$
   const FitSinSqTheta34Sterile kFitSinSqTheta34Sterile = FitSinSqTheta34Sterile();
+
+  //----------------------------------------------------------------------
+
+  /// \f$ \sin^22\theta_{34} \f$
+  class FitSinSq2Theta34Sterile: public IConstrainedFitVar
+  {
+  public:
+    virtual double GetValue(const osc::IOscCalculatorAdjustable* osc) const;
+    virtual void SetValue(osc::IOscCalculatorAdjustable* osc, double val) const;
+    virtual std::string ShortName() const {return "ss2th34";}
+    virtual std::string LatexName() const {return "sin^{2}2#theta_{34}";}
+
+    virtual double LowLimit() const {return 0;}
+    virtual double HighLimit() const {return 1;}
+  };
+
+  /// \f$ \sin^22\theta_{34} \f$
+  const FitSinSq2Theta34Sterile kFitSinSq2Theta34Sterile = FitSinSq2Theta34Sterile();
 
   //----------------------------------------------------------------------
 
