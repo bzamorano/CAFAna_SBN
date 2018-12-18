@@ -29,8 +29,7 @@ using namespace ana;
 
 void demo3()
 {
-    // See demo0.C for explanation of these repeated parts
-
+  // See demo0.C for explanation of these repeated parts
   const std::string fnameBeam = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_nu_ExampleAnalysis_ExampleSelection.root";
   const std::string fnameSwap = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_oscnue_ExampleAnalysis_ExampleSelection.root";
 
@@ -72,10 +71,10 @@ void demo3()
   // Calculator
   osc::OscCalculatorSterile* calc = DefaultSterileCalc(4);
   calc->SetL(0.11); // SBND only, temporary
-  calc->SetAngle(2, 4, 0.6);
+  calc->SetAngle(2, 4, 0.55);
   calc->SetDm(4, 1); // Some dummy values
 
-  TMarker* trueValues = new TMarker(pow(TMath::Sin(calc->GetAngle(2,4)),2), calc->GetDm(4), kFullCircle);
+  TMarker* trueValues = new TMarker(pow(TMath::Sin(2*calc->GetAngle(2,4)),2), calc->GetDm(4), kFullCircle);
   trueValues->SetMarkerColor(kRed);
 
   // To make a fit we need to have a "data" spectrum to compare to our MC
@@ -86,11 +85,12 @@ void demo3()
 
   // A Surface evaluates the experiment's chisq across a grid
   Surface surf(&expt, calc,
-               &kFitSinSqTheta24Sterile, 50, 0, 1,
-               &kFitDmSq41Sterile, 60, 0.8, 2.3);
+               &kFitSinSq2Theta24Sterile, 50, 0, 1,
+               &kFitDmSq41Sterile, 75, 0.5, 3);
 
 
   TCanvas* c1 = new TCanvas("c1");
+  //c1->SetLogy();
   c1->SetLeftMargin(0.12);
   c1->SetBottomMargin(0.15);
   //surf.Draw();

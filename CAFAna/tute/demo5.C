@@ -9,90 +9,121 @@
 #include "CAFAna/Prediction/PredictionNoExtrap.h"
 #include "CAFAna/Analysis/Calcs.h"
 #include "StandardRecord/StandardRecord.h"
-#include "OscLib/func/OscCalculatorPMNSOpt.h"
+#include "OscLib/func/OscCalculatorSterile.h"
+
 #include "TCanvas.h"
 #include "TH1.h"
+
+// Random numbers to fake an efficiency and resolution
+#include "TRandom3.h"
+TRandom3 r(0);
 
 using namespace ana;
 
 class ToyEnergyScaleSyst: public ISyst
-{
-public:
-  std::string ShortName() const override {return "toyEScale";}
-  std::string LatexName() const override {return "Toy Energy Scale";}
-  void Shift(double sigma,
-             Restorer& restore,
-             caf::StandardRecord* sr,
-             double& weight) const override
   {
-    restore.Add(sr->dune.Ev_reco_numu);
-    sr->dune.Ev_reco_numu *= (1+.1*sigma);
-  }
-};
-const ToyEnergyScaleSyst eSyst;
+  public:
+    ToyEnergyScaleSyst() : ISyst("toyEScale", "Toy Energy Scale") {}
+    void Shift(double sigma,
+               Restorer& restore,
+               caf::StandardRecord* sr,
+               double& weight) const override
+    {
+      restore.Add(sr->sbn.truth.neutrino[0].energy);
+      const double scale = 1 + .03*sigma; // 3% resolution
+      sr->sbn.truth.neutrino[0].energy *= scale;
+    }
+  };
+  const ToyEnergyScaleSyst eSyst;
 
 class ToyNormSyst: public ISyst
-{
-public:
-  std::string ShortName() const override {return "toyNorm";}
-  std::string LatexName() const override {return "Toy Norm syst";}
-  void Shift(double sigma,
-             Restorer& restore,
-             caf::StandardRecord* sr,
-             double& weight) const override
   {
-    // Note I've switched this around to apply to high energy events, to more
-    // clearly seperate the effects from the energy scale syst.
-    if(sr->dune.Ev_reco_numu > 7) weight *= 1+0.2*sigma;
-  }
-};
-const ToyNormSyst nSyst;
+  public:
+    ToyNormSyst() : ISyst("toyNorm", "Toy Norm Scale") {}
+    void Shift(double sigma,
+               Restorer& restore,
+               caf::StandardRecord* sr,
+               double& weight) const override
+    {
+      if(sr->sbn.truth.neutrino[0].energy > 2) weight *= 1+0.2*sigma;
+      else weight *= 1+0.1*sigma;
+    }
+  };
+  const ToyNormSyst nSyst;
 
 void demo5()
 {
-  const std::string fname = "/pnfs/dune/persistent/TaskForce_AnaTree/far/train/v3.2/nu.mcc10.1_def.root";
-  SpectrumLoader loader(fname);
-  auto* loaderBeam  = loader.LoaderForRunPOT(20000001);
-  auto* loaderNue   = loader.LoaderForRunPOT(20000002);
-  auto* loaderNuTau = loader.LoaderForRunPOT(20000003);
-  auto* loaderNC    = loader.LoaderForRunPOT(0);
-  const Var kRecoEnergy = SIMPLEVAR(dune.Ev_reco_numu);
-  const Binning binsEnergy = Binning::Simple(40, 0, 10);
-  const HistAxis axEnergy("Reco energy (GeV)", binsEnergy, kRecoEnergy);
-  const Cut kPassesMVA = SIMPLEVAR(dune.mvanumu) > 0;
-  const double pot = 3.5 * 1.47e21 * 40/1.13;
-  osc::IOscCalculator* calc = DefaultOscCalc();
+  // See demo0.C for explanation of these repeated parts
+  const std::string fnameBeam = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_nu_ExampleAnalysis_ExampleSelection.root";
+  const std::string fnameSwap = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_oscnue_ExampleAnalysis_ExampleSelection.root";
 
-  PredictionNoExtrap predNom(*loaderBeam, *loaderNue, *loaderNuTau, *loaderNC,
-                             axEnergy, kPassesMVA);
+  // Source of events
+  SpectrumLoader loaderBeam(fnameBeam);
+  SpectrumLoader loaderSwap(fnameSwap);
+
+  const Var kRecoEnergy({}, // ToDo: smear with some resolution
+                        [](const caf::StandardRecord* sr)
+                        {
+                          double fE = sr->sbn.truth.neutrino[0].energy;
+                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          return fE;
+                        });
+
+  const Binning binsEnergy = Binning::Simple(50, 0, 5);
+  const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
+
+  // Fake POT: we need to sort this out in the files first
+  const double pot = 6.e20;
+
+  const Cut kSelectionCut({},
+                       [](const caf::StandardRecord* sr)
+                       {
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 90% eff for CC, 15% for NC
+                         if(isCC) return p < 0.9;
+                         else return p < 0.15;
+                       });
+
+  // Calculator
+  osc::OscCalculatorSterile* calc = DefaultSterileCalc(4);
+  calc->SetL(0.11); // SBND only, temporary
+  calc->SetAngle(2, 4, 0.55);
+  calc->SetDm(4, 1); // Some dummy values
+
+  PredictionNoExtrap predNom(loaderBeam, loaderSwap, kNullLoader,
+                          axEnergy, kSelectionCut);
 
   // Can set multiple systematics at once like this
   SystShifts bothUp;
   bothUp.SetShift(&eSyst, +1);
-  bothUp.SetShift(&nSyst, +3);
+  bothUp.SetShift(&nSyst, +1);
 
   SystShifts bothDn;
   bothDn.SetShift(&eSyst, -1);
-  bothDn.SetShift(&nSyst, -3);
+  bothDn.SetShift(&nSyst, -1);
 
   // Each of the constituent OscillatableSpectrum objects within these
   // predictions will be systematically altered as specified in the last
   // argument.
-  PredictionNoExtrap predUp(*loaderBeam, *loaderNue, *loaderNuTau, *loaderNC,
-                            axEnergy, kPassesMVA,
+  PredictionNoExtrap predUp(loaderBeam, loaderSwap, kNullLoader,
+                            axEnergy, kSelectionCut,
                             bothUp);
-  PredictionNoExtrap predDn(*loaderBeam, *loaderNue, *loaderNuTau, *loaderNC,
-                            axEnergy, kPassesMVA,
+  PredictionNoExtrap predDn(loaderBeam, loaderSwap, kNullLoader,
+                            axEnergy, kSelectionCut,
                             bothDn);
 
   // Fill all the nominal and shifted spectra within all three predictions
-  loader.Go();
+  loaderBeam.Go();
+  loaderSwap.Go();
 
   const Spectrum sOscNom = predNom.Predict(calc);
   const Spectrum sOscUp = predUp.Predict(calc);
   const Spectrum sOscDn = predDn.Predict(calc);
 
-  sOscDn.ToTH1(pot, kBlue)->Draw("hist");
+  TCanvas* c1 = new TCanvas("c1");
+  sOscUp.ToTH1(pot, kBlue)->Draw("hist");
   sOscNom.ToTH1(pot)->Draw("hist same");
-  sOscUp.ToTH1(pot, kRed)->Draw("hist same");
+  sOscDn.ToTH1(pot, kRed)->Draw("hist same");
+  c1->SaveAs("demo5_plot1.pdf");
 }

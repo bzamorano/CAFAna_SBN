@@ -74,7 +74,7 @@ void demo1()
   // Analysis/Calcs.h
   osc::OscCalculatorSterile* calc = DefaultSterileCalc(4);
   calc->SetL(0.11); // SBND only, temporary
-  calc->SetAngle(2, 4, 0.6);
+  calc->SetAngle(2, 4, 0.55);
   calc->SetDm(4, 1); // Some dummy values
 
   const Spectrum sOsc = pred.Predict(calc);

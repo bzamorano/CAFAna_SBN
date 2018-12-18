@@ -14,24 +14,36 @@
 #include "TH1.h"
 #include "TPad.h"
 
+// Random numbers to fake an efficiency and resolution
+#include "TRandom3.h"
+TRandom3 r(0);
+
 using namespace ana;
 
 void demo4()
 {
-  // Copying basic setup from demo0.C
-  const std::string fname = "/pnfs/dune/persistent/TaskForce_AnaTree/far/train/v3.2/nu.mcc10.1_def.root";
-  SpectrumLoader loader(fname);
-  auto* loaderBeam  = loader.LoaderForRunPOT(20000001);
-  auto* loaderNue   = loader.LoaderForRunPOT(20000002);
-  auto* loaderNuTau = loader.LoaderForRunPOT(20000003);
-  auto* loaderNC    = loader.LoaderForRunPOT(0);
-  const Var kRecoEnergy = SIMPLEVAR(dune.Ev_reco_numu);
-  const Binning binsEnergy = Binning::Simple(40, 0, 10);
-  const HistAxis axEnergy("Reco energy (GeV)", binsEnergy, kRecoEnergy);
-  const double pot = 3.5 * 1.47e21 * 40/1.13;
+  // See demo0.C for explanation of these repeated parts
+  const std::string fnameBeam = "/sbnd/app/users/bzamoran/sbncode-v07_11_00/output_largesample_nu_ExampleAnalysis_ExampleSelection.root";
+
+  // Source of events
+  SpectrumLoader loaderBeam(fnameBeam);
+
+  const Var kRecoEnergy({}, // ToDo: smear with some resolution
+                        [](const caf::StandardRecord* sr)
+                        {
+                          double fE = sr->sbn.truth.neutrino[0].energy;
+                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          return fE;
+                        });
+
+  const Binning binsEnergy = Binning::Simple(50, 0, 5);
+  const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
+
+  // Fake POT: we need to sort this out in the files first
+  const double pot = 6.e20;
 
   // This is the nominal energy spectrum
-  Spectrum sEnergy(*loaderBeam, axEnergy, kIsNumuCC);
+  Spectrum sEnergy(loaderBeam, axEnergy, kIsNumuCC);
 
   // Systematics work by modifying the event record before it's filled into the
   // spectrum. These generally should be added into a header like Systs.h
@@ -39,8 +51,7 @@ void demo4()
   class ToyEnergyScaleSyst: public ISyst
   {
   public:
-    std::string ShortName() const override {return "toyEScale";}
-    std::string LatexName() const override {return "Toy Energy Scale";}
+    ToyEnergyScaleSyst() : ISyst("toyEScale", "Toy Energy Scale") {}
 
     // Function that will be called to actually do the shift
     void Shift(double sigma,
@@ -50,24 +61,23 @@ void demo4()
     {
       // First - register all the variables that will need to be restored to
       // return the record to nominal
-      restore.Add(sr->dune.Ev_reco_numu);
+      restore.Add(sr->sbn.truth.neutrino[0].energy);
 
       // Then edit the event record
-      const double scale = 1 + .1*sigma;
-      sr->dune.Ev_reco_numu *= scale;
+      const double scale = 1 + .03*sigma; // 3% resolution
+      sr->sbn.truth.neutrino[0].energy *= scale;
     }
   };
   const ToyEnergyScaleSyst eSyst;
 
   // Make systematically shifted variants of the spectrum above
-  Spectrum sEnergyUp(*loaderBeam, axEnergy, kIsNumuCC, SystShifts(&eSyst, +1));
-  Spectrum sEnergyDn(*loaderBeam, axEnergy, kIsNumuCC, SystShifts(&eSyst, -1));
+  Spectrum sEnergyUp(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&eSyst, +1));
+  Spectrum sEnergyDn(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&eSyst, -1));
 
   class ToyNormSyst: public ISyst
   {
   public:
-    std::string ShortName() const override {return "toyNorm";}
-    std::string LatexName() const override {return "Toy Norm syst";}
+    ToyNormSyst() : ISyst("toyNorm", "Toy Norm Scale") {}
 
     void Shift(double sigma,
                Restorer& restore,
@@ -76,24 +86,29 @@ void demo4()
     {
       // A systematic can also reweight events, based on whatever criteria you
       // want.
-      if(sr->dune.Ev_reco_numu < 2) weight *= 1+0.2*sigma;
+      if(sr->sbn.truth.neutrino[0].energy > 1.5) weight *= 1+0.2*sigma;
+      else weight *= 1+0.1*sigma;
     }
   };
   const ToyNormSyst nSyst;
 
-  Spectrum sNormUp(*loaderBeam, axEnergy, kIsNumuCC, SystShifts(&nSyst, +1));
-  Spectrum sNormDn(*loaderBeam, axEnergy, kIsNumuCC, SystShifts(&nSyst, -1));
+  Spectrum sNormUp(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&nSyst, +1));
+  Spectrum sNormDn(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&nSyst, -1));
 
   // Fill all the various shifted spectra
-  loader.Go();
+  loaderBeam.Go();
 
+  // Plot what we have so far
+  TCanvas* c1 = new TCanvas("c1");
 
   sEnergyDn.ToTH1(pot, kBlue)->Draw("hist");
   sEnergyUp.ToTH1(pot, kRed)->Draw("hist same");
   sEnergy.ToTH1(pot)->Draw("hist same");
+  c1->SaveAs("demo4_plot1.pdf");
 
-  new TCanvas;
+  // Now the normalisation systematic
   sNormUp.ToTH1(pot, kRed)->Draw("hist");
   sNormDn.ToTH1(pot, kBlue)->Draw("hist same");
   sEnergy.ToTH1(pot)->Draw("hist same");
+  c1->SaveAs("demo4_plot2.pdf");
 }

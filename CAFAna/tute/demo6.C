@@ -22,35 +22,35 @@
 using namespace ana;
 
 class ToyEnergyScaleSyst: public ISyst
-{
-public:
-  std::string ShortName() const override {return "toyEScale";}
-  std::string LatexName() const override {return "Toy Energy Scale";}
-  void Shift(double sigma,
-             Restorer& restore,
-             caf::StandardRecord* sr,
-             double& weight) const override
   {
-    restore.Add(sr->dune.Ev_reco_numu);
-    sr->dune.Ev_reco_numu *= (1+.05*sigma);
-  }
-};
-const ToyEnergyScaleSyst eSyst;
+  public:
+    ToyEnergyScaleSyst() : ISyst("toyEScale", "Toy Energy Scale") {}
+    void Shift(double sigma,
+               Restorer& restore,
+               caf::StandardRecord* sr,
+               double& weight) const override
+    {
+      restore.Add(sr->sbn.truth.neutrino[0].energy);
+      const double scale = 1 + .03*sigma; // 3% resolution
+      sr->sbn.truth.neutrino[0].energy *= scale;
+    }
+  };
+  const ToyEnergyScaleSyst eSyst;
 
 class ToyNormSyst: public ISyst
-{
-public:
-  std::string ShortName() const override {return "toyNorm";}
-  std::string LatexName() const override {return "Toy Norm syst";}
-  void Shift(double sigma,
-             Restorer& restore,
-             caf::StandardRecord* sr,
-             double& weight) const override
   {
-    if(sr->dune.Ev_reco_numu > 7) weight *= 1+0.1*sigma;
-  }
-};
-const ToyNormSyst nSyst;
+  public:
+    ToyNormSyst() : ISyst("toyNorm", "Toy Norm Scale") {}
+    void Shift(double sigma,
+               Restorer& restore,
+               caf::StandardRecord* sr,
+               double& weight) const override
+    {
+      if(sr->sbn.truth.neutrino[0].energy > 2) weight *= 1+0.2*sigma;
+      else weight *= 1+0.1*sigma;
+    }
+  };
+  const ToyNormSyst nSyst;
 
 void demo6()
 {
