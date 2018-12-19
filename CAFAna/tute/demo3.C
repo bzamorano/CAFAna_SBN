@@ -51,7 +51,7 @@ void demo3()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
-                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
                           return fE;
                         });
 
@@ -66,9 +66,9 @@ void demo3()
                        {
                          bool isCC = sr->sbn.truth.neutrino[0].iscc;
                          double p = r.Uniform();
-                         // 90% eff for CC, 15% for NC
+                         // 90% eff for CC, 10% for NC
                          if(isCC) return p < 0.9;
-                         else return p < 0.15;
+                         else return p < 0.10;
                        });
 
   PredictionNoExtrap pred(loaderBeam, loaderSwap, kNullLoader,
@@ -101,7 +101,6 @@ void demo3()
   Surface surf(&expt, calc,
                &kFitSinSq2Theta24Sterile, 50, 0, 1,
                &kFitDmSq41Sterile, 75, 0.5, 3);
-
 
   TCanvas* c1 = new TCanvas("c1");
   c1->SetLogy();

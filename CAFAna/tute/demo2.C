@@ -40,7 +40,7 @@ void demo2()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
-                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
                           return fE;
                         });
 
@@ -55,14 +55,13 @@ void demo2()
                        {
                          bool isCC = sr->sbn.truth.neutrino[0].iscc;
                          double p = r.Uniform();
-                         // 90% eff for CC, 15% for NC
-                         if(isCC) return p < 0.9;
-                         else return p < 0.15;
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
+                         else return p < 0.10;
                        });
 
   PredictionNoExtrap pred(loaderBeam, loaderSwap, kNullLoader,
                           axEnergy, kSelectionCut);
-
 
   loaderBeam.Go();
   loaderSwap.Go();

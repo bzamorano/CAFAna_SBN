@@ -36,7 +36,7 @@ void demo1()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
-                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
                           return fE;
                         });
 
@@ -51,9 +51,15 @@ void demo1()
                        {
                          bool isCC = sr->sbn.truth.neutrino[0].iscc;
                          double p = r.Uniform();
-                         // 90% eff for CC, 15% for NC
-                         if(isCC) return p < 0.9;
-                         else return p < 0.15;
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
+                         else return p < 0.10;
+                         // This won't work once we add systematics, since we need to be
+                         // able to "recover" the true value. Instead, one needs to use
+                         // pseudo-random, based on some dummy value (e.g. run and subrun).
+                         // However, the present files don't have much we can use as such,
+                         // so for now we'll simply move to "truth" selection when we start
+                         // to include systematics
                        });
 
   // In many cases it's easier to form them from existing Vars like this

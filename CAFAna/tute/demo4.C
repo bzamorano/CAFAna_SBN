@@ -32,7 +32,7 @@ void demo4()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
-                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
                           return fE;
                         });
 
@@ -64,7 +64,7 @@ void demo4()
       restore.Add(sr->sbn.truth.neutrino[0].energy);
 
       // Then edit the event record
-      const double scale = 1 + .03*sigma; // 3% resolution
+      const double scale = 1 + .03*sigma; // 3% energy scale syst.
       sr->sbn.truth.neutrino[0].energy *= scale;
     }
   };

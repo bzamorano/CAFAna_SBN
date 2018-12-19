@@ -30,7 +30,7 @@ class ToyEnergyScaleSyst: public ISyst
                double& weight) const override
     {
       restore.Add(sr->sbn.truth.neutrino[0].energy);
-      const double scale = 1 + .03*sigma; // 3% resolution
+      const double scale = 1 + .03*sigma; // 3% E scale syst.
       sr->sbn.truth.neutrino[0].energy *= scale;
     }
   };
@@ -65,7 +65,7 @@ void demo5()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
-                          double smear = r.Gaus(1, 0.03); // Flat 3% E resolution
+                          double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
                           return fE;
                         });
 
@@ -80,9 +80,9 @@ void demo5()
                        {
                          bool isCC = sr->sbn.truth.neutrino[0].iscc;
                          double p = r.Uniform();
-                         // 90% eff for CC, 15% for NC
-                         if(isCC) return p < 0.9;
-                         else return p < 0.15;
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
+                         else return p < 0.10;
                        });
 
   // Calculator

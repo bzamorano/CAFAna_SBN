@@ -54,9 +54,8 @@ void demo0()
   // This is the call that actually fills in those spectra
   loader.Go();
 
-  // POT/yr * 3.5yrs * mass correction for the workspace geometry
-  //  const double pot = 3.5 * 1.47e21 * 40/1.13;
-  const double pot = 1.e16;
+  // Fake POT: we need to sort this out in the files first
+  const double pot = 6.e20;
 
   // For plotting purposes we can convert to TH1s
   TCanvas* c1 = new TCanvas("c1");
