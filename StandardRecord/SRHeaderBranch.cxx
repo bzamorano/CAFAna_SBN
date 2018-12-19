@@ -1,26 +1,22 @@
 ////////////////////////////////////////////////////////////////////////
-// \brief   An SRTruthBranch contains vectors of SRTruth.  
+// \brief   An SRHeader contains vectors of SRHeader.  
 //          It is intended for use in the Common Analysis File ROOT trees.
 //
-// \author  Dominick Rocco
-// \date    November 2012
+// \author  Bruno Zamorano
+// \date    December 2018
 ////////////////////////////////////////////////////////////////////////
 
-#include "StandardRecord/SRTruthBranch.h"
+#include "StandardRecord/SRHeaderBranch.h"
 
 
 namespace caf
 {
   
-  SRTruthBranch::SRTruthBranch():
-  neutrino(),
-  lepton()
-  {  }
+  SRHeaderBranch::SRHeaderBranch() {}
   
-  SRTruthBranch::~SRTruthBranch() {}
+  SRHeaderBranch::~SRHeaderBranch() {}
   
-  
-  void SRTruthBranch::setDefault()
+  void SRHeaderBranch::setDefault()
   {
   }
   

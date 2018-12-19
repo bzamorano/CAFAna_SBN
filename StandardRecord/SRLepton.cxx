@@ -1,22 +1,20 @@
 ////////////////////////////////////////////////////////////////////////
-// \brief   An  SRNeutrino represents a true neutrino.
-// \author  gsdavies@iastate.edu
-// \date    February 2013
+// \brief   An  SRLepton represents a true lepton.
+// \author  Bruno Zamorano
+// \date    December 2018
 ////////////////////////////////////////////////////////////////////////
 
 
-#include "StandardRecord/SRNeutrino.h"
+#include "StandardRecord/SRLepton.h"
 
 
 namespace caf
 {
 
-  SRNeutrino::SRNeutrino():
-    iscc(false),
+  SRLepton::SRLepton():
     pdg(0),
-    genie_intcode(-1),
     energy(-1),
-    inelasticityY(-1)
+    momentum(-1)
     {  }
 
 } // end namespace caf

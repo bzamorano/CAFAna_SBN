@@ -10,7 +10,6 @@
 #define STANDARDRECORD_H
 
 #include "StandardRecord/SRSBN.h"
-#include "StandardRecord/SRDune.h"
 
 /// Common Analysis Files
 namespace caf
@@ -27,7 +26,6 @@ namespace caf
     ~StandardRecord();
 
     SRSBN sbn;
-    SRDune dune;
   };
   
 } // end namespace

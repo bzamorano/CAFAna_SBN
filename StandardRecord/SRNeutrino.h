@@ -16,6 +16,7 @@ namespace caf
 
       bool         iscc;          ///< Is CC interaction
       int          pdg;           ///< PDG code
+      int          genie_intcode; ///< GENIE interaction mode
       double       energy;        ///< True energy [GeV]
       double       inelasticityY; ///< True inelasticity
     };
