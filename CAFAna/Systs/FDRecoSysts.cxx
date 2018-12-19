@@ -6,15 +6,15 @@
 
 namespace ana {
 
-  const FDRecoNumuSyst kFDRecoNumuSyst;
-  const FDRecoNueSyst kFDRecoNueSyst;
+  // const FDRecoNumuSyst kFDRecoNumuSyst;
+  // const FDRecoNueSyst kFDRecoNueSyst;
 
-  FDRecoSystVector GetFDRecoSysts()
-  {
-    FDRecoSystVector vec = {};
-    vec.push_back(&kFDRecoNumuSyst);
-    vec.push_back(&kFDRecoNueSyst);
-    return vec;
-  }
+  // FDRecoSystVector GetFDRecoSysts()
+  // {
+  //   FDRecoSystVector vec = {};
+  //   vec.push_back(&kFDRecoNumuSyst);
+  //   vec.push_back(&kFDRecoNueSyst);
+  //   return vec;
+  // }
   
 }

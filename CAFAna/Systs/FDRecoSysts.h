@@ -10,83 +10,82 @@
 #include "TFile.h"
 #include "TH1.h"
 #include "TH2.h"
-#include "TRandom3.h"
 
 #include <cassert>
 
 namespace ana {
 
-  class FDRecoNumuSyst: public ISyst
-  {
-  public:
-  FDRecoNumuSyst() : ISyst("FDRecoNumuSyst", "Far Detector Numu Reconstruction Syst") {}
+ //  class FDRecoNumuSyst: public ISyst
+ //  {
+ //  public:
+ //  FDRecoNumuSyst() : ISyst("FDRecoNumuSyst", "Far Detector Numu Reconstruction Syst") {}
 
-    void Shift(double sigma,
-	       Restorer& restore,
-	       caf::StandardRecord* sr,
-	       double& weight) const override 
-    {
-      // Load histograms if they have not been loaded already
-      if (!hist) {
-	TFile f((FindCAFAnaDir()+"/Systs/modelComp.root").c_str());
-	assert(!f.IsZombie());
-	hist = (TH2*)f.Get("hYratio_neutfhc_geniefhc");
-	hist->SetDirectory(0);
-	assert(hist);
-      }
-      // Passes FD selection cut
-      if (sr->dune.isFD && sr->dune.cvnnumu >= 0.5) {
-	int EBin   = hist->GetXaxis()->FindBin(sr->dune.Ev);
-	int VarBin = hist->GetYaxis()->FindBin(sr->dune.Y);
-	double w   = hist->GetBinContent(EBin, VarBin);
-	weight    *= 1. + sigma * (1. - w) ;
-      }
-    }
+ //    void Shift(double sigma,
+	//        Restorer& restore,
+	//        caf::StandardRecord* sr,
+	//        double& weight) const override 
+ //    {
+ //      // Load histograms if they have not been loaded already
+ //      if (!hist) {
+	// TFile f((FindCAFAnaDir()+"/Systs/modelComp.root").c_str());
+	// assert(!f.IsZombie());
+	// hist = (TH2*)f.Get("hYratio_neutfhc_geniefhc");
+	// hist->SetDirectory(0);
+	// assert(hist);
+ //      }
+ //      // Passes FD selection cut
+ //      if (sr->dune.isFD && sr->dune.cvnnumu >= 0.5) {
+	// int EBin   = hist->GetXaxis()->FindBin(sr->dune.Ev);
+	// int VarBin = hist->GetYaxis()->FindBin(sr->dune.Y);
+	// double w   = hist->GetBinContent(EBin, VarBin);
+	// weight    *= 1. + sigma * (1. - w) ;
+ //      }
+ //    }
     
-  protected:
-    mutable TH2* hist;
-  }; 
+ //  protected:
+ //    mutable TH2* hist;
+ //  }; 
 
-  extern const FDRecoNumuSyst kFDRecoNumuSyst;
+ //  extern const FDRecoNumuSyst kFDRecoNumuSyst;
 
-  // Nue reco syst
-  class FDRecoNueSyst: public ISyst
-  {
-  public:
-  FDRecoNueSyst() : ISyst("FDRecoNueSyst", "Far Detector Nue Reconstruction Syst") {}
+ //  // Nue reco syst
+ //  class FDRecoNueSyst: public ISyst
+ //  {
+ //  public:
+ //  FDRecoNueSyst() : ISyst("FDRecoNueSyst", "Far Detector Nue Reconstruction Syst") {}
 
-    void Shift(double sigma,
-	       Restorer& restore,
-	       caf::StandardRecord* sr,
-	       double& weight) const override 
-    {
-      // Load histograms if they have not been loaded already
-      if (!hist) {
-	TFile f((FindCAFAnaDir()+"/Systs/modelComp.root").c_str());
-	assert(!f.IsZombie());
-	hist = (TH2*)f.Get("hYratio_neutfhc_geniefhc");
-	hist->SetDirectory(0);
-	assert(hist);
-      }
-      // Passes FD nue selection
-      if (sr->dune.isFD && sr->dune.cvnnue >= 0.5) {
-	int EBin   = hist->GetXaxis()->FindBin(sr->dune.Ev);
-	int VarBin = hist->GetYaxis()->FindBin(sr->dune.Y);
-	double w   = hist->GetBinContent(EBin, VarBin);
-	weight    *= 1. + sigma * (1. - w) ;
-      }
-    }
+ //    void Shift(double sigma,
+	//        Restorer& restore,
+	//        caf::StandardRecord* sr,
+	//        double& weight) const override 
+ //    {
+ //      // Load histograms if they have not been loaded already
+ //      if (!hist) {
+	// TFile f((FindCAFAnaDir()+"/Systs/modelComp.root").c_str());
+	// assert(!f.IsZombie());
+	// hist = (TH2*)f.Get("hYratio_neutfhc_geniefhc");
+	// hist->SetDirectory(0);
+	// assert(hist);
+ //      }
+ //      // Passes FD nue selection
+ //      if (sr->dune.isFD && sr->dune.cvnnue >= 0.5) {
+	// int EBin   = hist->GetXaxis()->FindBin(sr->dune.Ev);
+	// int VarBin = hist->GetYaxis()->FindBin(sr->dune.Y);
+	// double w   = hist->GetBinContent(EBin, VarBin);
+	// weight    *= 1. + sigma * (1. - w) ;
+ //      }
+ //    }
     
-  protected:
-    mutable TH2* hist;
-  };
+ //  protected:
+ //    mutable TH2* hist;
+ //  };
 
-  extern const FDRecoNueSyst kFDRecoNueSyst;
+ //  extern const FDRecoNueSyst kFDRecoNueSyst;
 
-  struct FDRecoSystVector: public std::vector<const ISyst*>
-  {
-  };
+ //  struct FDRecoSystVector: public std::vector<const ISyst*>
+ //  {
+ //  };
 
-  FDRecoSystVector GetFDRecoSysts();
+ //  FDRecoSystVector GetFDRecoSysts();
   
 }
