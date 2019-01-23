@@ -16,7 +16,6 @@
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
-TRandom3 r(0);
 
 using namespace ana;
 
@@ -65,9 +64,22 @@ void demo5()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
+                          TRandom3 r(floor(fE*10000));
                           double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
-                          return fE;
+                          return fE*smear;
                         });
+
+  const Cut kSelectionCut({},
+                       [](const caf::StandardRecord* sr)
+                       {
+                         double fE = sr->sbn.truth.neutrino[0].energy;
+                         TRandom3 r(floor(fE*10000));
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
+                         else return p < 0.10;
+                       });
 
   const Binning binsEnergy = Binning::Simple(50, 0, 5);
   const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
@@ -75,15 +87,6 @@ void demo5()
   // Fake POT: we need to sort this out in the files first
   const double pot = 6.e20;
 
-  const Cut kSelectionCut({},
-                       [](const caf::StandardRecord* sr)
-                       {
-                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
-                         double p = r.Uniform();
-                         // 80% eff for CC, 10% for NC
-                         if(isCC) return p < 0.8;
-                         else return p < 0.10;
-                       });
 
   // Calculator
   osc::OscCalculatorSterile* calc = DefaultSterileCalc(4);

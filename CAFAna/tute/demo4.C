@@ -16,7 +16,6 @@
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
-TRandom3 r(0);
 
 using namespace ana;
 
@@ -32,9 +31,22 @@ void demo4()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
+                          TRandom3 r(floor(fE*10000));
                           double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
-                          return fE;
+                          return fE*smear;
                         });
+
+  const Cut kSelectionCut({},
+                       [](const caf::StandardRecord* sr)
+                       {
+                         double fE = sr->sbn.truth.neutrino[0].energy;
+                         TRandom3 r(floor(fE*10000));
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
+                         else return p < 0.10;
+                       });
 
   const Binning binsEnergy = Binning::Simple(50, 0, 5);
   const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
@@ -43,7 +55,7 @@ void demo4()
   const double pot = 6.e20;
 
   // This is the nominal energy spectrum
-  Spectrum sEnergy(loaderBeam, axEnergy, kIsNumuCC);
+  Spectrum sEnergy(loaderBeam, axEnergy, kSelectionCut);
 
   // Systematics work by modifying the event record before it's filled into the
   // spectrum. These generally should be added into a header like Systs.h
@@ -71,8 +83,8 @@ void demo4()
   const ToyEnergyScaleSyst eSyst;
 
   // Make systematically shifted variants of the spectrum above
-  Spectrum sEnergyUp(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&eSyst, +1));
-  Spectrum sEnergyDn(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&eSyst, -1));
+  Spectrum sEnergyUp(loaderBeam, axEnergy, kSelectionCut, SystShifts(&eSyst, +1));
+  Spectrum sEnergyDn(loaderBeam, axEnergy, kSelectionCut, SystShifts(&eSyst, -1));
 
   class ToyNormSyst: public ISyst
   {
@@ -92,8 +104,8 @@ void demo4()
   };
   const ToyNormSyst nSyst;
 
-  Spectrum sNormUp(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&nSyst, +1));
-  Spectrum sNormDn(loaderBeam, axEnergy, kIsNumuCC, SystShifts(&nSyst, -1));
+  Spectrum sNormUp(loaderBeam, axEnergy, kSelectionCut, SystShifts(&nSyst, +1));
+  Spectrum sNormDn(loaderBeam, axEnergy, kSelectionCut, SystShifts(&nSyst, -1));
 
   // Fill all the various shifted spectra
   loaderBeam.Go();

@@ -23,7 +23,6 @@
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
-TRandom3 r(0);
 
 using namespace ana;
 
@@ -68,15 +67,28 @@ void demo7()
   Loaders loaders;
 
   loaders.SetLoaderPath( fnameBeam,  caf::kFARDET,  Loaders::kMC,   ana::kBeam, Loaders::kNonSwap);
-  loaders.SetLoaderPath( fnameSwap,  caf::kFARDET,  Loaders::kMC,   ana::kBeam, Loaders::kNueSwap);
+  loaders.SetLoaderPath( fnameSwap,  caf::kFARDET,  Loaders::kMC,   ana::kBeam, Loaders::kFluxSwap);
 
   const Var kRecoEnergy({}, // ToDo: smear with some resolution
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
+                          TRandom3 r(floor(fE*10000));
                           double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
-                          return fE;
+                          return fE*smear;
                         });
+
+  const Cut kSelectionCut({},
+                       [](const caf::StandardRecord* sr)
+                       {
+                         double fE = sr->sbn.truth.neutrino[0].energy;
+                         TRandom3 r(floor(fE*10000));
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
+                         else return p < 0.10;
+                       });
 
   const Binning binsEnergy = Binning::Simple(50, 0, 5);
   const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
@@ -98,7 +110,7 @@ void demo7()
   // List all of the systematics we'll be using
   for(const ISyst* s: allSysts) std::cout << s->ShortName() << "\t\t" << s->LatexName() << std::endl;
 
-  NoExtrapGenerator gen(axEnergy, kIsNumuCC);
+  NoExtrapGenerator gen(axEnergy, kSelectionCut);
 
   PredictionInterp predInterp(allSysts, calc, gen, loaders);
 
@@ -123,6 +135,9 @@ void demo7()
   /// Now show the effect of including the systematic uncertainty in the fit
 
   c1->Clear();
+  c1->SetLogy();
+  c1->SetLeftMargin(0.12);
+  c1->SetBottomMargin(0.15);
 
   const Spectrum data = predInterp.Predict(calc).FakeData(pot);
   SingleSampleExperiment expt(&predInterp, data);

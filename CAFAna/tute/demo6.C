@@ -20,7 +20,6 @@
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
-TRandom3 r(0);
 
 using namespace ana;
 
@@ -65,15 +64,28 @@ void demo6()
   Loaders loaders;
 
   loaders.SetLoaderPath( fnameBeam,  caf::kFARDET,  Loaders::kMC,   ana::kBeam, Loaders::kNonSwap);
-  loaders.SetLoaderPath( fnameSwap,  caf::kFARDET,  Loaders::kMC,   ana::kBeam, Loaders::kNueSwap);
+  loaders.SetLoaderPath( fnameSwap,  caf::kFARDET,  Loaders::kMC,   ana::kBeam, Loaders::kFluxSwap);
 
   const Var kRecoEnergy({}, // ToDo: smear with some resolution
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
+                          TRandom3 r(floor(fE*10000));
                           double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
-                          return fE;
+                          return fE*smear;
                         });
+
+  const Cut kSelectionCut({},
+                       [](const caf::StandardRecord* sr)
+                       {
+                         double fE = sr->sbn.truth.neutrino[0].energy;
+                         TRandom3 r(floor(fE*10000));
+                         bool isCC = sr->sbn.truth.neutrino[0].iscc;
+                         double p = r.Uniform();
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
+                         else return p < 0.10;
+                       });
 
   const Binning binsEnergy = Binning::Simple(50, 0, 5);
   const HistAxis axEnergy("Fake reconsturcted energy (GeV)", binsEnergy, kRecoEnergy);
@@ -91,7 +103,7 @@ void demo6()
   // any values of the systematic parameters. Internally that works by creating
   // various predictions at different values of the paramters, so we need to
   // add this extra layer of indirection to allow it to create those.
-  NoExtrapGenerator gen(axEnergy, kIsNumuCC);
+  NoExtrapGenerator gen(axEnergy, kSelectionCut);
 
   // PredictionInterp needs:
   // - The list of systematics it should be ready to interpolate over

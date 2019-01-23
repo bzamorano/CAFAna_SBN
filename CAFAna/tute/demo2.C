@@ -12,6 +12,7 @@
 #include "StandardRecord/StandardRecord.h"
 #include "TCanvas.h"
 #include "TH1.h"
+#include "TGraph.h"
 
 // New includes required
 #include "CAFAna/Experiment/SingleSampleExperiment.h"
@@ -20,7 +21,6 @@
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
-TRandom3 r(0);
 
 using namespace ana;
 
@@ -40,8 +40,9 @@ void demo2()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
+                          TRandom3 r(floor(fE*10000));
                           double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
-                          return fE;
+                          return fE*smear;
                         });
 
   const Binning binsEnergy = Binning::Simple(50, 0, 5);
@@ -53,6 +54,8 @@ void demo2()
   const Cut kSelectionCut({},
                        [](const caf::StandardRecord* sr)
                        {
+                         double fE = sr->sbn.truth.neutrino[0].energy;
+                         TRandom3 r(floor(fE*10000));
                          bool isCC = sr->sbn.truth.neutrino[0].iscc;
                          double p = r.Uniform();
                          // 80% eff for CC, 10% for NC
@@ -72,9 +75,16 @@ void demo2()
   calc->SetAngle(2, 4, 0.55);
   calc->SetDm(4, 1); // Some dummy values
 
+  TGraph* trueValues = new TGraph();
+  trueValues->SetPoint(0, pow(TMath::Sin(2*calc->GetAngle(2,4)),2), -100);
+  trueValues->SetPoint(1, pow(TMath::Sin(2*calc->GetAngle(2,4)),2), 1e5);
+  trueValues->SetLineColor(kRed);
+  trueValues->SetLineStyle(2);
+  trueValues->SetLineWidth(2);
+
   // To make a fit we need to have a "data" spectrum to compare to our MC
   // Prediction object
-  const Spectrum data = pred.Predict(calc).MockData(pot);
+  const Spectrum data = pred.Predict(calc).FakeData(pot);
 
   // An Experiment object is something that can turn oscillation parameters
   // into a chisq, in this case by comparing a Prediction and a data Spectrum
@@ -95,6 +105,16 @@ void demo2()
   // parameters
   std::cout << "Best chisq is " << best_chisq << " with "
             << "dmsq41 = " << calc->GetDm(4)
-            << " and sinsqth24 = " << kFitSinSqTheta24Sterile.GetValue(calc)
+            << " and th14 = " << TMath::ASin(sqrt(kFitSinSqTheta24Sterile.GetValue(calc)))
             << std::endl;
+
+  // We can obtain the 1-D ChiSquare plot for one of the variables, profiling over the other
+  TH1* h1 = SqrtProfile(&expt, calc, &kFitSinSq2Theta24Sterile, 80, 0.6, 1, -1, {&kFitDmSq41Sterile});
+  TCanvas* c1 = new TCanvas("c1");
+  c1->SetLeftMargin(0.12);
+  c1->SetBottomMargin(0.15);
+  h1->SetLineColor(kBlue);
+  h1->Draw("hist");
+  trueValues->Draw("L");
+  c1->SaveAs("demo2_plot1.pdf");
 }

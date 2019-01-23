@@ -23,7 +23,6 @@
 
 // Random numbers to fake an efficiency and resolution
 #include "TRandom3.h"
-TRandom3 r(0);
 
 #include "TMarker.h"
 
@@ -51,8 +50,9 @@ void demo3()
                         [](const caf::StandardRecord* sr)
                         {
                           double fE = sr->sbn.truth.neutrino[0].energy;
+                          TRandom3 r(floor(fE*10000));
                           double smear = r.Gaus(1, 0.05); // Flat 5% E resolution
-                          return fE;
+                          return fE*smear;
                         });
 
   const Binning binsEnergy = Binning::Simple(50, 0, 5);
@@ -64,10 +64,12 @@ void demo3()
   const Cut kSelectionCut({},
                        [](const caf::StandardRecord* sr)
                        {
+                         double fE = sr->sbn.truth.neutrino[0].energy;
+                         TRandom3 r(floor(fE*10000));
                          bool isCC = sr->sbn.truth.neutrino[0].iscc;
                          double p = r.Uniform();
-                         // 90% eff for CC, 10% for NC
-                         if(isCC) return p < 0.9;
+                         // 80% eff for CC, 10% for NC
+                         if(isCC) return p < 0.8;
                          else return p < 0.10;
                        });
 
@@ -158,35 +160,35 @@ void demo3()
 
   c1->SaveAs("demo3_plot3.pdf");
 
-  // We can now fit including profiling over the (relevant) unknown 
-  // oscillation parameters. We can also include constraints for those.
-  // ToDo: the complete general case, with multiple experiments and profiling
+  // // We can now fit including profiling over the (relevant) unknown 
+  // // oscillation parameters. We can also include constraints for those.
+  // // ToDo: the complete general case, with multiple experiments and profiling
 
-  // Experimental constraints (NuFit 4.0)
-  GaussianConstraint th23Constraint(&kFitTheta23InDegreesSterile, 49.7, 1.1);
-  GaussianConstraint dmsq32Constraint(&kFitDmSq32Sterile, 2.53e-3, 0.03e-3);
-  MultiExperiment multiExpt3({&th23Constraint, &dmsq32Constraint, &expt});
+  // // Experimental constraints (NuFit 4.0)
+  // GaussianConstraint th23Constraint(&kFitTheta23InDegreesSterile, 49.7, 1.1);
+  // GaussianConstraint dmsq32Constraint(&kFitDmSq32Sterile, 2.53e-3, 0.03e-3);
+  // MultiExperiment multiExpt3({&th23Constraint, &dmsq32Constraint, &expt});
 
-  std::vector< const IFitVar * > kProfiledVars = {&kFitTheta23InDegreesSterile, 
-                                                  &kFitDmSq32Sterile,
-                                                  &kFitDelta14InPiUnitsSterile,
-                                                  &kFitDelta24InPiUnitsSterile};
+  // std::vector< const IFitVar * > kProfiledVars = {&kFitTheta23InDegreesSterile, 
+  //                                                 &kFitDmSq32Sterile,
+  //                                                 &kFitDelta14InPiUnitsSterile,
+  //                                                 &kFitDelta24InPiUnitsSterile};
 
-  Surface surf3(&multiExpt3, calc,
-               &kFitSinSq2Theta24Sterile, 50, 0, 1,
-               &kFitDmSq41Sterile, 75, 0.5, 3,
-               kProfiledVars,{});
+  // Surface surf3(&multiExpt3, calc,
+  //              &kFitSinSq2Theta24Sterile, 50, 0, 1,
+  //              &kFitDmSq41Sterile, 75, 0.5, 3,
+  //              kProfiledVars,{});
 
-  c1->Clear(); // just in case
-  surf3.DrawBestFit(kBlue);
-  trueValues->Draw();
+  // c1->Clear(); // just in case
+  // surf3.DrawBestFit(kBlue);
+  // trueValues->Draw();
 
-  TH2* crit1sig3 = Gaussian68Percent2D(surf3);
-  TH2* crit2sig3 = Gaussian2Sigma2D(surf3);
+  // TH2* crit1sig3 = Gaussian68Percent2D(surf3);
+  // TH2* crit2sig3 = Gaussian2Sigma2D(surf3);
 
-  surf3.DrawContour(crit1sig3, 7, kBlue);
-  surf3.DrawContour(crit2sig3, kSolid, kBlue);
+  // surf3.DrawContour(crit1sig3, 7, kBlue);
+  // surf3.DrawContour(crit2sig3, kSolid, kBlue);
 
-  c1->SaveAs("demo3_plot4.pdf");
+  // c1->SaveAs("demo3_plot4.pdf");
 
 }
