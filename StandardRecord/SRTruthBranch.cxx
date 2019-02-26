@@ -14,7 +14,8 @@ namespace caf
   
   SRTruthBranch::SRTruthBranch():
   neutrino(),
-  lepton()
+  lepton(),
+  finalstate()
   {  }
   
   SRTruthBranch::~SRTruthBranch() {}
