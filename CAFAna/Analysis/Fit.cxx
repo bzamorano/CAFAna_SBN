@@ -14,8 +14,12 @@
 #include "TH1.h"
 #include "TMatrixDSym.h"
 
+// ROOT fitter interface
+#include "Fit/Fitter.h"
+#include "Math/Factory.h"
+#include "Math/Functor.h"
+
 #include <cassert>
-#include <memory>
 #include <iostream>
 
 namespace ana
@@ -51,7 +55,7 @@ namespace ana
                  std::vector<const ISyst*> systs,
                  Precision prec)
     : fExpt(expt), fVars(vars), fSysts(systs), fPrec(prec), fCalc(0),
-      fSupportsDerivatives(SupportsDerivatives()), fCovar(0)
+      fSupportsDerivatives(SupportsDerivatives()), fCovar(0), fCovarStatus(-1)
   {
   }
 
@@ -113,154 +117,163 @@ namespace ana
   }
 
   //----------------------------------------------------------------------
-  double Fitter::FitHelperSeeded(osc::IOscCalculatorAdjustable* seed,
-                                 SystShifts& systSeed,
-                                 Verbosity verb) const
+  std::unique_ptr<ROOT::Math::Minimizer>
+  Fitter::FitHelperSeeded(osc::IOscCalculatorAdjustable* seed,
+                          SystShifts& systSeed, Verbosity verb) const
   {
-
+    // Why, when this is called for each seed?
     fCalc = seed;
     fShifts = systSeed;
 
-    ROOT::Minuit2::MnUserParameters mnPars;
+    if(fPrec & kIncludeSimplex) std::cout << "Simplex option specified but not implemented. Ignored." << std::endl;
+    if((fPrec & kAlgoMask) == kGradDesc){
+      std::cout << "GradDesc option specified but not implemented. Abort." << std::endl;
+      abort();
+    }
+
+    std::unique_ptr<ROOT::Math::Minimizer> mnMin(
+        ROOT::Math::Factory::CreateMinimizer("Minuit2", "Combined"));
+    mnMin->SetStrategy(int(fPrec & kAlgoMask));
+    mnMin->SetMaxFunctionCalls(1E8);
+    mnMin->SetMaxIterations(1E8);
 
     for(const IFitVar* v: fVars){
       const double val = v->GetValue(seed);
       // name, value, error
-      mnPars.Add(v->ShortName(), val, val ? val/2 : .1);
-      fParamNames  .push_back(v->ShortName());
+      mnMin->SetVariable(mnMin->NFree(), v->ShortName(), val, val ? fabs(val/2) : .1);
+      fParamNames.push_back(v->ShortName());
       fPreFitValues.push_back(val);
       fPreFitErrors.push_back(val ? val/2 : .1);
     }
     // One way this can go wrong is if two variables have the same ShortName
-    assert(mnPars.Params().size() == fVars.size());
-    for(const ISyst* s: fSysts){
+    assert(mnMin->NFree() == fVars.size());
+    for(const ISyst*s: fSysts){
       const double val = systSeed.GetShift(s);
       // name, value, error
-      mnPars.Add(s->ShortName(), val, 1);
-      // Add a limit on each
-      mnPars.SetLimits(mnPars.Params().size()-1, s->Min(), s->Max());
-      fParamNames  .push_back(s->ShortName());
+      mnMin->SetVariable(mnMin->NFree(), s->ShortName(), val, 1);
+      fParamNames.push_back(s->ShortName());
       fPreFitValues.push_back(val);
       fPreFitErrors.push_back(1);
     }
     // One way this can go wrong is if two variables have the same ShortName
-    assert(mnPars.Params().size() == fVars.size()+fSysts.size());
+    assert(mnMin->NFree() == fVars.size()+fSysts.size());
 
-    ROOT::Minuit2::MnApplication* mnApp = 0;
-
-    if((fPrec & kAlgoMask) == kGradDesc){
-      mnApp = new GradientDescent(*this, mnPars);
+    if(fSupportsDerivatives){
+      mnMin->SetFunction(*this);
     }
     else{
-      // TODO - could this be handled with templates?
-      if(fSupportsDerivatives){
-        if(fPrec & kIncludeSimplex){
-          // MnMinimize will try Simplex if the migrad minimum is invalid
-          mnApp = new ROOT::Minuit2::MnMinimize(*this, mnPars, int(fPrec & kAlgoMask));
-        }
-        else{
-          mnApp = new ROOT::Minuit2::MnMigrad(*this, mnPars, int(fPrec & kAlgoMask));
-        }
-      }
-      else{
-        if(fPrec & kIncludeSimplex){
-          mnApp = new ROOT::Minuit2::MnMinimize(*((ROOT::Minuit2::FCNBase*)this), mnPars, int(fPrec & kAlgoMask));
-        }
-        else{
-          mnApp = new ROOT::Minuit2::MnMigrad(*((ROOT::Minuit2::FCNBase*)this), mnPars, int(fPrec & kAlgoMask));
-        }
-      }
+      mnMin->SetFunction((ROOT::Math::IBaseFunctionMultiDim&)*this);
     }
 
-    // Minuit2 doesn't give a good way to control verbosity...
-    const int olderr = gErrorIgnoreLevel;
-    if(verb == kQuiet) gErrorIgnoreLevel = 1001; // Ignore warnings
+    if(verb == Verbosity::kQuiet) mnMin->SetPrintLevel(0);
 
-    ROOT::Minuit2::FunctionMinimum minpt = (*mnApp)();
-    gErrorIgnoreLevel = olderr;
-
-    // Hesse can find a better minimum, so let's do this before panicking
-    if(fPrec & kIncludeHesse){
-      std::cout << "Notice: attempting to build the Hessian matrix" << std::endl;
-      ROOT::Minuit2::MnHesse hesse(2);
-      hesse(*this, minpt, 1e5);
-    }
-    
-    // Okay, time to panic! If this isn't valid, we probably should worry more...
-    if(!minpt.IsValid()){
+    if(!mnMin->Minimize()){
       std::cout << "*** ERROR: minimum is not valid ***" << std::endl;
-    }
+      std::cout << "*** Precision: " << mnMin->Precision() << std::endl;
 
-    // Store some basic fit information
-    this->fEdm = minpt.Edm();
-    this->fIsValid = minpt.IsValid();
-      
-    fPostFitValues = minpt.UserParameters().Params();
-    fPostFitErrors = minpt.UserParameters().Errors();
-
-    gErrorIgnoreLevel = olderr;
-    // Store results back to the "seed" variable
-    for(unsigned int i = 0; i < fVars.size(); ++i){
-      fVars[i]->SetValue(seed, fPostFitValues[i]);
-    }
-    // Store systematic results back into "systSeed"
-    for(unsigned int j = 0; j < fSysts.size(); ++j){
-      systSeed.SetShift(fSysts[j], fPostFitValues[fVars.size()+j]);
-    }
-
-    // Store covariances
-    const ROOT::Minuit2::MnUserCovariance mncov = minpt.UserCovariance();
-    // Slightly tedious
-    std::vector<double> covdata = mncov.Data();
-    if (this->fCovar) delete this->fCovar;
-    this->fCovar = new TMatrixDSym(mncov.Nrow());
-
-    for (uint row = 0; row < mncov.Nrow(); ++row){
-      for (uint col = 0; col < mncov.Nrow(); ++col){
-	if (row > col)
-	  (*this->fCovar)(row, col) = covdata[col+row*(row+1)/2];
-	else (*this->fCovar)(row, col) = covdata[row+col*(col+1)/2];
+      std::cout << "-- Stopped at: \n";
+      for(uint i = 0; i < mnMin->NFree(); ++i){
+	std::cout << "\t" << mnMin->VariableName(i) << " = " << mnMin->X()[i] << "\n";
       }
     }
 
-    delete mnApp;
+    if (fPrec & kIncludeHesse){
+      std::cout << "It's Hesse o'clock" << std::endl;
+      mnMin->Hesse();
+    }
 
-    return minpt.Fval();
+    if (fPrec & kIncludeMinos){
+      std::cout << "It's minos time" << std::endl;
+      fTempMinosErrors.clear();
+      for (uint i = 0; i < mnMin->NDim(); ++i){
+	double errLow = 0, errHigh = 0;
+	mnMin->GetMinosError(i, errLow, errHigh);
+	std::cout << i << "/" << mnMin->NDim() << " " << fParamNames[i] << ": " << errLow << ", +" << errHigh << " (" << mnMin->Errors()[i] << ")" << std::endl;
+	fTempMinosErrors.push_back(std::make_pair(errLow,errHigh));
+      }      
+    }
+
+    return mnMin;
   }
 
   //----------------------------------------------------------------------
-  double Fitter::FitHelper(osc::IOscCalculatorAdjustable* seed,
+  double Fitter::FitHelper(osc::IOscCalculatorAdjustable* initseed,
                            SystShifts& bestSysts,
                            const std::map<const IFitVar*, std::vector<double>>& seedPts,
                            std::vector<SystShifts> systSeedPts,
                            Verbosity verb) const
   {
     const std::vector<SeedPt> pts = ExpandSeeds(seedPts, systSeedPts);
-
     double minchi = 1e10;
     std::vector<double> bestFitPars, bestSystPars;
 
     for(const SeedPt& pt: pts){
+      osc::IOscCalculatorAdjustable *seed = initseed->Copy();
+
       for(auto it: pt.fitvars) it.first->SetValue(seed, it.second);
 
+      // Need to deal with parameters that are not fit values!
       SystShifts shift = pt.shift;
-      const double chi = FitHelperSeeded(seed, shift, verb);
-      if(chi < minchi){
-        minchi = chi;
-        // Store the best fit values of all the parameters we know are being
-        // varied.
-        bestFitPars.clear();
-        bestSystPars.clear();
-        for(const IFitVar* v: fVars)
-          bestFitPars.push_back(v->GetValue(seed));
-        for(const ISyst* s: fSysts)
-          bestSystPars.push_back(shift.GetShift(s));
+
+      std::unique_ptr<ROOT::Math::Minimizer> thisMin =
+          FitHelperSeeded(seed, shift, verb);
+
+      // Check whether this is the best minimum we've found so far
+      if (thisMin->MinValue() < minchi) {
+        minchi = thisMin->MinValue();
+
+	// Need to do Prefit here too...
+	fParamNames    .clear();
+	fPreFitValues  .clear();
+	fPreFitErrors  .clear();
+	fPostFitValues .clear();
+	fPostFitErrors .clear();
+	fMinosErrors   .clear();
+	fMinosErrors   = fTempMinosErrors;
+
+	// Save pre-fit info
+	// In principle, these can change with the seed, so have to save them here...
+	for(const IFitVar* v: fVars){
+	  const double val = v->GetValue(seed);
+	  fParamNames  .push_back(v->ShortName());
+	  fPreFitValues.push_back(val);
+	  fPreFitErrors.push_back(val ? val/2 : .1);
+	}
+	for(const ISyst* s: fSysts){
+	  const double val = shift.GetShift(s);
+	  fParamNames  .push_back(s->ShortName());
+	  fPreFitValues.push_back(val);
+	  fPreFitErrors.push_back(1);
+	}
+
+	// Now save postfit
+	fPostFitValues = std::vector<double>(thisMin->X(), thisMin->X()+thisMin->NDim());
+	fPostFitErrors = std::vector<double>(thisMin->Errors(), thisMin->Errors()+thisMin->NDim());
+
+        fEdm = thisMin->Edm();
+        fIsValid = !thisMin->Status();
+
+        delete fCovar;
+        fCovar = new TMatrixDSym(thisMin->NDim());
+
+        for(unsigned int row = 0; row < thisMin->NDim(); ++row){
+          for(unsigned int col = 0; col < thisMin->NDim(); ++col){
+            (*fCovar)(row, col) = thisMin->CovMatrix(row, col);
+          }
+        }
+
+        // Store the best fit values of all the parameters we know are being varied.
+        for(unsigned int i = 0; i < fVars.size(); ++i)
+	  bestFitPars.push_back(fPostFitValues[i]);
+	for(unsigned int j = 0; j < fSysts.size(); ++j)
+	  bestSystPars.push_back(fPostFitValues[fVars.size()+j]);
       }
+      delete seed;
     }
 
     // Stuff the results of the actual best fit back into the seeds
     for(unsigned int i = 0; i < fVars.size(); ++i)
-      fVars[i]->SetValue(seed, bestFitPars[i]);
+      fVars[i]->SetValue(initseed, bestFitPars[i]);
     for(unsigned int i = 0; i < fSysts.size(); ++i)
       bestSysts.SetShift(fSysts[i], bestSystPars[i]);
 
@@ -294,7 +307,7 @@ namespace ana
         std::cout << "ERROR Fitter::Fit() trying to seed '"
                   << it.first->ShortName()
                   << "' which is not part of the fit." << std::endl;
-        abort();
+	 abort();
       }
     }
     for(const auto& it: systSeedPts){
@@ -342,10 +355,8 @@ namespace ana
   }
 
   //----------------------------------------------------------------------
-  void Fitter::DecodePars(const std::vector<double>& pars) const
+  void Fitter::DecodePars(const double* pars) const
   {
-    assert(pars.size() == fVars.size()+fSysts.size());
-
     for(unsigned int i = 0; i < fVars.size(); ++i){
       const double val = pars[i];
       fVars[i]->SetValue(fCalc, val);
@@ -357,42 +368,40 @@ namespace ana
   }
 
   //----------------------------------------------------------------------
-  double Fitter::operator()(const std::vector<double>& pars) const
+  double Fitter::DoEval(const double* pars) const
   {
     ++fNEval;
 
-    assert(pars.size() == fVars.size()+fSysts.size());
-
     DecodePars(pars); // Updates fCalc and fShifts
 
-    // Have to re-fetch the FitVar values because DecodePars() will have
-    // truncated values to the physical range where necessary.
+    // Have to re-fetch the values because DecodePars() will have truncated
+    // values to the physical range where necessary.
     double penalty = 0;
     for(unsigned int i = 0; i < fVars.size(); ++i){
       penalty += fVars[i]->Penalty(pars[i], fCalc);
     }
+    for(unsigned int j = 0; j < fSysts.size(); ++j){
+      penalty += fSysts[j]->Penalty(pars[fVars.size()+j]);
+    }
 
-    return fExpt->ChiSq(fCalc, fShifts) + penalty + fShifts.Penalty();
+    if(fNEval%1000 == 0) std::cout << fNEval << ": EXPT chi2 = " << fExpt->ChiSq(fCalc, fShifts) << "; penalty = " << penalty << std::endl;
+    return fExpt->ChiSq(fCalc, fShifts) + penalty;
   }
 
   //----------------------------------------------------------------------
-  std::vector<double> Fitter::Gradient(const std::vector<double>& pars) const
+  void Fitter::Gradient(const double* pars, double* ret) const
   {
     ++fNEvalGrad;
-
-    std::vector<double> ret(pars.size());
-
-    // TODO handling of FitVars including penalty terms
 
     if(!fVars.empty()){
       // Have to use finite differences to calculate these derivatives
       const double dx = 1e-9;
-      const double nom = (*this)(pars);
+      const double nom = DoEval(pars);
       ++fNEvalFiniteDiff;
-      std::vector<double> parsCopy = pars;
+      std::vector<double> parsCopy(pars, pars+NDim());
       for(unsigned int i = 0; i < fVars.size(); ++i){
         parsCopy[i] += dx;
-        ret[i] = ((*this)(parsCopy)-nom)/dx;
+        ret[i] = (DoEval(parsCopy.data())-nom)/dx;
         ++fNEvalFiniteDiff;
         parsCopy[i] = pars[i];
       }
@@ -406,13 +415,12 @@ namespace ana
     for(const ISyst* s: fSysts) dchi[s] = 0;
     fExpt->Derivative(fCalc, fShifts, dchi);
 
-    for(unsigned int i = 0; i < fSysts.size(); ++i){
-      // Include the derivative of the penalty terms too. TODO this is only
-      // right for quadratic penalties (ie all the currently existing ones)
-      ret[fVars.size()+i] = dchi[fSysts[i]] + 2*fShifts.GetShift(fSysts[i]);
-    }
+    for(unsigned int j = 0; j < fSysts.size(); ++j){
+      // Get the un-truncated systematic shift
+      const double x = pars[fVars.size()+j];
 
-    return ret;
+      ret[fVars.size()+j] = dchi[fSysts[j]] + fSysts[j]->PenaltyDerivative(x);
+    }
   }
 
   //----------------------------------------------------------------------
