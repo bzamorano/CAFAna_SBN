@@ -1,25 +1,27 @@
 ////////////////////////////////////////////////////////////////////////
 // \author  Bruno Zamorano
-// \date    December 2018
+// \date    February 2019
 ////////////////////////////////////////////////////////////////////////
-#ifndef SRLEPTON_H
-#define SRLEPTON_H
+#ifndef SRPARTICLE_H
+#define SRPARTICLE_H
+
+#include <TVector3.h>
 
 namespace caf
 {
-  /// The SRLepton is a representation of outcoming lepton information
-  class SRLepton
+  /// The SRParticle is a representation of final state pcle. info
+  class SRParticle
     {
     public:
-      SRLepton();
-      ~SRLepton() {  };
+      SRParticle();
+      ~SRParticle() {  };
 
       int          pdg;           ///< PDG code
       double       energy;        ///< True energy [GeV]
-      double       momentum;      ///< True momentum [GeV]
+      TVector3     momentum;      ///< True momentum [GeV]
     };
 
 } // end namespace
 
-#endif // SRLEPTON_H
+#endif // SRPARTICLE_H
 //////////////////////////////////////////////////////////////////////////////

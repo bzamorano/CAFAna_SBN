@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////
-// \author  Dominick Rocco
-// \date    Sept. 2012
+// \author  Bruno Zamorano
+// \date    February 2019
 ////////////////////////////////////////////////////////////////////////
 #ifndef SRTRUTHBRANCH_H
 #define SRTRUTHBRANCH_H
 
 #include "StandardRecord/SRNeutrino.h"
-#include "StandardRecord/SRLepton.h"
+#include "StandardRecord/SRParticle.h"
 
 #include <vector>
 
@@ -20,8 +20,9 @@ namespace caf
       SRTruthBranch();
       ~SRTruthBranch();
 
-      std::vector<SRNeutrino> neutrino;   ///< implemented as a vector to maintain mc.nu structure, i.e. not a pointer, but with 0 or 1 entries. 
-      std::vector<SRLepton>   lepton;
+      std::vector<SRNeutrino>   neutrino;   ///< implemented as a vector to maintain mc.nu structure, i.e. not a pointer, but with 0 or 1 entries. 
+      std::vector<SRParticle>     lepton;
+      std::vector<SRParticle> finalstate;
       void setDefault();
 
     };

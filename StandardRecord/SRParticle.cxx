@@ -1,20 +1,20 @@
 ////////////////////////////////////////////////////////////////////////
-// \brief   An  SRLepton represents a true lepton.
+// \brief   An  SRLepton represents a final state particle.
 // \author  Bruno Zamorano
-// \date    December 2018
+// \date    February 2019
 ////////////////////////////////////////////////////////////////////////
 
 
-#include "StandardRecord/SRLepton.h"
+#include "StandardRecord/SRParticle.h"
 
 
 namespace caf
 {
 
-  SRLepton::SRLepton():
+  SRParticle::SRParticle():
     pdg(0),
     energy(-1),
-    momentum(-1)
+    momentum(0, 0, 0)
     {  }
 
 } // end namespace caf
