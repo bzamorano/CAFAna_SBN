@@ -273,7 +273,7 @@ namespace ana
     TFile* f = fFileSource->GetNextFile();
     if(!f) return 0; // out of files
 
-    TTree* trPot;
+    TTree* trPot = new TTree();
     if (f->GetListOfKeys()->Contains("sbnsubrun"))
       trPot = (TTree*)f->Get("sbnsubrun");
     assert(trPot);
