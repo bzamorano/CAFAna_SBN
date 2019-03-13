@@ -273,31 +273,24 @@ namespace ana
     TFile* f = fFileSource->GetNextFile();
     if(!f) return 0; // out of files
 
-    fPOT = 1.e20;
+    TTree* trPot;
+    if (f->GetListOfKeys()->Contains("sbnsubrun"))
+      trPot = (TTree*)f->Get("sbnsubrun");
+    assert(trPot);
+
+    double pot;
+    trPot->SetBranchAddress("totpot", &pot); // should this be totgoodpot?
+
+    for(int n = 0; n < trPot->GetEntries(); n++){
+      trPot->GetEntry(n);
+
+      fPOT += pot;
+    }
+
+    // This won't work for old files, where we would need to set the POT
+    // to an arbitrary number (e.g. fPOT = 1.e20)
+
     return f;
-
-    //TTree* trPot;
-    //    if(f->GetListOfKeys()->Contains("cafmaker"))
-    //      trPot = (TTree*)f->Get("mvaselectnumu/pottree");
-    //    else
-    //      trPot = (TTree*)f->Get("mvaselect/pottree");
-
-    //    if (f->GetListOfKeys()->Contains("meta"))
-    //     trPot = (TTree*)f->Get("meta");
-    //  else
-    //  trPot = (TTree*)f->Get("pottree");
-    //assert(trPot);
-
-    //double pot;
-    //trPot->SetBranchAddress("pot", &pot);
-
-    //   for(int n = 0; n < trPot->GetEntries(); ++n){
-    //  trPot->GetEntry(n);
-
-    // fPOT += pot;
-    // }
-
-    //return f;
   }
 
   //----------------------------------------------------------------------
