@@ -13,8 +13,8 @@ namespace caf
 
   SRParticle::SRParticle():
     pdg(0),
-    energy(-1),
-    momentum(0, 0, 0)
+    energy(-1)
+    //    momentum(0, 0, 0)
     {  }
 
 } // end namespace caf

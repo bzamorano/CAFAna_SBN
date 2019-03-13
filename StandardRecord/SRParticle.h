@@ -5,7 +5,7 @@
 #ifndef SRPARTICLE_H
 #define SRPARTICLE_H
 
-#include <TVector3.h>
+//#include <TVector3.h>
 
 namespace caf
 {
@@ -18,7 +18,7 @@ namespace caf
 
       int          pdg;           ///< PDG code
       double       energy;        ///< True energy [GeV]
-      TVector3     momentum;      ///< True momentum [GeV]
+      //      TVector3     momentum;      ///< True momentum [GeV]
     };
 
 } // end namespace

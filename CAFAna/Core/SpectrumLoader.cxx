@@ -137,6 +137,9 @@ namespace ana
     FloatingExceptionOnNaN fpnan(false);
 
     caf::StandardRecord sr;
+
+    // This is a dirty fix while we figure out a better way of including the libraries
+
     sr.sbn.truth.neutrino.resize(1);
 
     TTreeFormula form1("form1", "truth.neutrino[0].iscc", tr);
